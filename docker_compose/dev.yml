@@ -10,10 +10,10 @@ services:
       - POSTGRES_USER=hulahoop
       - POSTGRES_PASSWORD=hulahoop
   app:
-    build: ..
-    command: python manage.py runserver 0.0.0.0:8000
+    build: ../docker/
+    command: python manage.py runserver 127.0.0.1:8000
     volumes:
-      - .:/code
+      - ../src:/opt/hulahoop
     ports:
       - "8000:8000"
     environment:
