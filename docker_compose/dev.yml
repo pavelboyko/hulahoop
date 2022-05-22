@@ -10,8 +10,8 @@ services:
       - POSTGRES_USER=hulahoop
       - POSTGRES_PASSWORD=hulahoop
   app:
-    build: ../docker/
-    command: python manage.py runserver 127.0.0.1:8000
+    build: ..
+    command: ["./entrypoint-dev.sh"]
     volumes:
       - ../src:/opt/hulahoop
     ports:
