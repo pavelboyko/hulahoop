@@ -1,6 +1,4 @@
 from django.db import models
-
-# from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from app.models.base_model import BaseModel
 from app.models.base_admin import BaseAdmin
@@ -14,9 +12,7 @@ class Example(BaseModel):
     workflow: models.ForeignKey = models.ForeignKey(
         "Workflow", null=False, blank=False, on_delete=models.CASCADE
     )
-
-
-#    properties: JSONField = JSONField(null=True, blank=True, default=None)
+    properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
 
 class ExampleAdmin(BaseAdmin):
@@ -31,6 +27,7 @@ class ExampleAdmin(BaseAdmin):
         "id",
         "uuid",
         "workflow",
+        "properties",
         "created_at",
         "updated_at",
         "is_deleted",

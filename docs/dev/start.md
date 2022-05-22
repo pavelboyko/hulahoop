@@ -22,6 +22,8 @@ docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py createsuperuser
 
 3. Open http://localhost:8000 to see the app. Use login and password from the previous step to login.
 
+## Changing code locally
+
 There is no need to rebuild or restart the app container if you only change code, since the code is mounted directly to the container. 
 
 If requirements change (e.g. you're using new `pip` or system package) you have to rebuild and restart the app:
@@ -29,6 +31,13 @@ If requirements change (e.g. you're using new `pip` or system package) you have 
 docker-compose -f docker_compose/dev.yml down
 docker-compose -f docker_compose/dev.yml build
 docker-compose -f docker_compose/dev.yml up
+```
+
+If database models change you have to create and apply migrations:
+
+```
+docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py makemigrations
+docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py migrate
 ```
 
 ## What's inside Hulahoop
