@@ -138,17 +138,26 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-    )
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 30,
 }
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "default": {"format": "{asctime} | {levelname} | {module} | {message}", "style": "{"},
+        "default": {
+            "format": "{asctime} | {levelname} | {module} | {message}",
+            "style": "{",
+        },
     },
     "handlers": {
-        "console": {"class": "logging.StreamHandler", "stream": sys.stdout, "formatter": "default"},
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "default",
+        },
     },
     "loggers": {
         "app": {
