@@ -1,6 +1,10 @@
+import logging
 from django.db import models
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
+from .example import Example
+
+logger = logging.getLogger(__package__)
 
 
 class Workflow(BaseModel):
@@ -16,6 +20,12 @@ class Workflow(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def start(self, example: Example) -> None:
+        """
+        Workflow entry point, executed immediately after an example was created
+        """
+        logger.debug(f"Workflow {self.name} started for example {example}")
 
 
 class WorkflowAdmin(BaseAdmin):
