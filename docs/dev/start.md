@@ -12,7 +12,7 @@ git clone https://github.com/pavelboyko/hulahoop.git && cd hulahoop/
 
 1. Launch database and app services
 ```
-docker-compose -f docker_compose/dev.yml up
+docker-compose up
 ```
 
 2. On the first run create a superuser
@@ -28,9 +28,9 @@ There is no need to rebuild or restart the app container if you only change code
 
 If requirements change (e.g. you're using new `pip` or system package) you have to rebuild and restart the app:
 ```
-docker-compose -f docker_compose/dev.yml down
-docker-compose -f docker_compose/dev.yml build
-docker-compose -f docker_compose/dev.yml up
+docker-compose down
+docker-compose build
+docker-compose up
 ```
 
 If database models change you have to create and apply migrations:

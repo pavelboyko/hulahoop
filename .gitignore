@@ -131,6 +131,6 @@ dmypy.json
 # PyCharm IDE
 .idea
 
-# Deve environment database
-docker_compose/.data
+# Dev environment database
+.data
 

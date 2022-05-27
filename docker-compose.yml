@@ -10,10 +10,10 @@ services:
       - POSTGRES_USER=hulahoop
       - POSTGRES_PASSWORD=hulahoop
   app:
-    build: ..
+    build: ""
     command: ["./entrypoint-dev.sh"]
     volumes:
-      - ../src:/opt/hulahoop
+      - ./src:/opt/hulahoop
     ports:
       - "8000:8000"
     environment:
