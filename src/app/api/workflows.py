@@ -11,13 +11,13 @@ class WorkflowSerializer(serializers.ModelSerializer):
             "name",
             "properties",
             "created_by",
-            "is_deleted",
             "created_at",
             "updated_at",
+            "is_deleted",
         )
         extra_kwargs = {"created_by": {"default": serializers.CurrentUserDefault()}}
 
 
 class WorkflowViewSet(ModelViewSet):
-    queryset = Workflow.objects.filter(is_deleted=False)
     serializer_class = WorkflowSerializer
+    queryset = Workflow.objects.filter(is_deleted=False)
