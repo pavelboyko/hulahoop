@@ -10,7 +10,9 @@ class Workflow(BaseModel):
 
     name: models.TextField = models.TextField()
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
-    created_by = models.ForeignKey("User", null=False, blank=False, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(
+        "User", null=False, blank=False, on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.name

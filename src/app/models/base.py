@@ -22,4 +22,3 @@ class BaseAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.JSONField: {"widget": PrettyJSONWidget(attrs={"initial": "parsed"})}
     }
-
