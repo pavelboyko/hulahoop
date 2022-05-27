@@ -17,7 +17,7 @@ docker-compose up
 
 2. On the first run create a superuser
 ```
-docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py createsuperuser 
+docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py createsuperuser 
 ```
 
 3. Open http://localhost:8000 to see the app. Use login and password from the previous step to login.
@@ -36,8 +36,8 @@ docker-compose up
 If database models change you have to create and apply migrations:
 
 ```
-docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py makemigrations
-docker exec -it docker_compose_app_1 /opt/hulahoop/manage.py migrate
+docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py makemigrations
+docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py migrate
 ```
 
 ## What's inside Hulahoop
@@ -68,14 +68,13 @@ POSTGRES_PASSWORD=hulahoop
 ```
 
 ## Source code structure
-
-- `docker_compose` -- Service launch instructions
-- `docs` -- Keep us up to date, please.
+- `docs` -- Keep this up to date, please.
 - `src`
   - `app` -- Backend sources
   - `hulahoop` -- Django configuration
   - `entrypoint-dev.sh` -- dev server launch script
   - `manage.py` -- Django swiss army knife
+- `docker-compose.yml` -- service launch instructions
 - `Dockerfile` -- app container build instructions. Update this file when you add new system dependencies.
 - `requirements.txt` -- Python requirements. Update this file when you add new `pip` packages.
 

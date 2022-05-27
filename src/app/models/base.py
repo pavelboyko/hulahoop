@@ -1,10 +1,12 @@
 import uuid
 from django.db import models
+from django.contrib import admin
+from prettyjson import PrettyJSONWidget
 
 
 class BaseModel(models.Model):
-    uuid: models.UUIDField = models.UUIDField(
-        unique=True, default=uuid.uuid4, editable=False
+    id: models.UUIDField = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
     )
     created_at: models.DateTimeField = models.DateTimeField(
         auto_now_add=True, null=True
@@ -14,3 +16,10 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class BaseAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.JSONField: {"widget": PrettyJSONWidget(attrs={"initial": "parsed"})}
+    }
+

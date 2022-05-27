@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib import admin
-from app.models.base_model import BaseModel
-from app.models.base_admin import BaseAdmin
+from .base import BaseModel, BaseAdmin
 
 
 class Example(BaseModel):
@@ -18,14 +17,12 @@ class Example(BaseModel):
 class ExampleAdmin(BaseAdmin):
     readonly_fields = (
         "id",
-        "uuid",
         "created_at",
         "updated_at",
     )
     list_display = ("id", "workflow", "is_deleted")
     fields = (
         "id",
-        "uuid",
         "workflow",
         "properties",
         "created_at",
