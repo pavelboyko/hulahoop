@@ -16,18 +16,23 @@
             font-size: 1.5rem !important;
         }
 
+
     </style>
 </head>
 <body>
 <div class="page-container mx-auto px-lg-0 p-3">
-    <header class="d-flex mb-3 border-bottom">
-        <nav aria-label="breadcrumb" class="flex-grow-1">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/" class="link-dark text-decoration-none">◯ Hulahoop</a></li>
-                {% block breadcrumb %} {% endblock breadcrumb %}
-            </ol>
-        </nav>
-        <div>{% block navbuttons %} {% endblock navbuttons %}</div>
+    <header class="mb-3">
+        <div class="d-flex">
+            <nav aria-label="breadcrumb" class="flex-grow-1">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/" class="link-dark text-decoration-none">◯ Hulahoop</a></li>
+                    {% block breadcrumb %} {% endblock breadcrumb %}
+                </ol>
+            </nav>
+        </div>
+        {% block tabs %}
+        <div class="border-bottom"/>
+        {% endblock tabs %}
     </header>
     <main>
         {% block main %}{% endblock main %}

@@ -5,8 +5,22 @@
 <li class="breadcrumb-item active" aria-current="page">{{ project.name|truncatechars:32 }}</li>
 {% endblock breadcrumb%}
 
+{% block tabs %}
+<ul class="nav nav-tabs" xmlns="http://www.w3.org/1999/html">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Examples</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Pipelines</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Settings</a>
+    </li>
+</ul>
+{% endblock tabs %}
+
+
 {% block main %}
-<h2>Examples:</h2>
 {% if example_list %}
     <ul>
     {% for example in example_list %}
