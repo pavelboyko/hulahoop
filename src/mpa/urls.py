@@ -2,7 +2,7 @@ from django.urls import path
 from mpa import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.project_list, name="project_list"),
     path("projects/<uuid:project_id>/", views.project_detail, name="project_detail"),
     path("projects/create/", views.project_create, name="project_create"),
     path(

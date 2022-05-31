@@ -1,5 +1,5 @@
 {% extends "mpa/base.html" %}
-{% block title %}Home{% endblock title %}
+{% block title %}Projects{% endblock title %}
 
 {% block tabs %}
 <ul class="nav nav-tabs" xmlns="http://www.w3.org/1999/html">
@@ -31,7 +31,7 @@
 <ul class="list-group">
     {% for project in project_list %}
     <li class="list-group-item">
-        {% include "mpa/index/project_card.html" with project=project only %}
+        <a href="{% url 'project_detail' project.id %}">{{ project.name }}</a>
     </li>
     {% endfor %}
 </ul>
@@ -41,4 +41,5 @@
     <a href="{% url 'project_create' %}">Create new project.</a>
 </p>
 {% endif %}
+
 {% endblock main %}
