@@ -1,0 +1,25 @@
+{% extends "mpa/base.html" %}
+{% block title %}Home{% endblock title %}
+
+{% block navbuttons %}
+<a href="{% url 'project_create' %}" type="button" class="btn btn-outline-dark px-4">
+    New project
+</a>
+{% endblock navbuttons %}
+
+{% block main %}
+{% if project_list %}
+<ul class="list-group">
+    {% for project in project_list %}
+    <li class="list-group-item">
+        {% include "mpa/index/project_card.html" with project=project only %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>
+    No results found.
+    <a href="{% url 'project_create' %}">Create new project.</a>
+</p>
+{% endif %}
+{% endblock main %}

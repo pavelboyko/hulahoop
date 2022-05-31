@@ -8,4 +8,4 @@ def example_detail(request, project_id, example_id):
         Example, id=example_id, project=project, is_deleted=False
     )
     context = {"project": project, "example": example}
-    return render(request, "mpa/example_detail.html", context)
+    return render(request, "mpa/example/example_detail.html", context)

@@ -4,6 +4,7 @@ from mpa import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("projects/<uuid:project_id>/", views.project_detail, name="project_detail"),
+    path("projects/create/", views.project_create, name="project_create"),
     path(
         "projects/<uuid:project_id>/examples/<uuid:example_id>/",
         views.example_detail,

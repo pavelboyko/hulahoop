@@ -7,20 +7,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <style>
+       @media screen and (min-width: 992px) {
+            .page-container {
+                width: 958px;
+            }
+        }
         .breadcrumb {
             font-size: 1.5rem !important;
         }
+
     </style>
 </head>
 <body>
-<div class="col-lg-8 mx-auto px-lg-0 p-3">
+<div class="page-container mx-auto px-lg-0 p-3">
     <header class="d-flex mb-3 border-bottom">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="flex-grow-1">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/" class="link-dark text-decoration-none">◯ Hulahoop</a></li>
                 {% block breadcrumb %} {% endblock breadcrumb %}
             </ol>
         </nav>
+        <div>{% block navbuttons %} {% endblock navbuttons %}</div>
     </header>
     <main>
         {% block main %}{% endblock main %}
