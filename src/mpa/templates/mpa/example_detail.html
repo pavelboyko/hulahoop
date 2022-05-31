@@ -1,7 +1,19 @@
-<h1>{{ project.name }}</h1>
-<h2>Example {{ example.id }}</h2>
+{% extends "mpa/base.html" %}
+{% block title %}Example — {{ project.name }}{% endblock title %}
 
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="{% url 'project_detail' project.id %}" class="link-dark text-decoration-none">
+        {{ project.name|truncatechars:32 }}
+    </a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
+{% endblock breadcrumb%}
+
+{% block main %}
+<p>Id: {{ example.id }}</p>
 <p>Media: <a href="{{ example.media_url }}">{{ example.media_url }}</a></p>
-<p>Status: {{ example.status }}</p>
+<p>Status: {{ example.get_status_display }}</p>
 <p>Created at: {{ example.created_at }}</p>
 <p>Updated at: {{ example.updated_at }}</p>
+{% endblock main %}

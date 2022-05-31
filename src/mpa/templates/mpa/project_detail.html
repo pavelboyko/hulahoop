@@ -1,7 +1,12 @@
-<h1>{{ project.name }}</h1>
+{% extends "mpa/base.html" %}
+{% block title %}{{ project.name }}{% endblock title %}
 
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">{{ project.name|truncatechars:32 }}</li>
+{% endblock breadcrumb%}
+
+{% block main %}
 <h2>Examples:</h2>
-
 {% if example_list %}
     <ul>
     {% for example in example_list %}
@@ -11,3 +16,4 @@
 {% else %}
     <p>No results found. Use API to upload examples.</p>
 {% endif %}
+{% endblock main %}
