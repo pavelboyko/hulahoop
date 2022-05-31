@@ -3,4 +3,10 @@ from mpa import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("projects/<uuid:project_id>/", views.project_detail, name="project_detail"),
+    path(
+        "projects/<uuid:project_id>/examples/<uuid:example_id>/",
+        views.example_detail,
+        name="example_detail",
+    ),
 ]

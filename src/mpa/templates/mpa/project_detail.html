@@ -1,0 +1,13 @@
+<h1>{{ project.name }}</h1>
+
+<h2>Examples:</h2>
+
+{% if example_list %}
+    <ul>
+    {% for example in example_list %}
+        <li><a href="/projects/{{ project.id }}/examples/{{ example.id }}">{{ example.id }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found. Use API to upload examples.</p>
+{% endif %}
