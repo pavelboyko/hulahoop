@@ -7,9 +7,9 @@ from .example import Example
 logger = logging.getLogger(__package__)
 
 
-class Workflow(BaseModel):
+class Project(BaseModel):
     """
-    A repeatable example processing workflow.
+    A container for examples, processing workflows, etc.
     """
 
     name: models.TextField = models.TextField()
@@ -25,10 +25,10 @@ class Workflow(BaseModel):
         """
         Workflow entry point, executed immediately after an example was created
         """
-        logger.debug(f"Workflow {self.name} started for example {example}")
+        logger.debug(f"Project {self.name} started workflow for example {example}")
 
 
-class WorkflowAdmin(BaseAdmin):
+class ProjectAdmin(BaseAdmin):
     readonly_fields = ("id", "created_at", "updated_at")
     list_display = ("id", "name", "created_by", "is_deleted")
     fields = (
@@ -47,4 +47,4 @@ class WorkflowAdmin(BaseAdmin):
         obj.save()
 
 
-admin.site.register(Workflow, WorkflowAdmin)
+admin.site.register(Project, ProjectAdmin)
