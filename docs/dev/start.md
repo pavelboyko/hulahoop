@@ -72,6 +72,7 @@ POSTGRES_PASSWORD=hulahoop
 - `src`
   - `app` -- Backend sources
   - `hulahoop` -- Django configuration
+  - `mpa` -- Multi-Page App frontend (to be replaced by and SPA frontend at some point I guess)
   - `entrypoint-dev.sh` -- dev server launch script
   - `manage.py` -- Django swiss army knife
 - `docker-compose.yml` -- service launch instructions

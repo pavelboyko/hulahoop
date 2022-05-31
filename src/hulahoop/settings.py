@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "prettyjson",
     "app",
+    "mpa",
 ]
 
 AUTH_USER_MODEL = "app.User"

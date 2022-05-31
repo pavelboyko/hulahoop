@@ -9,5 +9,5 @@ api_router.register(r"projects", api.ProjectViewSet, basename="projects_v1_0")
 api_router.register(r"examples", api.ExampleViewSet, basename="examples_v1_0")
 
 urlpatterns = [
-    path(r"api/v1.0/", include(api_router.urls)),
+    path(r"v1.0/", include(api_router.urls)),
 ]
