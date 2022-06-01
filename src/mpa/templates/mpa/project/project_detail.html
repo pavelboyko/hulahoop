@@ -21,13 +21,19 @@
 
 
 {% block main %}
-{% if example_list %}
+    <form method="get" class="d-flex align-items-baseline">
+        {{ example_filter.form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn" href="{% url 'project_detail' project.id %}">Clear</a>
+    </form>
+
+    {% if example_filter.qs %}
     <ul>
-    {% for example in example_list %}
+    {% for example in example_filter.qs %}
         <li><a href="{% url 'example_detail' project.id example.id %}">{{ example.id }}</a></li>
     {% endfor %}
     </ul>
-{% else %}
-    <p>No results found. Use API to upload examples.</p>
-{% endif %}
+    {% else %}
+        <p>No results found. Change filters or use API to upload examples.</p>
+    {% endif %}
 {% endblock main %}

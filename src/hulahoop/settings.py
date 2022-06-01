@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "prettyjson",
-    "crispy_forms",
+    "crispy_forms",     # required by mpa
+    "django_filters",    # required by mpa
     "app",
     "mpa",
 ]
