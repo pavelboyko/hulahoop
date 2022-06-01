@@ -11,9 +11,18 @@
 {% endblock breadcrumb%}
 
 {% block main %}
-<p>Id: {{ example.id }}</p>
-<p>Media: <a href="{{ example.media_url }}">{{ example.media_url }}</a></p>
-<p>Status: {{ example.get_status_display }}</p>
-<p>Created at: {{ example.created_at }}</p>
-<p>Updated at: {{ example.updated_at }}</p>
+<div class="container">
+    <div class="row">
+    <div class="col">
+        <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid"/>
+    </div>
+        <div class="col">
+            <p>Id: {{ example.id }}</p>
+            <p><a href="{{ example.media_url }}" target="_blank">Open in new tab</a></p>
+            <p>Status: <span class="badge rounded-pill bg-secondary">{{ example.get_status_display }}</span></p>
+            <p>Created: {{ example.created_at }}</p>
+            <p>Updated: {{ example.updated_at }}</p>
+        </div>
+    </div>
+</div>
 {% endblock main %}
