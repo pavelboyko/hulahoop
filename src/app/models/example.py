@@ -33,7 +33,7 @@ class Example(BaseModel):
     @classmethod
     def post_create(cls, sender, instance, created, *args, **kwargs):
         if created:
-            instance.project.start(instance)
+            instance.project.start_workflow(instance)
 
 
 post_save.connect(Example.post_create, sender=Example)
