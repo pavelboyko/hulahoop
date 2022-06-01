@@ -11,8 +11,12 @@ class Project(BaseModel):
     """
     A container for examples, processing workflows, etc.
     """
+    class MediaType(models.IntegerChoices):
+        image = 0
+        # video, audio, etc. will be here
 
     name: models.TextField = models.TextField()
+    media_type: models.IntegerField = models.IntegerField(choices=MediaType.choices, default=MediaType.image)
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     created_by = models.ForeignKey(
         "User", null=False, blank=False, on_delete=models.CASCADE
@@ -30,10 +34,11 @@ class Project(BaseModel):
 
 class ProjectAdmin(BaseAdmin):
     readonly_fields = ("id", "created_at", "updated_at")
-    list_display = ("id", "name", "created_by", "is_deleted")
+    list_display = ("id", "name", "media_type", "created_by", "is_deleted")
     fields = (
         "id",
         "name",
+        "media_type",
         "properties",
         "created_by",
         "created_at",

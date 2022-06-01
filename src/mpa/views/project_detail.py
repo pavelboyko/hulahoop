@@ -8,7 +8,7 @@ class ExampleFilter(django_filters.FilterSet):
 
     class Meta:
         model = Example
-        fields = ['created_at', 'status']
+        fields = ['status', 'created_at']
 
 
 def project_detail(request, project_id):

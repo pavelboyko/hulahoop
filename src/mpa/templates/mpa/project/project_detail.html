@@ -21,10 +21,10 @@
 
 
 {% block main %}
-    <form method="get" class="d-flex align-items-baseline">
+    <form method="get" class="d-flex align-items-baseline justify-content-end" style="gap: 0.5em">
         {{ example_filter.form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn" href="{% url 'project_detail' project.id %}">Clear</a>
+        <button type="submit" class="btn btn-sm btn-primary">Filter examples</button>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'project_detail' project.id %}">Clear filters</a>
     </form>
 
     {% if example_filter.qs %}

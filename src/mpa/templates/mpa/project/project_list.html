@@ -7,9 +7,6 @@
         <a class="nav-link active" aria-current="page" href="#">Projects</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Teams</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="#">Integrations</a>
     </li>
 </ul>
@@ -30,8 +27,11 @@
 {% if project_list %}
 <ul class="list-group">
     {% for project in project_list %}
-    <li class="list-group-item">
+    <li class="list-group-item d-flex flex-column list-group-item-action">
         <a href="{% url 'project_detail' project.id %}">{{ project.name }}</a>
+        <div>
+        <small class="text-muted">{{ project.get_media_type_display }} • Updated {{ project.updated_at|timesince }} ago </small>
+        </div>
     </li>
     {% endfor %}
 </ul>
