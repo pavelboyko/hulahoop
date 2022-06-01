@@ -6,7 +6,7 @@
 {% endblock breadcrumb%}
 
 {% block tabs %}
-<ul class="nav nav-tabs" xmlns="http://www.w3.org/1999/html">
+<ul class="nav">
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#">Examples</a>
     </li>
@@ -18,12 +18,13 @@
 
 
 {% block main %}
+<!--
     <form method="get" class="d-flex align-items-baseline justify-content-end" style="gap: 0.5em">
         {{ example_filter.form.as_p }}
         <button type="submit" class="btn btn-sm btn-primary">Filter examples</button>
         <a class="btn btn-sm btn-outline-primary" href="{% url 'example_list' project.id %}">Clear filters</a>
     </form>
-
+-->
     {% if example_filter.qs %}
     <div class="d-flex flex-wrap">
     {% for example in example_filter.qs %}
@@ -35,6 +36,6 @@
     {% endfor %}
     </div>
     {% else %}
-        <p>No results found. Change filters or use API to upload examples.</p>
+        <p>No examples found. Change filters or use API to upload examples.</p>
     {% endif %}
 {% endblock main %}

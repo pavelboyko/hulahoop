@@ -1,0 +1,23 @@
+@media screen and (min-width: 992px) {
+    .page-container {
+        width: 958px;
+    }
+}
+.breadcrumb {
+    font-size: 1.5rem !important;
+}
+.nav {
+    border-bottom: 1px solid rgb(222, 226, 230);
+}
+.nav-link {
+    color: rgb(110, 110, 110);
+    font-weight: 500;
+}
+.nav-link.active {
+    color: rgb(33, 37, 41);
+    background-color: white;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 600;
+    border-bottom: 2px solid rgb(33, 37, 41);
+    margin-bottom: -1px;
+}
