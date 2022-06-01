@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 
 
-def project_detail(request, project_id):
+def index(request):
     return HttpResponseRedirect(
-        reverse("example_list", kwargs={"project_id": project_id})
+        reverse("project_list")
     )

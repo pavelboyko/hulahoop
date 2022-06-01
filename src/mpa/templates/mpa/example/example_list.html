@@ -11,9 +11,6 @@
         <a class="nav-link active" aria-current="page" href="#">Examples</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Pipelines</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="#">Settings</a>
     </li>
 </ul>
@@ -24,7 +21,7 @@
     <form method="get" class="d-flex align-items-baseline justify-content-end" style="gap: 0.5em">
         {{ example_filter.form.as_p }}
         <button type="submit" class="btn btn-sm btn-primary">Filter examples</button>
-        <a class="btn btn-sm btn-outline-primary" href="{% url 'project_detail' project.id %}">Clear filters</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'example_list' project.id %}">Clear filters</a>
     </form>
 
     {% if example_filter.qs %}
