@@ -29,9 +29,7 @@
     {% for project in project_list %}
     <li class="list-group-item d-flex flex-column list-group-item-action">
         <a href="{% url 'project_detail' project.id %}" class="stretched-link">{{ project.name }}</a>
-        <div>
         <small class="text-muted">{{ project.get_media_type_display }} • Updated {{ project.updated_at|timesince }} ago </small>
-        </div>
     </li>
     {% endfor %}
 </ul>

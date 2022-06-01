@@ -25,11 +25,15 @@
     </form>
 
     {% if example_filter.qs %}
-    <ul>
+    <div class="d-flex flex-wrap">
     {% for example in example_filter.qs %}
-        <li><a href="{% url 'example_detail' project.id example.id %}">{{ example.id }}</a></li>
+        {% if project.media_type == 0 %}
+            {% include "mpa/example/image_card.html" %}
+        {% else %}
+        <p>unsupported media type</p>
+        {% endif %}
     {% endfor %}
-    </ul>
+    </div>
     {% else %}
         <p>No results found. Change filters or use API to upload examples.</p>
     {% endif %}
