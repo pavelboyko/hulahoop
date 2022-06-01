@@ -3,6 +3,4 @@ from django.urls import reverse
 
 
 def index(request):
-    return HttpResponseRedirect(
-        reverse("project_list")
-    )
+    return HttpResponseRedirect(reverse("project_list"))

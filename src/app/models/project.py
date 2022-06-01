@@ -12,12 +12,15 @@ class Project(BaseModel):
     """
     A container for examples, processing workflows, etc.
     """
+
     class MediaType(models.IntegerChoices):
         image = 0
         # video, audio, etc. will be here
 
     name: models.TextField = models.TextField()
-    media_type: models.IntegerField = models.IntegerField(choices=MediaType.choices, default=MediaType.image)
+    media_type: models.IntegerField = models.IntegerField(
+        choices=MediaType.choices, default=MediaType.image
+    )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     created_by = models.ForeignKey(
         "User", null=False, blank=False, on_delete=models.CASCADE

@@ -13,6 +13,7 @@ class Example(BaseModel):
     """
     A single ML example
     """
+
     class Status(models.IntegerChoices):
         pending = 0
         skipped = 10
