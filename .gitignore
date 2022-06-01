@@ -134,3 +134,6 @@ dmypy.json
 # Dev environment database
 .data
 
+# Dev environment static files
+/src/static/
+
