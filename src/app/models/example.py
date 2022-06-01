@@ -1,5 +1,6 @@
 from enum import Enum
 import logging
+from django.utils import timezone
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib import admin
@@ -31,12 +32,14 @@ class Example(BaseModel):
         return str(self.id)[:8]
 
     @classmethod
-    def post_create(cls, sender, instance, created, *args, **kwargs):
+    def post_save(cls, sender, instance, created, *args, **kwargs):
+        instance.project.updated_at = timezone.now()
+        instance.project.save(update_fields=["updated_at"])
         if created:
             instance.project.start_workflow(instance)
 
 
-post_save.connect(Example.post_create, sender=Example)
+post_save.connect(Example.post_save, sender=Example)
 
 
 class ExampleAdmin(BaseAdmin):
