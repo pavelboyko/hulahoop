@@ -21,7 +21,7 @@
             <h5>Properties</h5>
             <p>Id: {{ example.id }}</p>
             <p><a href="{{ example.media_url }}" target="_blank">Open in new tab</a></p>
-            <p>Status: <span class="badge rounded-pill bg-secondary">{{ example.get_status_display }}</span></p>
+            <p>Status: <span class="badge rounded-pill text-dark bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span></p>
             <p>Created: {{ example.created_at }}</p>
             <p>Updated: {{ example.updated_at }}</p>
             <br/>
