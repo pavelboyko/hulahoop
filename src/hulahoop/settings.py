@@ -173,3 +173,14 @@ LOGGING = {
 }
 
 LOGIN_URL = "/admin/login/"
+
+# Redis settings
+REDIS_HOST = os.environ.get("REDIS_SERVICE_ENDPOINT", "redis")
+REDIS_PORT = "6379"
+
+# Celery settings
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+

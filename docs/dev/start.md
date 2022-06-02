@@ -17,7 +17,7 @@ docker-compose up
 
 2. On the first run create a superuser
 ```
-docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py createsuperuser 
+docker exec -it hulahoop_app /opt/hulahoop/manage.py createsuperuser 
 ```
 
 3. Open http://localhost:8000 to see the app. Use login and password from the previous step to login.
@@ -36,8 +36,8 @@ docker-compose up
 If database models change you have to create and apply migrations:
 
 ```
-docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py makemigrations
-docker exec -it hulahoop_app_1 /opt/hulahoop/manage.py migrate
+docker exec -it hulahoop_app /opt/hulahoop/manage.py makemigrations
+docker exec -it hulahoop_app /opt/hulahoop/manage.py migrate
 ```
 
 ## What's inside Hulahoop
@@ -48,7 +48,8 @@ Services:
 
 ### Inside the app container
 
-The app is located in `/opt/hulahoop`.
+When running locally the app is launched in a separate container named `hulahoop_app`.  
+The app is located in `/opt/hulahoop` in the container.
 
 The following environment variables are defined in the `app` container:
 
@@ -58,21 +59,14 @@ The following environment variables are defined in the `app` container:
 
 ### Inside the database container
 
-Hulahoop uses PostgreSQL 14 as a transactional database. When running locally the database is launched in a separate container named `docker_compose_db_1`.
-If you need direct access to the database, use the following credentials:
-
-```
-POSTGRES_DB=hulahoop
-POSTGRES_USER=hulahoop
-POSTGRES_PASSWORD=hulahoop
-```
+Hulahoop uses PostgreSQL 14 as a transactional database. When running locally the database is launched in a separate container named `hulahoop_db`.
 
 ## Source code structure
 - `docs` -- Keep this up to date, please.
 - `src`
   - `app` -- Backend sources
   - `hulahoop` -- Django configuration
-  - `mpa` -- Multi-Page App frontend (to be replaced by and SPA frontend at some point I guess)
+  - `mpa` -- Multi-Page App frontend
   - `entrypoint-dev.sh` -- dev server launch script
   - `manage.py` -- Django swiss army knife
 - `docker-compose.yml` -- service launch instructions

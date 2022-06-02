@@ -2,6 +2,7 @@ version: "3"
 
 services:
   db:
+    container_name: hulahoop_db
     image: postgres:14
     volumes:
       - ./.data/db:/var/lib/postgresql/data
@@ -9,9 +10,21 @@ services:
       - POSTGRES_DB=hulahoop
       - POSTGRES_USER=hulahoop
       - POSTGRES_PASSWORD=hulahoop
+
+  redis:
+    container_name: hulahoop_redis
+    image: redis:6
+    command: redis-server
+    volumes:
+      - ./.data/redis:/var/lib/redis
+      - ./etc/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+
   app:
+    container_name: hulahoop_app
     build: ""
-    command: ["./entrypoint-dev.sh"]
+    command: "./entrypoint-dev.sh"
     volumes:
       - ./src:/opt/hulahoop
     ports:
@@ -22,3 +35,17 @@ services:
       - POSTGRES_PASSWORD=hulahoop
     depends_on:
       - db
+      - redis
+
+  celery_worker:
+    #container_name: hulahoop_celery_worker
+    build: ""
+    command: "./celery-worker.sh"
+    volumes:
+      - ./src:/opt/hulahoop
+    environment:
+      - DJANGO_SETTINGS_MODULE=hulahoop.settings
+    depends_on:
+      - db
+      - redis
+      - app
