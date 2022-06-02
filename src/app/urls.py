@@ -10,4 +10,5 @@ api_router.register(r"examples", api.ExampleViewSet, basename="examples_v1_0")
 
 urlpatterns = [
     path(r"v1.0/", include(api_router.urls)),
+    path(r"v1.0/webhook/<token>/", api.webhook, name="webhook_v1_0"),
 ]

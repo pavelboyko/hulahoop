@@ -36,7 +36,7 @@ class Example(BaseModel):
         instance.project.updated_at = timezone.now()
         instance.project.save(update_fields=["updated_at"])
         if created:
-            instance.project.start_workflow(instance)
+            instance.project.start_workflow(instance.id)
 
 
 post_save.connect(Example.post_save, sender=Example)

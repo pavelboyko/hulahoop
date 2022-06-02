@@ -1,7 +1,8 @@
+from typing import Tuple, Any
 import logging
-from typing import Tuple
 import requests
 from urllib.parse import urljoin
+#import app.api.webhook
 
 logger = logging.getLogger(__package__)
 
@@ -52,3 +53,9 @@ def create_image_labeling_task(
         logger.error(f"Failed to connect to Label Studio: {e}")
         return False, e.strerror
 
+
+def webhook_handler(data: Any) -> None:
+    logger.info(f"Label Studio webhook received some data: {data}")
+
+
+#app.api.webhook.register_webhook_handler("labelstudio", webhook_handler)
