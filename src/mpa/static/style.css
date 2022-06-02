@@ -23,9 +23,9 @@
 }
 
 .bage-bg-pending { background: #DD5703; }
-.bage-bg-skipped { background: #88888; }
+.bage-bg-skipped { background: #000000; }
 .bage-bg-started { background: #215DE8; }
 .bage-bg-completed { background: #129504; }
-.bage-bg-canceled { background: #CB0B68; }
+.bage-bg-canceled { background: #BD1498; }
 .bage-bg-error { background: #E50400; }
 
