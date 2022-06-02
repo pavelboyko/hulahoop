@@ -8,6 +8,8 @@ until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$host" -d "$POSTGRES_NAME" -U "$POS
   sleep 5
 done
 
+# we don't wait for Redis here because it starts faster than Postgres, though we should in principle
+
 >&2 echo "Postgres is up - starting service"
 
 python manage.py makemigrations --noinput && \

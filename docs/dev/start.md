@@ -44,7 +44,9 @@ docker exec -it hulahoop_app /opt/hulahoop/manage.py migrate
 
 Services:
 - db: the PostgreSQL database
+- redis: the Redis database
 - app: the Django app
+- celery_worker: the Celery worker for async tasks
 
 ### Inside the app container
 
@@ -67,7 +69,8 @@ Hulahoop uses PostgreSQL 14 as a transactional database. When running locally th
   - `app` -- Backend sources
   - `hulahoop` -- Django configuration
   - `mpa` -- Multi-Page App frontend
-  - `entrypoint-dev.sh` -- dev server launch script
+  - `celery-worker.sh` -- dev celery worker launch script
+  - `entrypoint-dev.sh` -- dev app launch script
   - `manage.py` -- Django swiss army knife
 - `docker-compose.yml` -- service launch instructions
 - `Dockerfile` -- app container build instructions. Update this file when you add new system dependencies.
