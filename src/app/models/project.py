@@ -33,7 +33,7 @@ class Project(BaseModel):
         """
         Workflow entry point, executed after an example was created
         """
-        demo.start(example)
+        demo.start(self.id, example.id)
 
 
 class ProjectAdmin(BaseAdmin):
