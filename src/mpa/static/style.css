@@ -22,10 +22,10 @@
     margin-bottom: -1px;
 }
 
-.bage-bg-pending { background: #EECD4F; }
-.bage-bg-skipped { background: #CCCCCC; }
-.bage-bg-started { background: #7ED5F7; }
-.bage-bg-completed { background: #78CD6D; }
-.bage-bg-canceled { background: #C273D0; }
-.bage-bg-error { background: #ff795b; }
+.bage-bg-pending { background: #DD5703; }
+.bage-bg-skipped { background: #88888; }
+.bage-bg-started { background: #215DE8; }
+.bage-bg-completed { background: #129504; }
+.bage-bg-canceled { background: #CB0B68; }
+.bage-bg-error { background: #E50400; }
 
