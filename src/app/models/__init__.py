@@ -1,3 +1,4 @@
+from .user import User
 from .project import Project
 from .example import Example
-from .user import User
+from .example_event import ExampleEvent

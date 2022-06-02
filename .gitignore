@@ -135,5 +135,11 @@ dmypy.json
 .data
 
 # Dev environment static files
-/src/static/
+src/static/
+
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+
 
