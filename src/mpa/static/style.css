@@ -21,3 +21,11 @@
     border-bottom: 2px solid rgb(33, 37, 41);
     margin-bottom: -1px;
 }
+
+.bage-bg-pending { background: #EECD4F; }
+.bage-bg-skipped { background: #CCCCCC; }
+.bage-bg-started { background: #7ED5F7; }
+.bage-bg-completed { background: #78CD6D; }
+.bage-bg-canceled { background: #C273D0; }
+.bage-bg-error { background: #ff795b; }
+
