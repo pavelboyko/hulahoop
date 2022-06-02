@@ -3,7 +3,7 @@ version: "3"
 services:
   db:
     container_name: hulahoop_db
-    image: postgres:14
+    image: postgres:14-alpine
     volumes:
       - ./.data/db:/var/lib/postgresql/data
     environment:
@@ -13,7 +13,7 @@ services:
 
   redis:
     container_name: hulahoop_redis
-    image: redis:6
+    image: redis:6-alpine
     command: redis-server
     volumes:
       - ./.data/redis:/var/lib/redis
@@ -45,6 +45,9 @@ services:
       - ./src:/opt/hulahoop
     environment:
       - DJANGO_SETTINGS_MODULE=hulahoop.settings
+      - POSTGRES_NAME=hulahoop
+      - POSTGRES_USER=hulahoop
+      - POSTGRES_PASSWORD=hulahoop
     depends_on:
       - db
       - redis

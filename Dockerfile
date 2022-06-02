@@ -1,11 +1,7 @@
-FROM python:3.10
+FROM python:3.10-alpine
 ENV PYTHONUNBUFFERED=1
 
-RUN \
-  apt update && \
-  apt install -yq --reinstall ca-certificates && \
-  apt install -yq \
-    postgresql-client
+RUN apk --update add postgresql-client
 
 COPY requirements.txt /opt/hulahoop/
 WORKDIR /opt/hulahoop/

@@ -1,9 +1,10 @@
 import logging
 import uuid
-from django.db import models
+from django.db import models, transaction
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
-from app.workflow import demo
+from hulahoop.celery import app
+
 
 logger = logging.getLogger(__package__)
 
@@ -30,10 +31,11 @@ class Project(BaseModel):
         return self.name
 
     def start_workflow(self, example_id: uuid.UUID) -> None:
-        """
-        Workflow entry point, executed after an example was created
-        """
-        demo.start(self.id, example_id)
+        """Workflow entry point, executed after an example was created"""
+        # transaction.on_commit is to make sure that example is saved
+        # because we call start_workflow from an Example post_save signal
+        # see https://stackoverflow.com/a/45279060
+        transaction.on_commit(lambda: app.send_task("start_workflow", [self.id, example_id]))
 
 
 class ProjectAdmin(BaseAdmin):
