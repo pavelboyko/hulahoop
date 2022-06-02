@@ -18,11 +18,17 @@
             <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
         </div>
         <div class="col-lg">
+            <h5>Properties</h5>
             <p>Id: {{ example.id }}</p>
             <p><a href="{{ example.media_url }}" target="_blank">Open in new tab</a></p>
             <p>Status: <span class="badge rounded-pill bg-secondary">{{ example.get_status_display }}</span></p>
             <p>Created: {{ example.created_at }}</p>
             <p>Updated: {{ example.updated_at }}</p>
+            <br/>
+            <h5>Events</h5>
+            {% for event in event_list %}
+            <p>{{ event.get_event_type_display}}: {{ event.created_at }}</p>
+            {% endfor %}
         </div>
     </div>
 </div>
