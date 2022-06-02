@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-__handler_registry: Dict[str, Callable[[Any], None]] = []
+__handler_registry: Dict[str, Callable[[Any], None]] = {}
 
 
 def register_webhook_handler(token: str, callback: Callable[[Any], None]) -> None:

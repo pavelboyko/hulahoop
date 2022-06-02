@@ -2,7 +2,7 @@ from typing import Tuple, Any
 import logging
 import requests
 from urllib.parse import urljoin
-#import app.api.webhook
+from app.api import register_webhook_handler
 
 logger = logging.getLogger(__package__)
 
@@ -58,4 +58,4 @@ def webhook_handler(data: Any) -> None:
     logger.info(f"Label Studio webhook received some data: {data}")
 
 
-#app.api.webhook.register_webhook_handler("labelstudio", webhook_handler)
+register_webhook_handler("labelstudio", webhook_handler)
