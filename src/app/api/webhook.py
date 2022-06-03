@@ -3,6 +3,8 @@ import logging
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from urllib.parse import urljoin, quote
+from hulahoop.settings import HOSTNAME, HTTP_SCHEME, API_VERSION
 
 logger = logging.getLogger(__package__)
 
@@ -18,6 +20,13 @@ def register_webhook_handler(slug: str, callback: Callable[[Any], None]) -> None
 
     __handler_registry[slug] = callback
     logger.info(f"Webhook slug '{slug}' registered")
+
+
+def get_webhook_absolute_url(slug: str) -> str:
+    """Get a registered webhook URL for a slug"""
+    return urljoin(
+        f"{HTTP_SCHEME}{HOSTNAME}", f"api/v{API_VERSION}/webhook/{quote(slug)}/"
+    )
 
 
 @api_view(["POST"])

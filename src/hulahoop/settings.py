@@ -14,6 +14,10 @@ import os
 import sys
 from pathlib import Path
 
+HTTP_SCHEME = "http://"
+HOSTNAME = "host.docker.internal:8000"
+API_VERSION = "1.0"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +31,7 @@ SECRET_KEY = "django-insecure-6adc!959=99x3&^z)vhq@_gl02n1$ml1f6ius*%l+00!10y6f@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["host.docker.internal", "localhost"]
 
 
 # Application definition
@@ -167,7 +171,7 @@ LOGGING = {
         "app": {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "propagate": True,
+            "propagate": False,
         },
     },
 }

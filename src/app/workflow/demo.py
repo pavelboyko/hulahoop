@@ -7,7 +7,7 @@ import uuid
 from app.models import Example, ExampleEvent, Project
 from app.plugins import label_studio
 
-logger = logging.getLogger("workflow.demo")
+logger = logging.getLogger(__package__)
 
 
 def start(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
@@ -20,9 +20,7 @@ def start(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
 
 def create_labeling_task(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
     # TODO: replace me by project-level Label Studio plugin configuration
-    LABELSTUDIO_URL = "http://host.docker.internal:8080/"
-    LABELSTUDIO_API_KEY = "d3bca97b95da0820cadae2197c7ccde4ee6e77b7"
-    LABELSTUDIO_PROJECT_ID = "2"
+    LABELSTUDIO_PROJECT_ID = 2
 
     media_urls = Example.objects.filter(id=example_id).values_list(
         "media_url", flat=True
@@ -34,7 +32,7 @@ def create_labeling_task(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
         return
 
     success, message = label_studio.create_image_labeling_task(
-        LABELSTUDIO_URL, LABELSTUDIO_API_KEY, LABELSTUDIO_PROJECT_ID, media_urls[0]
+        LABELSTUDIO_PROJECT_ID, media_urls[0]
     )
     if success:
         Example.objects.filter(id=example_id).update(status=Example.Status.started)
