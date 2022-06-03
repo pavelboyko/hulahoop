@@ -5,9 +5,9 @@ import logging
 import uuid
 
 from app.models import Example, ExampleEvent, Project
-from app.integrations import label_studio
+from app.plugins import label_studio
 
-logger = logging.getLogger(__package__)
+logger = logging.getLogger("workflow.demo")
 
 
 def start(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
@@ -37,16 +37,12 @@ def create_labeling_task(project_id: uuid.UUID, example_id: uuid.UUID) -> None:
         LABELSTUDIO_URL, LABELSTUDIO_API_KEY, LABELSTUDIO_PROJECT_ID, media_urls[0]
     )
     if success:
-        Example.objects.filter(id=example_id).update(
-            status=Example.Status.started
-        )
+        Example.objects.filter(id=example_id).update(status=Example.Status.started)
         ExampleEvent.objects.create(
             example_id=example_id, event_type=ExampleEvent.EventType.started
         )
     else:
-        Example.objects.filter(id=example_id).update(
-            status=Example.Status.error
-        )
+        Example.objects.filter(id=example_id).update(status=Example.Status.error)
         ExampleEvent.objects.create(
             example_id=example_id,
             event_type=ExampleEvent.EventType.error,

@@ -35,7 +35,9 @@ class Project(BaseModel):
         # transaction.on_commit is to make sure that example is saved
         # because we call start_workflow from an Example post_save signal
         # see https://stackoverflow.com/a/45279060
-        transaction.on_commit(lambda: app.send_task("start_workflow", [self.id, example_id]))
+        transaction.on_commit(
+            lambda: app.send_task("start_workflow", [self.id, example_id])
+        )
 
 
 class ProjectAdmin(BaseAdmin):

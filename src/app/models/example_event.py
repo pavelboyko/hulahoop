@@ -10,6 +10,7 @@ class ExampleEvent(BaseModel):
     """
     An example processing event, e.g. "Labeling started", "Labeling completed", "Error", etc.
     """
+
     class EventType(models.IntegerChoices):
         created = 0
         started = 10
@@ -20,7 +21,9 @@ class ExampleEvent(BaseModel):
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
-    event_type = models.IntegerField(choices=EventType.choices, default=EventType.created)
+    event_type = models.IntegerField(
+        choices=EventType.choices, default=EventType.created
+    )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
     def __str__(self):
@@ -46,5 +49,3 @@ class ExampleEventAdmin(BaseAdmin):
 
 
 admin.site.register(ExampleEvent, ExampleEventAdmin)
-
-

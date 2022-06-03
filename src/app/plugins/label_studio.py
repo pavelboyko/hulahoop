@@ -6,6 +6,14 @@ from app.api import register_webhook_handler
 
 logger = logging.getLogger(__package__)
 
+name = "Label Studio"
+slug = "label studio"
+
+
+def init():
+    logger.info(f"Initializing {name} plugin...")
+    register_webhook_handler(slug, webhook_handler)
+
 
 def create_image_labeling_task(
     label_studio_url: str,
@@ -56,6 +64,3 @@ def create_image_labeling_task(
 
 def webhook_handler(data: Any) -> None:
     logger.info(f"Label Studio webhook received some data: {data}")
-
-
-register_webhook_handler("labelstudio", webhook_handler)

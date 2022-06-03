@@ -9,6 +9,8 @@ def example_detail(request, project_id, example_id):
     example = get_object_or_404(
         Example, id=example_id, project=project, is_deleted=False
     )
-    event_list = ExampleEvent.objects.filter(example_id=example_id).order_by("created_at")
+    event_list = ExampleEvent.objects.filter(example_id=example_id).order_by(
+        "created_at"
+    )
     context = {"project": project, "example": example, "event_list": event_list}
     return render(request, "mpa/example/example_detail.html", context)
