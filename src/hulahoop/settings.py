@@ -43,11 +43,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
-    "rest_framework.authtoken",
-    "prettyjson",
-    "crispy_forms",  # required by mpa
-    "django_filters",  # required by mpa
+    "rest_framework",                   # required by app
+    "rest_framework.authtoken",         # required by app
+    "prettyjson",                       # required by app
+    "crispy_forms",                     # required by mpa
+    "django_filters",                   # required by mpa
+    "django.contrib.humanize",          # required by mpa
     "app",
     "mpa",
 ]

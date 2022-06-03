@@ -30,6 +30,9 @@ class Project(BaseModel):
     def __str__(self):
         return self.name
 
+    def example_count(self):
+        return self.example_set.all().count()
+
     def start_workflow(self, example_id: uuid.UUID) -> None:
         """Workflow entry point, executed after an example was created"""
         # transaction.on_commit is to make sure that example is saved
