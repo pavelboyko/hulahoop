@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 from uuid import UUID
 from app.workflow.base import BaseWorkflow
 from app.plugins.base import BaseLabelingPlugin, ConfigError, RestRequestError
@@ -21,14 +22,17 @@ class DemoWorkflow(BaseWorkflow):
         # For now just hardcode Labeling Studio config here
         try:
             self.labeling_plugin = LabelStudioPlugin(
+                project_id,
                 {
                     "LABELSTUDIO_URL": "http://host.docker.internal:8080/",
                     "LABELSTUDIO_API_KEY": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
                     "LABELSTUDIO_PROJECT_ID": 2,
-                }
+                },
             )
         except ConfigError as error:
-            logger.error(f"Label Studio configuration error: {error}. Workflow initialization aborted.")
+            logger.error(
+                f"Label Studio configuration error: {error}. Workflow initialization aborted."
+            )
             return
 
         self.initialized = True
@@ -58,8 +62,13 @@ class DemoWorkflow(BaseWorkflow):
             example.status = Example.Status.error
             example.save(update_fields=["status"])
             ExampleEvent.objects.create(
-                example_id=example_id, event_type=ExampleEvent.EventType.error, properties={"message": e.message}
+                example_id=example_id,
+                event_type=ExampleEvent.EventType.error,
+                properties={"message": e.message},
             )
 
-
-
+    def webhook(self, slug: str, data: Any):
+        logger.debug(f"DemoWorkflow received some data: slug={slug}, data={data}")
+        if not self.initialized:
+            logger.debug("DemoWorkflow is not properly initialized. Aborted.")
+            return

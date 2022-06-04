@@ -1,5 +1,6 @@
 from app.models import Example
 
+
 class BasePlugin:
     pass
 

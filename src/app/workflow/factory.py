@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, Any
 from uuid import UUID
 from app.workflow.base import BaseWorkflow
 from .demo import DemoWorkflow
@@ -13,7 +13,8 @@ __registry: Dict[UUID, BaseWorkflow] = {}
 
 def start(project_id: UUID, example_id: UUID):
     """Start workflow for a specific project and example
-    A normal call chain is supposed to be: this function -> Workflow -> Plugin(s) -> Client (see plugins/base/)
+    This function is supposed to be executed by a celery worket (see tasks.py)
+    A call chain is supposed to be: this function -> Workflow -> Plugin(s) -> Client (see plugins/base/)
     """
 
     if project_id not in __registry:
@@ -23,3 +24,15 @@ def start(project_id: UUID, example_id: UUID):
         __registry[project_id] = DemoWorkflow(project_id)
 
     __registry[project_id].start(example_id)
+
+
+def webhook(project_id: UUID, slug: str, data: Any):
+    """Handle data received to webhook
+    This function is supposed to be executed by a celery worket (see tasks.py)
+    A call chain is supposed to be: this function -> Workflow -> Plugin(s) -> Workflow
+    """
+    if project_id not in __registry:
+        # See comment above
+        __registry[project_id] = DemoWorkflow(project_id)
+
+    __registry[project_id].webhook(slug, data)

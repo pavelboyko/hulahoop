@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Callable
 from app.plugins.base import BaseRestClient, ConfigError
 
 logger = logging.getLogger(__package__)
@@ -12,10 +12,12 @@ class LabelStudioClient(BaseRestClient):
     api_key: Optional[str] = None
     project_id: Optional[int] = None
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], webhook_slug: str):
         logger.debug(f"Initializing LabelStudioClient config={config}")
         self.read_config(config)
-        super().__init__(base_url=self.url, headers={"Authorization": f"Token {self.api_key}"})
+        super().__init__(
+            base_url=self.url, headers={"Authorization": f"Token {self.api_key}"}
+        )
 
     def read_config(self, config: Dict[str, Any]) -> None:
         self.url = config.get("LABELSTUDIO_URL")
@@ -39,5 +41,3 @@ class LabelStudioClient(BaseRestClient):
             path=f"/api/projects/{self.project_id}/import/",
             data=[{"image": image_url}],
         )
-
-
