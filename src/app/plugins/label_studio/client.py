@@ -12,7 +12,7 @@ class LabelStudioClient(BaseRestClient):
     api_key: Optional[str] = None
     project_id: Optional[int] = None
 
-    def __init__(self, config: Dict[str, Any], webhook_slug: str):
+    def __init__(self, config: Dict[str, Any]):
         logger.debug(f"Initializing LabelStudioClient config={config}")
         self.read_config(config)
         super().__init__(

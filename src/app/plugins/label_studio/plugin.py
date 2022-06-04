@@ -15,8 +15,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
 
     def __init__(self, project_id: UUID, config: Dict[str, Any]):
         logger.debug(f"Initializing {self.name} plugin config={config}")
-        webhook_slug = f"{self.slug}-{str(project_id)}"
-        self.client = LabelStudioClient(config, webhook_slug)
+        self.client = LabelStudioClient(config)
 
     def create_labeling_task(self, example: Example) -> None:
         # Assume all examples are images for a while
