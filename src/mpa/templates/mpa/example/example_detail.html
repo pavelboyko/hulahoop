@@ -25,10 +25,12 @@
             <p>Created: {{ example.created_at }}</p>
             <p>Updated: {{ example.updated_at }}</p>
             <br/>
+            {% if event_list %}
             <h5>Events</h5>
             {% for event in event_list %}
             <p>{{ event.get_event_type_display}}: {{ event.created_at }}</p>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
