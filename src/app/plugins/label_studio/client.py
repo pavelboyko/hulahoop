@@ -36,7 +36,9 @@ class LabelStudioClient(BaseRestClient):
         # TODO: check project id is positive integer
 
     def create_image_labeling_task(self, image_url: str) -> None:
-        """Create an image labeling task in Label Studio."""
+        """Create an image labeling task in Label Studio.
+        Request format is based on https://github.com/heartexlabs/label-studio/blob/develop/label_studio/data_import/api.py
+        """
         self.create(
             path=f"/api/projects/{self.project_id}/import/",
             data=[{"image": image_url}],

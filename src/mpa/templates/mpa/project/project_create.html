@@ -1,4 +1,6 @@
 {% extends "mpa/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block title %}New project{% endblock title %}
 
 {% block breadcrumb %}
@@ -6,9 +8,14 @@
 {% endblock breadcrumb%}
 
 {% block main %}
+<div class="d-flex justify-content-center">
+<div class="col-6">
 <form action="{% url 'project_create' %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create" class="btn btn-primary">
+    {{ form | crispy }}
+    <button type="submit" value="Create" class="btn btn-primary">Create</button>
+    <a href="/" class="btn btn-outline-secondary">Cancel</a>
 </form>
+</div>
+</div>
 {% endblock main %}

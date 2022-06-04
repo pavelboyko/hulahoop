@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",  # required by app
     "prettyjson",  # required by app
     "crispy_forms",  # required by mpa
+    "crispy_bootstrap5",  # required by mpa
     "django_filters",  # required by mpa
     "django.contrib.humanize",  # required by mpa
     "app",
@@ -188,3 +189,6 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
 CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
