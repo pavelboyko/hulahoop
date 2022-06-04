@@ -3,12 +3,7 @@
         width: 958px;
     }
 }
-a {
-    color: #1c48d9;
-}
-a:hover {
-    color: #0035c2;
-}
+
 .breadcrumb {
     font-size: 1.5rem !important;
 }

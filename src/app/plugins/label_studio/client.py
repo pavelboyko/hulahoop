@@ -43,3 +43,23 @@ class LabelStudioClient(BaseRestClient):
             path=f"/api/projects/{self.project_id}/import/",
             data=[{"image": image_url}],
         )
+
+    def create_webhook(self, url: str) -> None:
+        """Register webhook in Label Studio
+        """
+        self.create(
+            path=f"/api/webhooks/",
+            data={
+                "project": self.project_id,
+                "url": url,
+                "send_payload": True,
+                "send_for_all_actions": False,
+                "actions": [
+                    "ANNOTATION_CREATED",
+                    "ANNOTATIONS_CREATED",
+                    "ANNOTATION_UPDATED",
+                    "ANNOTATIONS_DELETED",
+                    "TASKS_DELETED",
+                ],
+            },
+        )
