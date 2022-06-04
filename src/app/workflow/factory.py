@@ -12,7 +12,10 @@ __registry: Dict[UUID, BaseWorkflow] = {}
 
 
 def start(project_id: UUID, example_id: UUID):
-    """Start workflow for a specific project and example"""
+    """Start workflow for a specific project and example
+    A normal call chain is supposed to be: this function -> Workflow -> Plugin(s) -> Client (see plugins/base/)
+    """
+
     if project_id not in __registry:
         # Initialize workflow at first start() call
         # In the future we will customize workflow depending on project settings
