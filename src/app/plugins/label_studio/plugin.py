@@ -19,7 +19,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         logger.debug(f"Initializing {self.name} plugin config={config}")
         self.client = LabelStudioClient(config)
 
-        webhook_path = reverse('webhook_v1_0', args=[project_id, self.slug])
+        webhook_path = reverse("webhook_v1_0", args=[project_id, self.slug])
         webhook_url = f"{HTTP_SCHEME}{HOSTNAME}{webhook_path}"
         logger.debug(f"Registering Label Studio webhook url={webhook_url}")
         self.client.create_webhook(webhook_url)

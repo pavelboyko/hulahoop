@@ -45,8 +45,7 @@ class LabelStudioClient(BaseRestClient):
         )
 
     def create_webhook(self, url: str) -> None:
-        """Register webhook in Label Studio
-        """
+        """Register webhook in Label Studio"""
         self.create(
             path=f"/api/webhooks/",
             data={

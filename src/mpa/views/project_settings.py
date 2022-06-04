@@ -23,4 +23,6 @@ def project_settings(request, project_id):
     else:
         form = ProjectForm()
 
-    return render(request, "mpa/project/project_settings.html", {"project": project, "form": form})
+    return render(
+        request, "mpa/project/project_settings.html", {"project": project, "form": form}
+    )
