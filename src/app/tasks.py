@@ -1,6 +1,6 @@
 import uuid
 from hulahoop.celery import app
-from app.workflow.demo import start
+from app.workflow.factory import start
 
 
 @app.task(name="start_workflow")

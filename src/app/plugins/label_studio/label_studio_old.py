@@ -6,6 +6,12 @@ Settings:
                            e.g. label_studio_url="http://host.docker.internal:8080/"
     LABELSTUDIO_API_KEY:   A secret Label Studio API key.
                            You can find your API key on the User Account page in Label Studio.
+
+    Example configuration
+        {
+            "LABELSTUDIO_URL": "http://host.docker.internal:8080/",
+            "LABELSTUDIO_API_KEY": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
+        }
 """
 from typing import Tuple, Any, Dict
 import logging
