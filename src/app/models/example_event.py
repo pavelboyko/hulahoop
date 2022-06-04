@@ -21,7 +21,7 @@ class ExampleEvent(BaseModel):
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
-    event_type = models.IntegerField(
+    event_type: models.IntegerField = models.IntegerField(
         choices=EventType.choices, default=EventType.created
     )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)

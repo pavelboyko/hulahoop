@@ -29,13 +29,11 @@ class DemoWorkflow(BaseWorkflow):
                     "LABELSTUDIO_PROJECT_ID": 2,
                 },
             )
+            self.initialized = True
         except ConfigError as error:
             logger.error(
                 f"Label Studio configuration error: {error}. Workflow initialization aborted."
             )
-            return
-
-        self.initialized = True
 
     def start(self, example_id: UUID):
         logger.debug(
@@ -52,20 +50,9 @@ class DemoWorkflow(BaseWorkflow):
 
         try:
             self.labeling_plugin.create_labeling_task(example)
-
-            example.status = Example.Status.started
-            example.save(update_fields=["status"])
-            ExampleEvent.objects.create(
-                example_id=example_id, event_type=ExampleEvent.EventType.started
-            )
+            example.set_started()
         except RestRequestError as e:
-            example.status = Example.Status.error
-            example.save(update_fields=["status"])
-            ExampleEvent.objects.create(
-                example_id=example_id,
-                event_type=ExampleEvent.EventType.error,
-                properties={"message": e.message},
-            )
+            example.set_error(e.message)
 
     def webhook(self, slug: str, data: Any):
         logger.debug(f"DemoWorkflow received some data: slug={slug}, data={data}")

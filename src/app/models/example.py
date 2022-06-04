@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
+from .example_event import ExampleEvent
 
 logger = logging.getLogger(__package__)
 
@@ -37,6 +38,23 @@ class Example(BaseModel):
         instance.project.save(update_fields=["updated_at"])
         if created:
             instance.project.start_workflow(instance.id)
+
+    def set_started(self):
+        self.status = Example.Status.started
+        self.save(update_fields=["status"])
+        ExampleEvent.objects.create(
+            example=self,
+            event_type=ExampleEvent.EventType.started,
+        )
+
+    def set_error(self, message):
+        self.status = Example.Status.error
+        self.save(update_fields=["status"])
+        ExampleEvent.objects.create(
+            example=self,
+            event_type=ExampleEvent.EventType.error,
+            properties={"message": message},
+        )
 
 
 post_save.connect(Example.post_save, sender=Example)
