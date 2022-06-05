@@ -39,21 +39,44 @@ class Example(BaseModel):
         if created:
             instance.project.start_workflow(instance.id)
 
-    def set_started(self):
+    def set_labeling_started(self):
         self.status = Example.Status.started
         self.save(update_fields=["status"])
         ExampleEvent.objects.create(
             example=self,
-            event_type=ExampleEvent.EventType.started,
+            event_type=ExampleEvent.EventType.labeling_started,
         )
 
-    def set_error(self, message):
+    def set_labeling_error(self, message):
         self.status = Example.Status.error
         self.save(update_fields=["status"])
         ExampleEvent.objects.create(
             example=self,
-            event_type=ExampleEvent.EventType.error,
+            event_type=ExampleEvent.EventType.labeling_error,
             properties={"message": message},
+        )
+
+    def set_labeling_completed(self):
+        self.status = Example.Status.completed
+        self.save(update_fields=["status"])
+        ExampleEvent.objects.create(
+            example=self,
+            event_type=ExampleEvent.EventType.labeling_completed,
+        )
+
+    def set_labeling_updated(self):
+        # do not change status
+        ExampleEvent.objects.create(
+            example=self,
+            event_type=ExampleEvent.EventType.labeling_updated,
+        )
+
+    def set_labeling_deleted(self):
+        self.status = Example.Status.started
+        self.save(update_fields=["status"])
+        ExampleEvent.objects.create(
+            example=self,
+            event_type=ExampleEvent.EventType.labeling_deleted,
         )
 
 

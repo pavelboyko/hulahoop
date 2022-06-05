@@ -12,17 +12,18 @@ class ExampleEvent(BaseModel):
     """
 
     class EventType(models.IntegerChoices):
-        created = 0
-        started = 10
-        completed = 20
-        error = 30
-        updated = 40
+        default = 0
+        labeling_started = 10
+        labeling_completed = 20
+        labeling_error = 30
+        labeling_updated = 40
+        labeling_deleted = 50
 
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
     event_type: models.IntegerField = models.IntegerField(
-        choices=EventType.choices, default=EventType.created
+        choices=EventType.choices, default=EventType.default
     )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 

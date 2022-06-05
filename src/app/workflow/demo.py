@@ -49,13 +49,28 @@ class DemoWorkflow(BaseWorkflow):
             return
 
         try:
-            self.labeling_plugin.create_labeling_task(example)
-            example.set_started()
+            self.labeling_plugin.create_task(example)
+            example.set_labeling_started()
         except RestRequestError as e:
-            example.set_error(str(e))
+            example.set_labeling_error(str(e))
 
     def webhook(self, slug: str, data: Any):
-        logger.debug(f"DemoWorkflow received some data: slug={slug}, data={data}")
+        logger.debug(f"DemoWorkflow received some data: slug={slug}")
         if not self.initialized:
             logger.debug("DemoWorkflow is not properly initialized. Aborted.")
             return
+
+        if slug == self.labeling_plugin.slug:
+            example, action, result = self.labeling_plugin.parse_result(data)
+            if not example or not action:
+                logger.warning(
+                    f"Label Studio plugin wasn't able to parse example_id or action from webhook data {data}. Ignoring."
+                )
+                return
+
+            if action == BaseLabelingPlugin.Action.ANNOTATION_CREATED:
+                example.set_labeling_completed()
+            elif action == BaseLabelingPlugin.Action.ANNOTATION_UPDATED:
+                example.set_labeling_updated()
+            elif action == BaseLabelingPlugin.Action.ANNOTATION_DELETED:
+                example.set_labeling_deleted()

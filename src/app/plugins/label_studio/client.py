@@ -1,6 +1,7 @@
 import logging
-from typing import Dict, Any, Optional, Callable
-from app.plugins.base import BaseRestClient, ConfigError
+from typing import Dict, Any, Optional
+from uuid import UUID
+from app.plugins.base import BaseRestClient, BaseLabelingPlugin, ConfigError
 
 logger = logging.getLogger(__package__)
 
@@ -11,6 +12,7 @@ class LabelStudioClient(BaseRestClient):
     url: Optional[str] = None
     api_key: Optional[str] = None
     project_id: Optional[int] = None
+    token_field: str = "hulahoop_token"
 
     def __init__(self, config: Dict[str, Any]):
         logger.debug(f"Initializing LabelStudioClient config={config}")
@@ -35,13 +37,13 @@ class LabelStudioClient(BaseRestClient):
             raise ConfigError("Missing required LABELSTUDIO_PROJECT_ID field")
         # TODO: check project id is positive integer
 
-    def create_image_labeling_task(self, image_url: str) -> None:
+    def create_image_labeling_task(self, example_id: UUID, image_url: str) -> None:
         """Create an image labeling task in Label Studio.
         Request format is based on https://github.com/heartexlabs/label-studio/blob/develop/label_studio/data_import/api.py
         """
         self.create(
-            path=f"/api/projects/{self.project_id}/import",     # NB! no slash at the end
-            data=[{"image": image_url}],
+            path=f"/api/projects/{self.project_id}/import",  # NB! no slash at the end
+            data={"image": image_url, self.token_field: str(example_id)},
         )
 
     def create_webhook(self, url: str) -> None:
@@ -62,3 +64,28 @@ class LabelStudioClient(BaseRestClient):
                 ],
             },
         )
+
+    def get_example_id_from_webhook_request(self, data: Any) -> Optional[UUID]:
+        try:
+            return UUID(data["task"]["data"][self.token_field])
+        except (ValueError, KeyError, TypeError):
+            return None
+
+    def get_action_from_webhook_request(self, data: Any) -> BaseLabelingPlugin.Action:
+        try:
+            action_map = {
+                "ANNOTATION_CREATED": BaseLabelingPlugin.Action.ANNOTATION_CREATED,
+                "ANNOTATIONS_CREATED": BaseLabelingPlugin.Action.ANNOTATION_CREATED,
+                "ANNOTATION_UPDATED": BaseLabelingPlugin.Action.ANNOTATION_UPDATED,
+                "ANNOTATIONS_UPDATED": BaseLabelingPlugin.Action.ANNOTATION_CREATED,
+                "ANNOTATIONS_DELETED": BaseLabelingPlugin.Action.ANNOTATION_DELETED,
+            }
+            return action_map[data["action"]]
+        except (KeyError, TypeError):
+            return None
+
+    def get_result_from_webhook_request(self, data: Any) -> Any:
+        try:
+            return data["annotation"]["result"]
+        except (KeyError, TypeError):
+            return None

@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from uuid import UUID
 from django.urls import reverse
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
@@ -13,6 +13,7 @@ logger = logging.getLogger(__package__)
 class LabelStudioPlugin(BaseLabelingPlugin):
     name: str = "Label Studio"
     slug: str = "labelstudio"
+
     client: LabelStudioClient
 
     def __init__(self, project_id: UUID, config: Dict[str, Any]):
@@ -24,6 +25,18 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         logger.debug(f"Registering Label Studio webhook url={webhook_url}")
         self.client.create_webhook(webhook_url)
 
-    def create_labeling_task(self, example: Example) -> None:
+    def create_task(self, example: Example) -> None:
         # Assume all examples are images for a while
-        self.client.create_image_labeling_task(example.media_url)
+        self.client.create_image_labeling_task(example.id, example.media_url)
+
+    def parse_result(
+        self, data: Any
+    ) -> Tuple[Optional[Example], Optional[BaseLabelingPlugin.Action], Any]:
+        example_id = self.client.get_example_id_from_webhook_request(data)
+        action = self.client.get_action_from_webhook_request(data)
+        result = self.client.get_result_from_webhook_request(data)
+        if not example_id:
+            return None, action, result
+
+        example = Example.objects.filter(id=example_id).last()
+        return example, action, result

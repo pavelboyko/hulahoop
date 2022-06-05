@@ -38,7 +38,7 @@ services:
       - redis
 
   celery_worker:
-    #container_name: hulahoop_celery_worker
+    container_name: hulahoop_celery_worker
     build: ""
     command: "./celery-worker.sh"
     volumes:
