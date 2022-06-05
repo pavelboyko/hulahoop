@@ -1,7 +1,12 @@
 import logging
 from typing import Dict, Any, Optional
 from uuid import UUID
-from app.plugins.base import BaseRestClient, BaseLabelingPlugin, ConfigError
+from app.plugins.base import (
+    BaseRestClient,
+    BaseLabelingPlugin,
+    ConfigError,
+    RestRequestError,
+)
 
 logger = logging.getLogger(__package__)
 
@@ -25,17 +30,14 @@ class LabelStudioClient(BaseRestClient):
         self.url = config.get("LABELSTUDIO_URL")
         if not self.url:
             raise ConfigError("Missing required LABELSTUDIO_URL field")
-        # TODO: check URL format
 
         self.api_key = config.get("LABELSTUDIO_API_KEY")
         if not self.api_key:
             raise ConfigError("Missing required LABELSTUDIO_API_KEY field")
-        # TODO: check API key length
 
         self.project_id = config.get("LABELSTUDIO_PROJECT_ID")
         if not self.project_id:
             raise ConfigError("Missing required LABELSTUDIO_PROJECT_ID field")
-        # TODO: check project id is positive integer
 
     def create_image_labeling_task(self, example_id: UUID, image_url: str) -> None:
         """Create an image labeling task in Label Studio.
@@ -45,6 +47,17 @@ class LabelStudioClient(BaseRestClient):
             path=f"/api/projects/{self.project_id}/import",  # NB! no slash at the end
             data={"image": image_url, self.token_field: str(example_id)},
         )
+
+    def check_webhook_exists(self, url: str) -> bool:
+        """Check if a given webhook url already registered in Label Studio"""
+        try:
+            webhooks = self.get(path=f"/api/webhooks/")
+            for wh in webhooks:
+                if wh["url"] == url:
+                    return True
+            return False
+        except (TypeError, ValueError, KeyError) as e:
+            raise RestRequestError(e)
 
     def create_webhook(self, url: str) -> None:
         """Register webhook in Label Studio"""

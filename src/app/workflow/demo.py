@@ -30,9 +30,13 @@ class DemoWorkflow(BaseWorkflow):
                 },
             )
             self.initialized = True
-        except ConfigError as error:
+        except ConfigError as e:
             logger.error(
-                f"Label Studio configuration error: {error}. Workflow initialization aborted."
+                f"Label Studio configuration error: {e}. Workflow initialization aborted."
+            )
+        except RestRequestError as e:
+            logger.error(
+                f"Label Studio API request error: {e}. Workflow initialization aborted."
             )
 
     def start(self, example_id: UUID):

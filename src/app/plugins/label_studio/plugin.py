@@ -22,8 +22,11 @@ class LabelStudioPlugin(BaseLabelingPlugin):
 
         webhook_path = reverse("webhook_v1_0", args=[project_id, self.slug])
         webhook_url = f"{HTTP_SCHEME}{HOSTNAME}{webhook_path}"
-        logger.debug(f"Registering Label Studio webhook url={webhook_url}")
-        self.client.create_webhook(webhook_url)
+        # As we init plugin in all celery workers on every start
+        # make sure that our webhook wasn't already registered
+        if not self.client.check_webhook_exists(webhook_url):
+            logger.debug(f"Registering Label Studio webhook url={webhook_url}")
+            self.client.create_webhook(webhook_url)
 
     def create_task(self, example: Example) -> None:
         # Assume all examples are images for a while

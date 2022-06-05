@@ -17,7 +17,18 @@ class BaseRestClient:
         self.base_url = base_url
         self.headers = headers
 
-    def create(self, path: str, data: Any):
+    def get(self, path: str) -> Any:
+        url = urljoin(self.base_url, path)
+        logger.debug(f"Get url={url}.")
+        try:
+            response = requests.get(url=url, headers=self.headers)
+            if response.status_code != 200:
+                raise RestRequestError(response.text)
+            return response.json()
+        except requests.ConnectionError as e:
+            raise RestRequestError(e)
+
+    def create(self, path: str, data: Any) -> None:
         url = urljoin(self.base_url, path)
         logger.debug(f"Creating url={url}, data={data}.")
         try:
