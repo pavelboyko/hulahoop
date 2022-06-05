@@ -8,13 +8,13 @@
 {% block tabs %}
 <ul class="nav">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page"  href="#">Dashboard</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="{% url 'project_issues' project.id %}">Issues</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'example_list' project.id %}">Examples</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page"  href="#">Insights</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'project_settings' project.id %}">Settings</a>
@@ -25,7 +25,7 @@
 
 {% block main %}
 
-<h5>Number of examples <small class="text-muted">Last 30 days</small></h5>
+<h5 class="fs-3 display-6">Number of examples <small class="text-muted">Last 30 days</small></h5>
 
 {{ examples_last_n_days | safe}}
 

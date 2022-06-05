@@ -8,13 +8,13 @@
 {% block tabs %}
 <ul class="nav">
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'project_dashboard' project.id %}">Dashboard</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="{% url 'project_issues' project.id %}">Issues</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'example_list' project.id %}">Examples</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'project_dashboard' project.id %}">Insights</a>
     </li>
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#">Settings</a>
