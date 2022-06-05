@@ -40,7 +40,7 @@ class LabelStudioClient(BaseRestClient):
         Request format is based on https://github.com/heartexlabs/label-studio/blob/develop/label_studio/data_import/api.py
         """
         self.create(
-            path=f"/api/projects/{self.project_id}/import/",
+            path=f"/api/projects/{self.project_id}/import",     # NB! no slash at the end
             data=[{"image": image_url}],
         )
 
