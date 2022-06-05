@@ -1,4 +1,5 @@
 {% extends "mpa/base.html" %}
+
 {% block title %}{{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
@@ -24,24 +25,13 @@
 
 
 {% block main %}
-<!--
-    <form method="get" class="d-flex align-items-baseline justify-content-end" style="gap: 0.5em">
-        {{ example_filter.form.as_p }}
-        <button type="submit" class="btn btn-sm btn-primary">Filter examples</button>
-        <a class="btn btn-sm btn-outline-primary" href="{% url 'example_list' project.id %}">Clear filters</a>
-    </form>
--->
-    {% if example_filter.qs %}
+    {% if examples %}
     <div class="d-flex flex-wrap">
-    {% for example in example_filter.qs %}
-        {% if project.media_type == 0 %}
-            {% include "mpa/example/image_card.html" %}
-        {% else %}
-        <p>Unsupported media type</p>
-        {% endif %}
+    {% for example in examples %}
+        {% include "mpa/example/image_card.html" %}
     {% endfor %}
     </div>
     {% else %}
-        <p>No examples found. Change filters or use API to upload examples.</p>
+        <p>No examples found. Use API to upload examples.</p>
     {% endif %}
 {% endblock main %}
