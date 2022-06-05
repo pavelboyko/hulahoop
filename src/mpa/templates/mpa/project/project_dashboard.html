@@ -25,7 +25,9 @@
 
 {% block main %}
 
-{{ examples_last_30_days }}
+<h5>Number of examples <small class="text-muted">Last 30 days</small></h5>
+
+{{ examples_last_n_days | safe}}
 
 {% endblock main %}
 
