@@ -27,6 +27,6 @@ class BaseRestClient:
                 headers=self.headers,
             )
             if response.status_code != 201:
-                RestRequestError(response.text)
+                raise RestRequestError(response.text)
         except requests.ConnectionError as e:
             raise RestRequestError(e)

@@ -52,7 +52,7 @@ class DemoWorkflow(BaseWorkflow):
             self.labeling_plugin.create_labeling_task(example)
             example.set_started()
         except RestRequestError as e:
-            example.set_error(e.message)
+            example.set_error(str(e))
 
     def webhook(self, slug: str, data: Any):
         logger.debug(f"DemoWorkflow received some data: slug={slug}, data={data}")
