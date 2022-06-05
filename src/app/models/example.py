@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 from django.utils import timezone
 from django.db import models
 from django.db.models.signals import post_save
@@ -56,19 +57,21 @@ class Example(BaseModel):
             properties={"message": message},
         )
 
-    def set_labeling_completed(self):
+    def set_labeling_completed(self, result: Any):
         self.status = Example.Status.completed
         self.save(update_fields=["status"])
         ExampleEvent.objects.create(
             example=self,
             event_type=ExampleEvent.EventType.labeling_completed,
+            properties={"result": result},
         )
 
-    def set_labeling_updated(self):
+    def set_labeling_updated(self, result: Any):
         # do not change status
         ExampleEvent.objects.create(
             example=self,
             event_type=ExampleEvent.EventType.labeling_updated,
+            properties={"result": result},
         )
 
     def set_labeling_deleted(self):

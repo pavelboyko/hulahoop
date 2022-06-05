@@ -73,8 +73,8 @@ class DemoWorkflow(BaseWorkflow):
                 return
 
             if action == BaseLabelingPlugin.Action.ANNOTATION_CREATED:
-                example.set_labeling_completed()
+                example.set_labeling_completed(result)
             elif action == BaseLabelingPlugin.Action.ANNOTATION_UPDATED:
-                example.set_labeling_updated()
+                example.set_labeling_updated(result)
             elif action == BaseLabelingPlugin.Action.ANNOTATION_DELETED:
                 example.set_labeling_deleted()
