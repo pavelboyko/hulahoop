@@ -39,9 +39,11 @@ def plot_examples_last_n_days(project: Project, ndays: int = 30) -> Chart:
                 height="320px",
                 animation_opts=opts.AnimationOpts(animation=False),
                 renderer=RenderType.SVG,
-            )
+            ),
         )
-        .set_global_opts()
+        .set_global_opts(
+            tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="shadow"),
+        )
         .set_colors(colors)
     )
     labels = [(now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)]
