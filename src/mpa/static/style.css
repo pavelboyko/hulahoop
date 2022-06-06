@@ -30,3 +30,8 @@
 .bage-bg-canceled { background: #BD1498; }
 .bage-bg-error { background: #E50400; }
 
+.bage-bg-open { background: #E50400; }
+.bage-bg-muted { background: #cccccc; }
+.bage-bg-resolved { background: #129504; }
+.bage-bg-closed { background: #BD1498; }
+

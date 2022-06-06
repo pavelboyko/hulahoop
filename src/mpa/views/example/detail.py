@@ -13,4 +13,4 @@ def example_detail(request, project_id, example_id):
         "created_at"
     )
     context = {"project": project, "example": example, "event_list": event_list}
-    return render(request, "mpa/example/example_detail.html", context)
+    return render(request, "mpa/example/detail.html", context)

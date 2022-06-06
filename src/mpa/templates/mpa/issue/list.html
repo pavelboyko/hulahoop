@@ -1,4 +1,6 @@
 {% extends "mpa/base.html" %}
+{% load humanize %}
+
 {% block title %}{{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
@@ -24,6 +26,27 @@
 
 
 {% block main %}
-<p>Hello, issues</p>
+
+{% if issues %}
+<ul class="list-group">
+    {% for issue in issues %}
+    <li class="list-group-item d-flex flex-column list-group-item-action">
+        <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">{{ issue }}</a>
+        <small class="text-muted">
+            <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
+                {{ issue.get_status_display }}
+            </span>
+            • {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+            • Updated {{ project.updated_at | naturaltime }}
+        </small>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>
+    No issues found.
+</p>
+{% endif %}
+
 {% endblock main %}
 

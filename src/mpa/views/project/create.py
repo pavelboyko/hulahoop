@@ -23,4 +23,4 @@ def project_create(request):
     else:
         form = ProjectForm()
 
-    return render(request, "mpa/project/project_create.html", {"form": form})
+    return render(request, "mpa/project/create.html", {"form": form})

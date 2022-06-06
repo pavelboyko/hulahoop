@@ -3,6 +3,7 @@ import uuid
 from django.db import models, transaction
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
+from .issue import Issue
 from hulahoop.celery import app
 
 
@@ -31,7 +32,10 @@ class Project(BaseModel):
         return self.name
 
     def example_count(self):
-        return self.example_set.all().count()
+        return self.example_set.filter(is_deleted=False).count()
+
+    def issue_count(self):
+        return self.issue_set.filter(status=Issue.Status.open, is_deleted=False).count()
 
     def start_workflow(self, example_id: uuid.UUID) -> None:
         """Workflow entry point, executed after an example was created"""

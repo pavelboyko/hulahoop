@@ -70,7 +70,7 @@ def project_dashboard(request, project_id):
     examples_last_n_days = plot_examples_last_n_days(project, ndays=30)
     return render(
         request,
-        "mpa/project/project_dashboard.html",
+        "mpa/project/dashboard.html",
         {
             "project": project,
             "examples_last_n_days": examples_last_n_days.render_embed(),

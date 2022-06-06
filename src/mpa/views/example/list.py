@@ -11,6 +11,6 @@ def example_list(request, project_id):
     )
     return render(
         request,
-        "mpa/example/example_list.html",
+        "mpa/example/list.html",
         {"project": project, "examples": examples},
     )

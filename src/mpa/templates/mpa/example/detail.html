@@ -7,6 +7,11 @@
         {{ project.name|truncatechars:32 }}
     </a>
 </li>
+<li class="breadcrumb-item">
+    <a href="{% url 'example_list' project.id %}" class="link-dark text-decoration-none">
+        Examples
+    </a>
+</li>
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
 {% endblock breadcrumb%}
 

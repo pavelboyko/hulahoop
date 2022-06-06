@@ -24,7 +24,10 @@ class Issue(BaseModel):
     name: models.TextField = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.name if self.name else str(self.id)[:8]
+        return self.name if self.name else f"Issue str(self.id)[:8]"
+
+    def example_count(self):
+        return self.example_set.filter(is_deleted=False).count()
 
 
 class IssueAdmin(BaseAdmin):
