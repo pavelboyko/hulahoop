@@ -14,13 +14,15 @@ class Issue(BaseModel):
     class Status(models.IntegerChoices):
         open = 0
         muted = 10
-        resolved = 20   # a resolved Issue can receive new Examples and reopen
-        closed = 30     # a closed Issue can not receive new Examples
+        resolved = 20  # a resolved Issue can receive new Examples and reopen
+        closed = 30  # a closed Issue can not receive new Examples
 
     project: models.ForeignKey = models.ForeignKey(
         "Project", null=False, blank=False, on_delete=models.CASCADE
     )
-    status: models.IntegerField = models.IntegerField(choices=Status.choices, default=Status.open)
+    status: models.IntegerField = models.IntegerField(
+        choices=Status.choices, default=Status.open
+    )
     name: models.TextField = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -49,8 +51,3 @@ class IssueAdmin(BaseAdmin):
 
 
 admin.site.register(Issue, IssueAdmin)
-
-
-
-
-

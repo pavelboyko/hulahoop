@@ -6,9 +6,15 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("projects/", views.project.project_list, name="project_list"),
     path("projects/create/", views.project.project_create, name="project_create"),
-    path("projects/<uuid:project_id>/", views.project.project_detail, name="project_detail"),
     path(
-        "projects/<uuid:project_id>/examples/", views.example.example_list, name="example_list"
+        "projects/<uuid:project_id>/",
+        views.project.project_detail,
+        name="project_detail",
+    ),
+    path(
+        "projects/<uuid:project_id>/examples/",
+        views.example.example_list,
+        name="example_list",
     ),
     path(
         "projects/<uuid:project_id>/settings/",

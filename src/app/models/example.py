@@ -29,7 +29,9 @@ class Example(BaseModel):
     status = models.IntegerField(choices=Status.choices, default=Status.pending)
     media_url: models.TextField = models.TextField(null=False, blank=False)
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
-    issue: models.ForeignKey = models.ForeignKey("Issue", null=True, blank=True, on_delete=models.CASCADE)
+    issue: models.ForeignKey = models.ForeignKey(
+        "Issue", null=True, blank=True, on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return str(self.id)[:8]
