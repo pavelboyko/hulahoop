@@ -18,7 +18,7 @@ def project_create(request):
                 name=form.cleaned_data["name"], created_by=request.user
             )
             return HttpResponseRedirect(
-                reverse("project_detail", kwargs={"project_id": project.id})
+                reverse("project_settings", kwargs={"project_id": project.id})
             )
     else:
         form = ProjectForm()
