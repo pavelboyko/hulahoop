@@ -1,4 +1,6 @@
 {% extends "mpa/base.html" %}
+{% load humanize %}
+
 {% block title %}Example — {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
@@ -8,13 +10,27 @@
     </a>
 </li>
 <li class="breadcrumb-item">
-    <a href="{% url 'example_list' project.id %}" class="link-dark text-decoration-none">
+    <a href="{% url 'issue_list' project.id %}" class="link-dark text-decoration-none">
         Issues
     </a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{ issue }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ issue }}
+</li>
 {% endblock breadcrumb%}
 
 {% block main %}
-<p>Hello, {{ issue }}!</p>
+<h3>{{ issue }}</h3>
+<p class="text-muted">
+<span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
+        {{ issue.get_status_display }}
+</span>
+    • {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+    • Created {{ issue.created_at | naturaltime }}
+    • Updated {{ issue.updated_at | naturaltime }}
+</p>
+
+<h5>Examples</h5>
+{% include 'mpa/example/list_main.html' %}
+
 {% endblock main %}

@@ -37,7 +37,8 @@
                 {{ issue.get_status_display }}
             </span>
             • {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-            • Updated {{ project.updated_at | naturaltime }}
+            • Created {{ issue.created_at | naturaltime }}
+            • Updated {{ issue.updated_at | naturaltime }}
         </small>
     </li>
     {% endfor %}

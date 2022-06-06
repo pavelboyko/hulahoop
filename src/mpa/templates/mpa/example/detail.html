@@ -19,10 +19,19 @@
 <div class="container">
     <div class="row">
         <div class="col-lg">
-            <!-- TODO: check project.media_type -->
             <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
         </div>
         <div class="col-lg">
+            {% if example.issue %}
+            <h5>Issue:
+                <a href="{% url 'issue_detail' project.id example.issue.id %}">{{ example.issue }}
+                <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
+                    {{ example.issue.get_status_display }}
+                </span>
+                </a>
+            </h5>
+            <br/>
+            {% endif %}
             <h5>Properties</h5>
             <p>Id: {{ example.id }}</p>
             <p><a href="{{ example.media_url }}" target="_blank">Open in new tab</a></p>
