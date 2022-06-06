@@ -29,6 +29,7 @@ class Example(BaseModel):
     status = models.IntegerField(choices=Status.choices, default=Status.pending)
     media_url: models.TextField = models.TextField(null=False, blank=False)
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
+    issue: models.ForeignKey = models.ForeignKey("Issue", null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.id)[:8]
@@ -37,6 +38,9 @@ class Example(BaseModel):
     def post_save(cls, sender, instance, created, *args, **kwargs):
         instance.project.updated_at = timezone.now()
         instance.project.save(update_fields=["updated_at"])
+        if instance.issue:
+            instance.issue.updated_at = timezone.now()
+            instance.issue.save(update_fields=["updated_at"])
         if created:
             instance.project.start_workflow(instance.id)
 
@@ -92,10 +96,11 @@ class ExampleAdmin(BaseAdmin):
         "created_at",
         "updated_at",
     )
-    list_display = ("id", "project", "status", "is_deleted")
+    list_display = ("id", "project", "issue", "status", "is_deleted")
     fields = (
         "id",
         "project",
+        "issue",
         "status",
         "media_url",
         "properties",
