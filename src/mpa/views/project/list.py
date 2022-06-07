@@ -5,6 +5,6 @@ from app.models import Project
 
 @login_required
 def project_list(request):
-    projects = Project.objects.filter(is_deleted=False).order_by("name")
+    projects = Project.objects.all().order_by("name")
     context = {"project_list": projects}
     return render(request, "mpa/project/list.html", context)

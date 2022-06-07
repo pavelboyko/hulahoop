@@ -1,11 +1,11 @@
-from uuid import UUID
+import uuid
 
 
-IdOfProject = UUID
-IdOfProjectPathConverter = "uuid"
+IdOfProject = int
+IdOfProjectPathConverter = "int"
 
-IdOfExample = UUID
+IdOfExample = uuid.UUID
 IdOfExamplePathConverter = "uuid"
 
-IdOfIssue = UUID
-IdOfIssuePathConverter = "uuid"
+IdOfIssue = int
+IdOfIssuePathConverter = "int"

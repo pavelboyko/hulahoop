@@ -31,10 +31,10 @@ class Project(BaseModel):
         return self.name
 
     def example_count(self):
-        return self.example_set.filter(is_deleted=False).count()
+        return self.example_set.filter().count()
 
     def issue_count(self):
-        return self.issue_set.filter(is_deleted=False).count()
+        return self.issue_set.filter().count()
 
     def start_workflow(self, example_id: IdOfExample) -> None:
         """Workflow entry point, executed after an example was created"""
@@ -48,7 +48,12 @@ class Project(BaseModel):
 
 class ProjectAdmin(BaseAdmin):
     readonly_fields = ("id", "created_at", "updated_at")
-    list_display = ("id", "name", "media_type", "created_by", "is_deleted")
+    list_display = (
+        "id",
+        "name",
+        "media_type",
+        "created_by",
+    )
     fields = (
         "id",
         "name",
@@ -57,7 +62,6 @@ class ProjectAdmin(BaseAdmin):
         "created_by",
         "created_at",
         "updated_at",
-        "is_deleted",
     )
     search_fields = ("name",)
 

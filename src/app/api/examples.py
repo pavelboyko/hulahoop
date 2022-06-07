@@ -16,7 +16,7 @@ class ExampleViewSet(ModelViewSet):
     serializer_class = ExampleSerializer
 
     def get_queryset(self):
-        queryset = Example.objects.filter(is_deleted=False)
+        queryset = Example.objects.filter()
         project = self.request.query_params.get("project")
         if project:
             queryset = queryset.filter(project=project)

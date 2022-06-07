@@ -12,4 +12,4 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
-    queryset = Project.objects.filter(is_deleted=False)
+    queryset = Project.objects.filter()

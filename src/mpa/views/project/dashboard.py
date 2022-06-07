@@ -24,7 +24,6 @@ def plot_examples_last_n_days(project: Project, ndays: int = 30) -> Chart:
     examples = (
         Example.objects.filter(
             project=project,
-            is_deleted=False,
             created_at__gte=now - timedelta(days=ndays),
         )
         .values("created_at__date", "status")
@@ -66,7 +65,7 @@ def plot_examples_last_n_days(project: Project, ndays: int = 30) -> Chart:
 
 @login_required
 def project_dashboard(request, project_id):
-    project = get_object_or_404(Project, id=project_id, is_deleted=False)
+    project = get_object_or_404(Project, id=project_id)
     examples_last_n_days = plot_examples_last_n_days(project, ndays=30)
     return render(
         request,

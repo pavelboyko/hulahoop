@@ -45,7 +45,6 @@ class ExampleEventAdmin(BaseAdmin):
         "properties",
         "created_at",
         "updated_at",
-        "is_deleted",
     )
 
 

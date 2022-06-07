@@ -1,5 +1,6 @@
 import logging
 from typing import Any
+import uuid
 from django.utils import timezone
 from django.db import models
 from django.db.models.signals import post_save
@@ -23,6 +24,10 @@ class Example(BaseModel):
         canceled = 40
         error = 50
 
+    # Use UUID pk to allow client-side ID allocation
+    id: models.UUIDField = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     project: models.ForeignKey = models.ForeignKey(
         "Project", null=False, blank=False, on_delete=models.CASCADE
     )
@@ -98,7 +103,7 @@ class ExampleAdmin(BaseAdmin):
         "created_at",
         "updated_at",
     )
-    list_display = ("id", "project", "issue", "status", "is_deleted")
+    list_display = ("id", "project", "issue", "status")
     fields = (
         "id",
         "project",
@@ -108,7 +113,6 @@ class ExampleAdmin(BaseAdmin):
         "properties",
         "created_at",
         "updated_at",
-        "is_deleted",
     )
 
 

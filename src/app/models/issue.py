@@ -26,10 +26,10 @@ class Issue(BaseModel):
     name: models.TextField = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.name if self.name else str(self.id)[:8]
+        return self.name if self.name else f"#{str(self.id)[:8]}"
 
     def example_count(self):
-        return self.example_set.filter(is_deleted=False).count()
+        return self.example_set.filter().count()
 
 
 class IssueAdmin(BaseAdmin):
@@ -38,7 +38,12 @@ class IssueAdmin(BaseAdmin):
         "created_at",
         "updated_at",
     )
-    list_display = ("id", "project", "name", "status", "is_deleted")
+    list_display = (
+        "id",
+        "project",
+        "name",
+        "status",
+    )
     fields = (
         "id",
         "project",
@@ -46,7 +51,6 @@ class IssueAdmin(BaseAdmin):
         "status",
         "created_at",
         "updated_at",
-        "is_deleted",
     )
 
 

@@ -11,7 +11,7 @@ class ProjectForm(forms.Form):
 
 @login_required
 def project_settings(request, project_id):
-    project = get_object_or_404(Project, pk=project_id, is_deleted=False)
+    project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
         form = ProjectForm(request.POST)
