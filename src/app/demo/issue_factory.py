@@ -10,3 +10,4 @@ class IssueFactory(DjangoModelFactory):
         self.project = project
 
     name = "Cartoonish hotdogs"
+    description = "Cartoon style images of hot dogs are not properly classified"

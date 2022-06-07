@@ -37,6 +37,7 @@
     {% for issue in issues %}
     <li class="list-group-item d-flex flex-column list-group-item-action">
         <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">{{ issue.display_name }}</a>
+        {% if issue.description %} <div class="mb-1">{{ issue.description }}</div> {% endif %}
         <small class="text-muted">
             <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
                 {{ issue.get_status_display }}

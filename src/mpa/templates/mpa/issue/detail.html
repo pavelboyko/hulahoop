@@ -33,6 +33,7 @@
 {% endblock header-buttons %}
 
 {% block subheader %}
+{% if issue.description %} <div class="mb-1">{{ issue.description }}</div> {% endif %}
 <p class="text-muted">
 <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
         {{ issue.get_status_display }}

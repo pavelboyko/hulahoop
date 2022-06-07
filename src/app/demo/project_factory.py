@@ -9,6 +9,7 @@ class ProjectFactory(DjangoModelFactory):
         model = Project
 
     name = "Not Hotdog"
+    description = "A demo project"
     media_type = Project.MediaType.image
     created_at = Faker(
         "date_time_between",

@@ -19,6 +19,9 @@ class Project(BaseModel):
         # video, audio, etc. will be here
 
     name: models.TextField = models.TextField()
+    description: models.TextField = models.TextField(
+        null=True, blank=True, default=None
+    )
     media_type: models.IntegerField = models.IntegerField(
         choices=MediaType.choices, default=MediaType.image
     )
@@ -57,6 +60,7 @@ class ProjectAdmin(BaseAdmin):
     fields = (
         "id",
         "name",
+        "description",
         "media_type",
         "properties",
         "created_by",

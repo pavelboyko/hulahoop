@@ -24,6 +24,9 @@ class Issue(BaseModel):
         choices=Status.choices, default=Status.open
     )
     name: models.TextField = models.TextField(null=True, blank=True)
+    description: models.TextField = models.TextField(
+        null=True, blank=True, default=None
+    )
 
     def __str__(self):
         return f"#{self.id}"
@@ -54,6 +57,7 @@ class IssueAdmin(BaseAdmin):
         "id",
         "project",
         "name",
+        "description",
         "status",
         "created_at",
         "updated_at",
