@@ -13,20 +13,29 @@
 </head>
 <body>
 <div class="page-container mx-auto px-lg-0 p-3">
-    <header class="mb-3">
+    <header>
         <div class="d-flex">
             <nav aria-label="breadcrumb" class="flex-grow-1">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/" class="link-dark text-decoration-none">◯ Hulahoop</a></li>
+                    <li class="breadcrumb-item"><a href="/">◯ Hulahoop</a></li>
                     {% block breadcrumb %} {% endblock breadcrumb %}
                 </ol>
             </nav>
         </div>
-        {% block tabs %}
-        <div class="border-bottom"/>
-        {% endblock tabs %}
     </header>
     <main>
+        <div class="mb-3">
+            <div class="d-flex flex-row align-items-center">
+                <div>
+                {% block header %}{% endblock header %}
+                </div>
+                <div class="ms-auto">
+                    {% block header-buttons %} {% endblock header-buttons%}
+                </div>
+            </div>
+            {% block subheader %}{% endblock subheader %}
+            {% block tabs %}{% endblock tabs %}
+        </div>
         {% block main %}{% endblock main %}
     </main>
 </div>

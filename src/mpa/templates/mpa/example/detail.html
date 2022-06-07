@@ -3,47 +3,57 @@
 
 {% block breadcrumb %}
 <li class="breadcrumb-item">
-    <a href="{% url 'project_detail' project.id %}" class="link-dark text-decoration-none">
+    <a href="{% url 'project_detail' project.id %}">
         {{ project.name|truncatechars:32 }}
     </a>
 </li>
 <li class="breadcrumb-item">
-    <a href="{% url 'example_list' project.id %}" class="link-dark text-decoration-none">
+    <a href="{% url 'example_list' project.id %}">
         Examples
     </a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
 {% endblock breadcrumb%}
 
+{% block header %}
+<h1 class="display-6">{{ example }}</h1>
+{% endblock header %}
+
+{% block subheader %}
+<div class="text-muted mb-1">
+    <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span>
+    &nbsp;
+    {% if example.issue %}
+    Issue:
+    <a href="{% url 'issue_detail' project.id example.issue.id %}">{{ example.issue.display_name }}
+        <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
+            {{ example.issue.get_status_display }}
+        </span>
+    </a>
+    {% endif %}
+</div>
+<div class="text-muted">
+    Created: {{ example.created_at }}
+    • Updated: {{ example.updated_at }}
+</div>
+{% endblock subheader %}
+
 {% block main %}
 <div class="container">
     <div class="row">
-        <div class="col-lg">
+        <div class="col-xl ps-0">
+            <a href="{{ example.media_url }}" target="_blank">
             <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
+            </a>
         </div>
-        <div class="col-lg">
-            {% if example.issue %}
-            <h5>Issue:
-                <a href="{% url 'issue_detail' project.id example.issue.id %}">{{ example.issue }}
-                <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
-                    {{ example.issue.get_status_display }}
-                </span>
-                </a>
-            </h5>
-            <br/>
-            {% endif %}
-            <h5>Properties</h5>
-            <p>Id: {{ example.id }}</p>
-            <p><a href="{{ example.media_url }}" target="_blank">Open in new tab</a></p>
-            <p>Status: <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span></p>
-            <p>Created: {{ example.created_at }}</p>
-            <p>Updated: {{ example.updated_at }}</p>
-            <br/>
-            {% if event_list %}
+        <div class="col-xl">
             <h5>Events</h5>
-            {% for event in event_list %}
-            <p>{{ event.get_event_type_display}}: {{ event.created_at }}</p>
-            {% endfor %}
+            {% if event_list %}
+                {% for event in event_list %}
+                <p>{{ event.get_event_type_display}}: {{ event.created_at }}</p>
+                {% endfor %}
+            {% else %}
+            None.
             {% endif %}
         </div>
     </div>

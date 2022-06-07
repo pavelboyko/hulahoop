@@ -4,9 +4,14 @@
     }
 }
 
-.breadcrumb {
-    font-size: 1.5rem !important;
+.breadcrumb-item a {
+    color: rgb(108, 117, 125);
+    text-decoration: none;
 }
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
 .nav {
     border-bottom: 1px solid rgb(222, 226, 230);
 }

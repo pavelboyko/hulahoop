@@ -2,23 +2,17 @@
 {% load humanize %}
 {% block title %}Projects{% endblock title %}
 
-{% block tabs %}
-<ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Projects</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Settings</a>
-    </li>
-</ul>
-{% endblock tabs %}
+{% block header %}
+    <h1 class="display-6">Projects</h1>
+{% endblock header%}
 
-{% block main %}
-<div class="d-flex mb-3">
+{% block header-buttons %}
     <a href="{% url 'project_create' %}" type="button" class="btn btn-primary">
         <i class="bi bi-plus-lg"></i> New project
     </a>
-</div>
+{% endblock header-buttons%}
+
+{% block main %}
 
 {% if project_list %}
 <ul class="list-group">

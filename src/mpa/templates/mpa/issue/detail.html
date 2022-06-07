@@ -1,16 +1,16 @@
 {% extends "mpa/base.html" %}
 {% load humanize %}
 
-{% block title %}Example — {{ project.name }}{% endblock title %}
+{% block title %}Issue — {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item">
-    <a href="{% url 'project_detail' project.id %}" class="link-dark text-decoration-none">
+    <a href="{% url 'project_detail' project.id %}">
         {{ project.name | truncatechars:32 }}
     </a>
 </li>
 <li class="breadcrumb-item">
-    <a href="{% url 'issue_list' project.id %}" class="link-dark text-decoration-none">
+    <a href="{% url 'issue_list' project.id %}">
         Issues
     </a>
 </li>
@@ -19,17 +19,22 @@
 </li>
 {% endblock breadcrumb%}
 
-{% block main %}
-<h3>{{ issue }}</h3>
+{% block header %}
+<h1 class="display-6">{{ issue.display_name }}</h1>
+{% endblock header %}
+
+{% block subheader %}
 <p class="text-muted">
 <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
         {{ issue.get_status_display }}
 </span>
-    • {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+    &nbsp; {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
     • Created {{ issue.created_at | naturaltime }}
     • Updated {{ issue.updated_at | naturaltime }}
 </p>
+{% endblock subheader %}
 
+{% block main %}
 <h5>Examples</h5>
 {% include 'mpa/example/list_main.html' %}
 

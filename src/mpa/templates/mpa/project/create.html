@@ -7,6 +7,10 @@
 <li class="breadcrumb-item active" aria-current="page">New project</li>
 {% endblock breadcrumb%}
 
+{% block header %}
+<h1 class="display-6">New project</h1>
+{% endblock header %}
+
 {% block main %}
 <form action="{% url 'project_create' %}" method="post">
     {% csrf_token %}

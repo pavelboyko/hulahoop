@@ -26,7 +26,13 @@ class Issue(BaseModel):
     name: models.TextField = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.name if self.name else f"#{str(self.id)[:8]}"
+        return f"#{self.id}"
+
+    def display_name(self):
+        if self.name:
+            return f"{self} {self.name}"
+        else:
+            return str(self)
 
     def example_count(self):
         return self.example_set.filter().count()

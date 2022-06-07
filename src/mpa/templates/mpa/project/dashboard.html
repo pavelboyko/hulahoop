@@ -1,9 +1,13 @@
 {% extends "mpa/base.html" %}
-{% block title %}{{ project.name }}{% endblock title %}
+{% block title %}Insights — {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item active" aria-current="page">{{ project.name | truncatechars:32 }}</li>
 {% endblock breadcrumb%}
+
+{% block header %}
+<h1 class="display-6">{{ project.name }}</h1>
+{% endblock header %}
 
 {% block tabs %}
 <ul class="nav">
