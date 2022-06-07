@@ -1,6 +1,6 @@
 import logging
 from typing import Dict, Any, Optional
-from uuid import UUID
+from app.models.idof import IdOfExample
 from app.plugins.base import (
     BaseRestClient,
     BaseLabelingPlugin,
@@ -39,7 +39,9 @@ class LabelStudioClient(BaseRestClient):
         if not self.project_id:
             raise ConfigError("Missing required LABELSTUDIO_PROJECT_ID field")
 
-    def create_image_labeling_task(self, example_id: UUID, image_url: str) -> None:
+    def create_image_labeling_task(
+        self, example_id: IdOfExample, image_url: str
+    ) -> None:
         """Create an image labeling task in Label Studio.
         Request format is based on https://github.com/heartexlabs/label-studio/blob/develop/label_studio/data_import/api.py
         """
@@ -78,9 +80,9 @@ class LabelStudioClient(BaseRestClient):
             },
         )
 
-    def get_example_id_from_webhook_request(self, data: Any) -> Optional[UUID]:
+    def get_example_id_from_webhook_request(self, data: Any) -> Optional[IdOfExample]:
         try:
-            return UUID(data["task"]["data"][self.token_field])
+            return IdOfExample(data["task"]["data"][self.token_field])
         except (ValueError, KeyError, TypeError):
             return None
 

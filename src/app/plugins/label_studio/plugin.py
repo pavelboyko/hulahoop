@@ -1,10 +1,10 @@
 import logging
 from typing import Optional, Dict, Any, Tuple
-from uuid import UUID
 from django.urls import reverse
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 from app.plugins.base import BaseLabelingPlugin
 from app.models import Example
+from app.models.idof import IdOfProject
 from .client import LabelStudioClient
 
 logger = logging.getLogger(__package__)
@@ -16,7 +16,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
 
     client: LabelStudioClient
 
-    def __init__(self, project_id: UUID, config: Dict[str, Any]):
+    def __init__(self, project_id: IdOfProject, config: Dict[str, Any]):
         logger.debug(f"Initializing {self.name} plugin config={config}")
         self.client = LabelStudioClient(config)
 

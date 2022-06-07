@@ -1,9 +1,8 @@
 import logging
-import uuid
 from django.db import models, transaction
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
-from .issue import Issue
+from .idof import IdOfExample
 from hulahoop.celery import app
 
 
@@ -37,7 +36,7 @@ class Project(BaseModel):
     def issue_count(self):
         return self.issue_set.filter(is_deleted=False).count()
 
-    def start_workflow(self, example_id: uuid.UUID) -> None:
+    def start_workflow(self, example_id: IdOfExample) -> None:
         """Workflow entry point, executed after an example was created"""
         # transaction.on_commit is to make sure that example is saved
         # because we call start_workflow from an Example post_save signal

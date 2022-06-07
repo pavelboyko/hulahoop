@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf.urls import include
 from rest_framework import routers
 from app import api
+from app.models.idof import IdOfProjectPathConverter
 
 # Api v1.0
 api_router = routers.DefaultRouter()
@@ -10,5 +11,9 @@ api_router.register(r"examples", api.ExampleViewSet, basename="examples_v1_0")
 
 urlpatterns = [
     path(r"v1.0/", include(api_router.urls)),
-    path(r"v1.0/webhook/<uuid:project_id>/<slug>/", api.webhook, name="webhook_v1_0"),
+    path(
+        f"v1.0/webhook/<{IdOfProjectPathConverter}:project_id>/<slug:slug>/",
+        api.webhook,
+        name="webhook_v1_0",
+    ),
 ]

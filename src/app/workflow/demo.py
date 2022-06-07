@@ -1,10 +1,10 @@
 import logging
 from typing import Any
-from uuid import UUID
 from app.workflow.base import BaseWorkflow
 from app.plugins.base import BaseLabelingPlugin, ConfigError, RestRequestError
 from app.plugins.label_studio import LabelStudioPlugin
 from app.models import Example, ExampleEvent
+from app.models.idof import IdOfProject, IdOfExample
 
 logger = logging.getLogger(__package__)
 
@@ -14,7 +14,7 @@ class DemoWorkflow(BaseWorkflow):
 
     labeling_plugin: BaseLabelingPlugin
 
-    def __init__(self, project_id: UUID):
+    def __init__(self, project_id: IdOfProject):
         logger.debug(f"Initializing DemoWorkflow project_id={project_id}")
         super().__init__(project_id)
 
@@ -39,7 +39,7 @@ class DemoWorkflow(BaseWorkflow):
                 f"Label Studio API request error: {e}. Workflow initialization aborted."
             )
 
-    def start(self, example_id: UUID):
+    def start(self, example_id: IdOfExample):
         logger.debug(
             f"Starting DemoWorkflow project_id={self.project_id}, example_id={example_id}"
         )

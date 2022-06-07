@@ -1,6 +1,6 @@
 import logging
 from typing import Dict, Any
-from uuid import UUID
+from app.models.idof import IdOfProject, IdOfExample
 from app.workflow.base import BaseWorkflow
 from .demo import DemoWorkflow
 
@@ -9,26 +9,19 @@ logger = logging.getLogger(__package__)
 # The global per project workflow registry
 # XXX: the register is local to the celery worker
 # This means that every workflow must be initialized in every worker
-__registry: Dict[UUID, BaseWorkflow] = {}
+__registry: Dict[IdOfProject, BaseWorkflow] = {}
 
 
-def build(project_id: UUID) -> None:
+def build(project_id: IdOfProject) -> None:
     """Initialize workflow for a project
-    In the future we will customize workflow depending on project settings
     But for now the one and the only DemoWorkflow is hardcoded here
     """
     __registry[project_id] = DemoWorkflow(project_id)
 
 
-def start(project_id: UUID, example_id: UUID):
+def start(project_id: IdOfProject, example_id: IdOfExample):
     """Start workflow for a specific project and example
-    This function is supposed to be executed by a celery worker (see tasks.py)
-
-    A call chain is supposed to be:
-        this function
-        -> Workflow to execute some actions
-            -> Plugin to interface with 3rd party service
-                -> Client to do requests
+    This function is executed by a celery worker (see tasks.py)
     """
 
     if project_id not in __registry:
@@ -37,17 +30,9 @@ def start(project_id: UUID, example_id: UUID):
     __registry[project_id].start(example_id)
 
 
-def webhook(project_id: UUID, slug: str, data: Any):
+def webhook(project_id: IdOfProject, slug: str, data: Any):
     """Handle data received to webhook
-    This function is supposed to be executed by a celery worker (see tasks.py)
-
-    A call chain is supposed to be:
-        this function
-        -> Workflow to route data to relevant plugin
-            -> Plugin to interpret data
-                -> Client to decode data transport format
-            -> Plugin to return decoded data to Workflow
-        -> Workflow to take some actions depending on the data received
+    This function is executed by a celery worker (see tasks.py)
     """
     if project_id not in __registry:
         build(project_id)
