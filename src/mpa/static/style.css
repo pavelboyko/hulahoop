@@ -1,6 +1,6 @@
-@media screen and (min-width: 992px) {
-    .page-container {
-        width: 958px;
+@media screen and (min-width: 1400px) {
+    .container-limited {
+        width: 1280px;
     }
 }
 

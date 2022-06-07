@@ -12,7 +12,7 @@
     <link href="{% static 'style.css' %}" rel="stylesheet" />
 </head>
 <body>
-<div class="page-container mx-auto px-lg-0 p-3">
+<div class="container-limited m-3 mx-xxl-auto">
     <header>
         <div class="d-flex">
             <nav aria-label="breadcrumb" class="flex-grow-1">
@@ -34,7 +34,7 @@
                 </div>
             </div>
             {% block subheader %}{% endblock subheader %}
-            {% block tabs %}{% endblock tabs %}
+            {% block tabs %} <div class="border-bottom mb-3" />{% endblock tabs %}
         </div>
         {% block main %}{% endblock main %}
     </main>

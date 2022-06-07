@@ -31,6 +31,7 @@
 
 {% block main %}
 
+<div class="container-limited mx-auto">
 {% if issues %}
 <ul class="list-group">
     {% for issue in issues %}
@@ -52,6 +53,7 @@
     No issues found.
 </p>
 {% endif %}
+</div>
 
 {% endblock main %}
 
