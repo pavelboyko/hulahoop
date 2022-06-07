@@ -23,6 +23,16 @@
 <h1 class="display-6">{{ issue.display_name }}</h1>
 {% endblock header %}
 
+{% block header-buttons %}
+    <button href="#" class="btn btn-outline-secondary">
+        <i class="bi bi-x-lg"></i> Mute
+    </button>
+    <button href="#" class="btn btn-success">
+        <i class="bi bi-check-lg"></i> Resolve
+    </button>
+
+{% endblock header-buttons %}
+
 {% block subheader %}
 <p class="text-muted">
 <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
