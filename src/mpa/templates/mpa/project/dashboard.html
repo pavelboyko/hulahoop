@@ -9,6 +9,10 @@
 <h1 class="display-6">{{ project.name }}</h1>
 {% endblock header %}
 
+{% block subheader %}
+{% if project.description %}<p>{{ project.description }}</p>{% endif %}
+{% endblock subheader %}
+
 {% block tabs %}
 <ul class="nav">
     <li class="nav-item">

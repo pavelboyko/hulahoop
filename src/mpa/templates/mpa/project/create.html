@@ -12,10 +12,12 @@
 {% endblock header %}
 
 {% block main %}
+<div class="col-xxl-8 mx-auto">
 <form action="{% url 'project_create' %}" method="post">
     {% csrf_token %}
     {{ form | crispy }}
     <button type="submit" value="Create" class="btn btn-primary me-1">Create and take me to settings</button>
     <a href="/" class="btn btn-outline-secondary">Cancel</a>
 </form>
+</div>
 {% endblock main %}

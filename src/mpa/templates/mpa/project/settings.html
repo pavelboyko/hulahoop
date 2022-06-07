@@ -9,6 +9,10 @@
 <h1 class="display-6">{{ project.name }}</h1>
 {% endblock header %}
 
+{% block subheader %}
+{% if project.description %}<p>{{ project.description }}</p>{% endif %}
+{% endblock subheader %}
+
 {% block tabs %}
 <ul class="nav">
     <li class="nav-item">
@@ -30,7 +34,7 @@
 {% block main %}
 
 <div class="row">
-    <div class="col">
+    <div class="col-2">
         <ul>
             <li>General</li>
             <li>Issues clustering</li>
@@ -42,7 +46,7 @@
             <li>Danger zone</li>
         </ul>
     </div>
-    <div class="col-9">
+    <div class="col-10">
         <p>Name</p>
         <p>Project ID & Client key</p>
         <p>API & SDK examples -- installation instructions</p>

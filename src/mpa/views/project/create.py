@@ -7,6 +7,9 @@ from app.models import Project
 
 class ProjectForm(forms.Form):
     name = forms.CharField(label="Project name", max_length=100)
+    description = forms.CharField(
+        label="Optional description", widget=forms.Textarea(), required=False
+    )
 
 
 @login_required
@@ -15,7 +18,9 @@ def project_create(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             project = Project.objects.create(
-                name=form.cleaned_data["name"], created_by=request.user
+                name=form.cleaned_data["name"],
+                description=form.cleaned_data["description"],
+                created_by=request.user,
             )
             return HttpResponseRedirect(
                 reverse("project_settings", kwargs={"project_id": project.id})
