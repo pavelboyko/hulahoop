@@ -1,8 +1,7 @@
 import logging
 from typing import Any
 from app.workflow.base import BaseWorkflow
-from app.plugins.base import BaseLabelingPlugin, ConfigError, RestRequestError
-from app.plugins.label_studio import LabelStudioPlugin
+from app.plugins.base import BaseLabelingPlugin, ConfigError
 from app.models import Example, ExampleEvent
 from app.models.idof import IdOfProject, IdOfExample
 
@@ -14,67 +13,43 @@ class Workflow(BaseWorkflow):
 
     labeling_plugin: BaseLabelingPlugin
 
-    def __init__(self, project_id: IdOfProject):
-        logger.debug(f"Initializing DemoWorkflow project_id={project_id}")
+    def __init__(self, project_id: IdOfProject, labeling_plugin: BaseLabelingPlugin):
+        logger.debug(f"Initializing Workflow project_id={project_id}")
         super().__init__(project_id)
-
-        # In the future we will take labeling plugin type and configuration from project config
-        # For now just hardcode Labeling Studio config here
-        try:
-            self.labeling_plugin = LabelStudioPlugin(
-                project_id,
-                {
-                    "LABELSTUDIO_URL": "http://host.docker.internal:8080/",
-                    "LABELSTUDIO_API_KEY": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
-                    "LABELSTUDIO_PROJECT_ID": 2,
-                },
-            )
-            self.initialized = True
-        except ConfigError as e:
-            logger.error(
-                f"Label Studio configuration error: {e}. Workflow initialization aborted."
-            )
-        except RestRequestError as e:
-            logger.error(
-                f"Label Studio API request error: {e}. Workflow initialization aborted."
-            )
+        self.labeling_plugin = labeling_plugin
+        self.labeling_plugin.callback = self.on_labeling_event
 
     def start(self, example_id: IdOfExample):
         logger.debug(
-            f"Starting DemoWorkflow project_id={self.project_id}, example_id={example_id}"
+            f"Starting Workflow project_id={self.project_id}, example_id={example_id}"
         )
-        if not self.initialized:
-            logger.debug("DemoWorkflow is not properly initialized. Aborted.")
-            return
-
         example = Example.objects.filter(id=example_id).last()
         if not example:
             logger.error(f"Can't find example by example_id={example_id}. Aborted.")
             return
 
-        try:
-            self.labeling_plugin.create_task(example)
-            example.set_labeling_started()
-        except RestRequestError as e:
-            example.set_labeling_error(str(e))
+        if self.labeling_plugin:
+            try:
+                self.labeling_plugin.create_task(example)
+                example.set_labeling_started()
+            except Exception as e:
+                logger.error(
+                    f"Error creating labeling task for example_id={example_id}: {e}"
+                )
+                example.set_labeling_error(str(e))
 
     def webhook(self, slug: str, data: Any):
-        logger.debug(f"DemoWorkflow received some data: slug={slug}")
-        if not self.initialized:
-            logger.debug("DemoWorkflow is not properly initialized. Aborted.")
-            return
+        logger.debug(f"Workflow received some data: slug={slug}")
 
-        if slug == self.labeling_plugin.slug:
-            example, action, result = self.labeling_plugin.parse_result(data)
-            if not example or not action:
-                logger.warning(
-                    f"Label Studio plugin wasn't able to parse example_id or action from webhook data {data}. Ignoring."
-                )
-                return
+        if self.labeling_plugin and slug == self.labeling_plugin.slug:
+            self.labeling_plugin.receive_callback(data)
 
-            if action == BaseLabelingPlugin.Action.ANNOTATION_CREATED:
-                example.set_labeling_completed(result)
-            elif action == BaseLabelingPlugin.Action.ANNOTATION_UPDATED:
-                example.set_labeling_updated(result)
-            elif action == BaseLabelingPlugin.Action.ANNOTATION_DELETED:
-                example.set_labeling_deleted()
+    def on_labeling_event(
+        self, example: Example, event: BaseLabelingPlugin.Event, result: Any
+    ) -> None:
+        if event == BaseLabelingPlugin.Event.annotation_created:
+            example.set_labeling_completed(result)
+        elif event == BaseLabelingPlugin.Event.annotation_updated:
+            example.set_labeling_updated(result)
+        elif event == BaseLabelingPlugin.Event.annotation_deleted:
+            example.set_labeling_deleted()

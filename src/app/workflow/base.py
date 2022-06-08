@@ -5,7 +5,7 @@ from app.models.idof import IdOfProject, IdOfExample
 class BaseWorkflow:
     """Base class for a project workflow"""
 
-    project_id: Optional[IdOfProject] = None
+    project_id: IdOfProject
 
     def __init__(self, project_id: IdOfProject):
         self.project_id = project_id

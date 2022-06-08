@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from app.models.idof import IdOfProject, IdOfExample
 from app.workflow.base import BaseWorkflow
+from app.plugins.label_studio import LabelStudioPlugin
 from .workflow import Workflow
 
 # The global per project workflow registry
@@ -10,14 +11,26 @@ __registry: Dict[IdOfProject, BaseWorkflow] = {}
 
 
 def build(project_id: IdOfProject) -> None:
-    __registry[project_id] = Workflow(project_id)
+    # In the (near) future we will take labeling plugin type and configuration from project config
+    # For now just hardcode Labeling Studio config here
+    labeling_plugin = LabelStudioPlugin(
+        project_id,
+        {
+            "LABELSTUDIO_URL": "http://host.docker.internal:8080/",
+            "LABELSTUDIO_API_KEY": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
+            "LABELSTUDIO_PROJECT_ID": 2,
+        },
+    )
+    # FIXME: catch ConfigError, RestClient.RequestError
+
+    __registry[project_id] = Workflow(project_id, labeling_plugin)
 
 
 def get_workflow(project_id: IdOfProject) -> BaseWorkflow:
     if project_id not in __registry:
         build(project_id)
 
-    return __registry[project_id]
+    return __registry.get(project_id)
 
 
 def start(project_id: IdOfProject, example_id: IdOfExample):
