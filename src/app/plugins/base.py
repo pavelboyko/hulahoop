@@ -22,7 +22,9 @@ class BaseLabelingPlugin(BasePlugin):
         annotation_created = 0
         annotation_updated = 1
         annotation_deleted = 2
+        # add more event types here if needed
 
+    # called when labeling service returns an event related to specific Example
     callback: Callable[[Example, Event, Any], None]
 
     def create_task(self, example: Example) -> None:

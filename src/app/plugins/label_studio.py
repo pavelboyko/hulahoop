@@ -38,7 +38,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
 
         webhook_path = reverse("webhook_v1_0", args=[project_id, self.slug])
         webhook_url = f"{HTTP_SCHEME}{HOSTNAME}{webhook_path}"
-        # As we init plugin in all celery workers on every start
+        # As we init plugin in every celery worker on every start
         # make sure that our webhook wasn't already registered
         if not self.check_webhook_exists(webhook_url):
             self.create_webhook(webhook_url)
@@ -67,7 +67,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     def check_webhook_exists(self, url: str) -> bool:
         """Check if a given webhook url already registered in Label Studio"""
         try:
-            webhooks = self.client.get(path=f"/api/webhooks/")
+            webhooks = self.client.get(path="/api/webhooks/")
             for wh in webhooks:
                 if wh["url"] == url:
                     return True
