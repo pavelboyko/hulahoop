@@ -7,7 +7,7 @@ from .workflow import Workflow
 # The global per project workflow registry
 # XXX: the registry is local to the celery worker
 # This means that every workflow must be initialized in every worker
-__registry: Dict[IdOfProject, BaseWorkflow] = {}
+project_workflow: Dict[IdOfProject, BaseWorkflow] = {}
 
 
 def build(project_id: IdOfProject) -> None:
@@ -23,14 +23,14 @@ def build(project_id: IdOfProject) -> None:
     )
     # FIXME: catch ConfigError, RestClient.RequestError
 
-    __registry[project_id] = Workflow(project_id, labeling_plugin)
+    project_workflow[project_id] = Workflow(project_id, labeling_plugin)
 
 
 def get_workflow(project_id: IdOfProject) -> BaseWorkflow:
-    if project_id not in __registry:
+    if project_id not in project_workflow:
         build(project_id)
 
-    return __registry.get(project_id)
+    return project_workflow.get(project_id)
 
 
 def start(project_id: IdOfProject, example_id: IdOfExample):

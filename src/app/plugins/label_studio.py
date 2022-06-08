@@ -4,8 +4,8 @@ from django.urls import reverse
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 from app.models import Example
 from app.models.idof import IdOfProject, IdOfExample
+from app.utils.rest_client import RestClient
 from .base import BaseLabelingPlugin, ConfigError
-from .rest_client import RestClient
 
 logger = logging.getLogger(__package__)
 

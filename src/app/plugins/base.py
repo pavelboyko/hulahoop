@@ -1,5 +1,6 @@
 from typing import Any, Callable
 from enum import Enum
+from app.models.idof import IdOfProject
 from app.models import Example
 
 
@@ -26,6 +27,9 @@ class BaseLabelingPlugin(BasePlugin):
 
     # called when labeling service returns an event related to specific Example
     callback: Callable[[Example, Event, Any], None]
+
+    def __init__(self, project_id: IdOfProject, config: Any):
+        pass
 
     def create_task(self, example: Example) -> None:
         pass

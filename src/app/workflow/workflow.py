@@ -28,28 +28,36 @@ class Workflow(BaseWorkflow):
             logger.error(f"Can't find example by example_id={example_id}. Aborted.")
             return
 
-        if self.labeling_plugin:
-            try:
-                self.labeling_plugin.create_task(example)
-                example.set_labeling_started()
-            except Exception as e:
-                logger.error(
-                    f"Error creating labeling task for example_id={example_id}: {e}"
-                )
-                example.set_labeling_error(str(e))
+        self.label_example(example)
 
     def webhook(self, slug: str, data: Any):
-        logger.debug(f"Workflow received some data: slug={slug}")
-
+        logger.debug(f"Workflow webhook received some data: slug={slug}")
         if self.labeling_plugin and slug == self.labeling_plugin.slug:
             self.labeling_plugin.receive_callback(data)
+
+    def label_example(self, example: Example) -> None:
+        if not self.labeling_plugin:
+            return
+        try:
+            self.labeling_plugin.create_task(example)
+            example.set_labeling_started()
+        except Exception as e:
+            logger.error(
+                f"Error creating labeling task for example_id={example.id}: {e}"
+            )
+            example.set_labeling_error(str(e))
 
     def on_labeling_event(
         self, example: Example, event: BaseLabelingPlugin.Event, result: Any
     ) -> None:
+        # more elegant way to switch?
         if event == BaseLabelingPlugin.Event.annotation_created:
             example.set_labeling_completed(result)
         elif event == BaseLabelingPlugin.Event.annotation_updated:
             example.set_labeling_updated(result)
         elif event == BaseLabelingPlugin.Event.annotation_deleted:
             example.set_labeling_deleted()
+        else:
+            logger.warning(
+                f"Unsupported labeling event type: {event} for example_id={example.id}"
+            )
