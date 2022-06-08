@@ -9,7 +9,7 @@ from app.models.idof import IdOfProject, IdOfExample
 logger = logging.getLogger(__package__)
 
 
-class DemoWorkflow(BaseWorkflow):
+class Workflow(BaseWorkflow):
     """The workflow"""
 
     labeling_plugin: BaseLabelingPlugin
