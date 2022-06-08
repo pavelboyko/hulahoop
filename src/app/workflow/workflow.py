@@ -1,5 +1,6 @@
 import logging
-from typing import Any
+from typing import Any, Optional
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from app.workflow.base import BaseWorkflow
 from app.plugins.base import BaseLabelingPlugin, ConfigError
 from app.models import Example, ExampleEvent
@@ -9,38 +10,35 @@ logger = logging.getLogger(__package__)
 
 
 class Workflow(BaseWorkflow):
-    """The workflow"""
+    labeling_plugin: BaseLabelingPlugin = None
 
-    labeling_plugin: BaseLabelingPlugin
-
-    def __init__(self, project_id: IdOfProject, labeling_plugin: BaseLabelingPlugin):
-        logger.debug(f"Initializing Workflow project_id={project_id}")
+    def __init__(
+        self, project_id: IdOfProject, labeling_plugin: Optional[BaseLabelingPlugin]
+    ):
+        logger.debug(
+            f"Initializing Workflow project_id={project_id} labeling_plugin={labeling_plugin}"
+        )
         super().__init__(project_id)
-        self.labeling_plugin = labeling_plugin
-        self.labeling_plugin.callback = self.on_labeling_event
+        if labeling_plugin:
+            self.labeling_plugin = labeling_plugin
+            self.labeling_plugin.callback = self.on_labeling_event
+            self.webhook_receivers.append(labeling_plugin)
 
     def start(self, example_id: IdOfExample):
-        logger.debug(
-            f"Starting Workflow project_id={self.project_id}, example_id={example_id}"
-        )
-        example = Example.objects.filter(id=example_id).last()
-        if not example:
-            logger.error(f"Can't find example by example_id={example_id}. Aborted.")
-            return
-
-        self.label_example(example)
-
-    def webhook(self, slug: str, data: Any):
-        logger.debug(f"Workflow webhook received some data: slug={slug}")
-        if self.labeling_plugin and slug == self.labeling_plugin.slug:
-            self.labeling_plugin.receive_callback(data)
+        try:
+            example = Example.objects.get(id=example_id)
+            self.label_example(example)
+        except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
+            logger.error(
+                f"Can't get a single example for example_id={example_id}: {e}. Aborted."
+            )
 
     def label_example(self, example: Example) -> None:
         if not self.labeling_plugin:
             return
         try:
-            self.labeling_plugin.create_task(example)
             example.set_labeling_started()
+            self.labeling_plugin.create_task(example)
         except Exception as e:
             logger.error(
                 f"Error creating labeling task for example_id={example.id}: {e}"

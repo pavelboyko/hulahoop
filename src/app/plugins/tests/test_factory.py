@@ -11,10 +11,10 @@ class WorkflowFactoryTest(TestCase):
         pass
 
     def test_unknown(self) -> None:
-        plugin = build_labeling_plugin(slug="___UNKNOWN___", project_id=0, config={})
+        plugin = build_labeling_plugin(project_id=0, slug="___UNKNOWN___", config={})
         self.assertIsNone(plugin)
 
     def test_build_dummy_labeling_plugin(self) -> None:
-        plugin = build_labeling_plugin(slug="dummy_labeling", project_id=0, config={})
+        plugin = build_labeling_plugin(project_id=0, slug="dummy_labeling", config={})
         self.assertIsNotNone(plugin)
         self.assertEqual(plugin.slug, "dummy_labeling")

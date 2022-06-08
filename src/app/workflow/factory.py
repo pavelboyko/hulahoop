@@ -1,29 +1,46 @@
+import logging
 from typing import Dict, Any
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from app.models import Project
 from app.models.idof import IdOfProject, IdOfExample
-from app.workflow.base import BaseWorkflow
-from app.plugins.label_studio import LabelStudioPlugin
+from app.plugins import BaseLabelingPlugin, build_labeling_plugin
+from .base import BaseWorkflow
 from .workflow import Workflow
 
+logger = logging.getLogger(__package__)
+
 # The global per project workflow registry
-# XXX: the registry is local to the celery worker
-# This means that every workflow must be initialized in every worker
+# The registry is local to the celery worker, this means
+# that every workflow must be initialized in every worker
 project_workflow: Dict[IdOfProject, BaseWorkflow] = {}
 
 
 def build(project_id: IdOfProject) -> None:
-    # In the (near) future we will take labeling plugin type and configuration from project config
-    # For now just hardcode Labeling Studio config here
-    labeling_plugin = LabelStudioPlugin(
-        project_id,
-        {
-            "LABELSTUDIO_URL": "http://host.docker.internal:8080/",
-            "LABELSTUDIO_API_KEY": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
-            "LABELSTUDIO_PROJECT_ID": 2,
-        },
-    )
-    # FIXME: catch ConfigError, RestClient.RequestError
+    try:
+        props = Project.objects.get(id=project_id).properties
+        labeling_plugin = None
+        if "plugins" in props:
+            if "labeling" in props["plugins"]:
+                labeling_plugin = build_labeling_plugin(
+                    project_id,
+                    props["plugins"]["labeling"]["slug"],
+                    props["plugins"]["labeling"]["config"],
+                )
+        else:
+            logger.warning(
+                f"For project_id {project_id} 'plugins' sections is not found in properties, check configuration."
+            )
+        project_workflow[project_id] = Workflow(project_id, labeling_plugin)
+    except Exception as e:
+        logger.error(
+            f"Problem during project initialization: project_id={project_id}, error={e}. Aborted."
+        )
 
-    project_workflow[project_id] = Workflow(project_id, labeling_plugin)
+
+def rebuild(project_id: IdOfProject) -> None:
+    if project_id in project_workflow:
+        del project_workflow[project_id]
+    build(project_id)
 
 
 def get_workflow(project_id: IdOfProject) -> BaseWorkflow:

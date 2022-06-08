@@ -12,7 +12,7 @@ logger = logging.getLogger(__package__)
 
 class LabelStudioPlugin(BaseLabelingPlugin):
     name: str = "Label Studio"
-    slug: str = "labelstudio"
+    slug: str = "label_studio"
 
     base_url: str
     api_key: str
@@ -30,6 +30,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     client: RestClient
 
     def __init__(self, project_id: IdOfProject, config: Any):
+        super().__init__(project_id, config)
         logger.debug(f"Initializing {self.name} plugin config={config}")
         self.read_config(config)
         self.client = RestClient(
@@ -44,17 +45,17 @@ class LabelStudioPlugin(BaseLabelingPlugin):
             self.create_webhook(webhook_url)
 
     def read_config(self, config: Dict[str, Any]) -> None:
-        self.base_url = config.get("LABELSTUDIO_URL")
+        self.base_url = config.get("url")
         if not self.base_url:
-            raise ConfigError("Missing required LABELSTUDIO_URL field")
+            raise ConfigError("Missing required 'url' field")
 
-        self.api_key = config.get("LABELSTUDIO_API_KEY")
+        self.api_key = config.get("api_key")
         if not self.api_key:
-            raise ConfigError("Missing required LABELSTUDIO_API_KEY field")
+            raise ConfigError("Missing required 'api_key' field")
 
-        self.ls_project_id = config.get("LABELSTUDIO_PROJECT_ID")
+        self.ls_project_id = config.get("project_id")
         if not self.ls_project_id:
-            raise ConfigError("Missing required LABELSTUDIO_PROJECT_ID field")
+            raise ConfigError("Missing required 'project_id' field")
 
     def create_task(self, example: Example) -> None:
         logger.debug(f"Creating {self.name} task for example_id={example.id}")

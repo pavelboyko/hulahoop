@@ -15,7 +15,7 @@ labeling_plugins: Dict[str, Type[BaseLabelingPlugin]] = {
 
 
 def build_labeling_plugin(
-    slug: str, project_id: IdOfProject, config: str
+    project_id: IdOfProject, slug: str, config: str
 ) -> Optional[BaseLabelingPlugin]:
     if slug in labeling_plugins:
         return labeling_plugins[slug](project_id, config)
