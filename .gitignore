@@ -143,3 +143,4 @@ src/static/
 **/._.DS_Store
 
 
+.vscode/settings.json
