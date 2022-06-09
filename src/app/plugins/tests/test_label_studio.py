@@ -10,11 +10,11 @@ from app.fixtures import ProjectFactory, ExampleFactory
 from app.models import Project, Example
 from app.plugins.label_studio import LabelStudioPlugin
 
-correct_config = {"url": "http://example.com", "api_key": "xxx", "project_id": 1}
+valid_config = {"url": "http://example.com", "api_key": "xxx", "project_id": 1}
 
 
 def create_plugin(project_id: IdOfProject = IdOfProject()):
-    return LabelStudioPlugin(project_id=project_id, config=correct_config)
+    return LabelStudioPlugin(project_id=project_id, config=valid_config)
 
 
 class LabelStudioPluginTest(TestCase):
@@ -25,82 +25,22 @@ class LabelStudioPluginTest(TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_config_type(self) -> None:
-        self.assertRaises(
-            ConfigError, LabelStudioPlugin, project_id=IdOfProject(), config=None
-        )
-        self.assertRaises(
-            ConfigError, LabelStudioPlugin, project_id=IdOfProject(), config=""
-        )
-        self.assertRaises(
-            ConfigError, LabelStudioPlugin, project_id=IdOfProject(), config=[]
-        )
-        self.assertRaises(
-            ConfigError, LabelStudioPlugin, project_id=IdOfProject(), config={}
-        )
+    def test_validate_config(self) -> None:
+        invalid_configs = [
+            None,
+            [],
+            "",
+            {},
+            {"url": "", "api_key": "", "project_id": -1},
+            {"url": "", "api_key": "", "project_id": 0},
+            {"url": "xxx", "api_key": "", "project_id": 0},
+            {"url": "www.example.com", "api_key": "", "project_id": 0},
+        ]
+        for config in invalid_configs:
+            print(config)
+            self.assertRaises(ConfigError, LabelStudioPlugin.validate_config, config)
 
-    def test_config_url(self) -> None:
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_url,
-            config={},
-        )
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_url,
-            config={"url": ""},
-        )
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_url,
-            config={"url": "xxx.yz"},
-        )
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_url,
-            config={"url": "example.com"},
-        )
-        try:
-            LabelStudioPlugin.read_config_url({"url": "https://example.com"})
-            LabelStudioPlugin.read_config_url({"url": "https://example.com:8080"})
-            LabelStudioPlugin.read_config_url({"url": "http://localhost:8080"})
-            LabelStudioPlugin.read_config_url(
-                {"url": "http://host.docker.internal:8080/"}
-            )
-        except ConfigError as e:  # pragma: no cover
-            self.fail(f"Unexpected ConfigError exception: {e}")
-
-    def test_config_api_key(self) -> None:
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_api_key,
-            config={},
-        )
-        try:
-            LabelStudioPlugin.read_config_api_key({"api_key": "xxx"})
-        except ConfigError as e:  # pragma: no cover
-            self.fail(f"Unexpected ConfigError exception: {e}")
-
-    def test_config_project_id(self) -> None:
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_project_id,
-            config={},
-        )
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_project_id,
-            config={"project_id": "100"},
-        )
-        self.assertRaises(
-            ConfigError,
-            LabelStudioPlugin.read_config_project_id,
-            config={"project_id": -1},
-        )
-        try:
-            LabelStudioPlugin.read_config_project_id({"project_id": 0})
-        except ConfigError as e:  # pragma: no cover
-            self.fail(f"Unexpected ConfigError exception: {e}")
+        self.assertEqual(LabelStudioPlugin.validate_config(valid_config), valid_config)
 
     @responses.activate
     def test_webhook_create(self) -> None:
@@ -112,7 +52,7 @@ class LabelStudioPluginTest(TestCase):
             match=[
                 matchers.json_params_matcher(
                     {
-                        "project": correct_config["project_id"],
+                        "project": valid_config["project_id"],
                         "url": f"{HTTP_SCHEME}{HOSTNAME}/api/v1.0/webhook/{IdOfProject()}/label_studio/",
                         "send_for_all_actions": False,
                         "send_payload": True,
@@ -129,7 +69,7 @@ class LabelStudioPluginTest(TestCase):
         )
         try:
             create_plugin()
-        except RestClient.RequestError as e:
+        except RestClient.RequestError as e:  # pragma: no cover
             self.fail(f"Unexpected request error: {e}")
 
     @responses.activate
@@ -141,7 +81,7 @@ class LabelStudioPluginTest(TestCase):
         )
         try:
             create_plugin()
-        except RestClient.RequestError as e:
+        except RestClient.RequestError as e:  # pragma: no cover
             self.fail(f"Unexpected request error: {e}")
 
     @responses.activate

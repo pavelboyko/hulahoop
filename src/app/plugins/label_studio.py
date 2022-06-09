@@ -1,8 +1,9 @@
+import configparser
 import logging
 from typing import Dict, Any
 from django.urls import reverse
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
+from jsonschema import validate, draft7_format_checker
+from jsonschema.exceptions import ValidationError
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 from app.models import Example
 from app.models.idof import IdOfProject, IdOfExample
@@ -16,10 +17,16 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     name: str = "Label Studio"
     slug: str = "label_studio"
 
-    base_url: str = ""
-    api_key: str = ""
-    ls_project_id: int = -1
-
+    config: Any
+    config_schema = {
+        "type": "object",
+        "properties": {
+            "url": {"type": "string", "format": "uri"},
+            "api_key": {"type": "string"},
+            "project_id": {"type": "integer", "minimum": 0},
+        },
+        "required": ["url", "api_key", "project_id"],
+    }
     token_field: str = "hulahoop_example_id"
     event_map: Dict[str, BaseLabelingPlugin.Event] = {
         "ANNOTATION_CREATED": BaseLabelingPlugin.Event.annotation_created,
@@ -28,21 +35,17 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         "ANNOTATIONS_UPDATED": BaseLabelingPlugin.Event.annotation_updated,
         "ANNOTATIONS_DELETED": BaseLabelingPlugin.Event.annotation_deleted,
     }
-
     client: RestClient
 
     def __init__(self, project_id: IdOfProject, config: Any):
         super().__init__(project_id, config)
         logger.debug(f"Initializing {self.name} plugin config={config}")
-        if not isinstance(config, dict):
-            raise ConfigError("Plugin config must be a dict")
 
-        self.base_url = LabelStudioPlugin.read_config_url(config)
-        self.api_key = LabelStudioPlugin.read_config_api_key(config)
-        self.ls_project_id = LabelStudioPlugin.read_config_project_id(config)
+        self.config = self.validate_config(config)
 
         self.client = RestClient(
-            base_url=self.base_url, headers={"Authorization": f"Token {self.api_key}"}
+            base_url=self.config["url"],
+            headers={"Authorization": f"Token {self.config['api_key']}"},
         )
 
         webhook_path = reverse("webhook_v1_0", args=[project_id, self.slug])
@@ -52,11 +55,19 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         if not self.check_webhook_exists(webhook_url):
             self.create_webhook(webhook_url)
 
+    @classmethod
+    def validate_config(cls, config: Any) -> Any:
+        try:
+            validate(config, cls.config_schema, format_checker=draft7_format_checker)
+            return config
+        except ValidationError as e:
+            raise ConfigError(f"Config validation error: {e}")
+
     def create_task(self, example: Example) -> None:
         logger.debug(f"Creating {self.name} task for example_id={example.id}")
         # Assume all examples are images for a while
         self.client.create(
-            path=f"/api/projects/{self.ls_project_id}/import",  # NB! no slash at the end
+            path=f"/api/projects/{self.config['project_id']}/import",  # NB! no slash at the end
             data={"image": example.media_url, self.token_field: str(example.id)},
         )
 
@@ -77,17 +88,11 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         self.client.create(
             path="/api/webhooks/",
             data={
-                "project": self.ls_project_id,
+                "project": self.config["project_id"],
                 "url": url,
                 "send_payload": True,
                 "send_for_all_actions": False,
-                "actions": (
-                    "ANNOTATION_CREATED",
-                    "ANNOTATIONS_CREATED",
-                    "ANNOTATION_UPDATED",
-                    "ANNOTATIONS_UPDATED",
-                    "ANNOTATIONS_DELETED",
-                ),
+                "actions": list(self.event_map.keys()),
             },
         )
 
@@ -109,35 +114,3 @@ class LabelStudioPlugin(BaseLabelingPlugin):
             )
 
         # FIXME: catch exceptions from Example.objects.get
-
-    @staticmethod
-    def read_config_url(config: Dict[str, Any]) -> str:
-        url = config.get("url")
-        if url is None:
-            raise ConfigError("Missing required 'url' field")
-
-        validate_url = URLValidator()
-        try:
-            validate_url(url)
-        except ValidationError as e:
-            raise ConfigError("'url' field value is not a valid URL: {e}")
-
-        return url
-
-    @staticmethod
-    def read_config_api_key(config: Dict[str, Any]) -> str:
-        api_key = config.get("api_key")
-        if api_key is None:
-            raise ConfigError("Missing required 'api_key' field")
-        return api_key
-
-    @staticmethod
-    def read_config_project_id(config: Dict[str, Any]) -> int:
-        project_id = config.get("project_id")
-        if project_id is None:
-            raise ConfigError("Missing required 'project_id' field")
-        if not isinstance(project_id, int):
-            raise ConfigError("'project_id' field must be int: {project_id}")
-        if project_id < 0:
-            raise ConfigError("'project_id' field must be positive: {project_id}")
-        return project_id
