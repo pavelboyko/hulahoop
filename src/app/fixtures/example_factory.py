@@ -1,3 +1,4 @@
+from typing import Optional
 from factory import Faker
 from factory.django import DjangoModelFactory
 from django.utils.timezone import get_current_timezone
@@ -8,7 +9,7 @@ class ExampleFactory(DjangoModelFactory):
     class Meta:
         model = Example
 
-    def __init__(self, project: Project, issue: Issue):
+    def __init__(self, project: Project, issue: Optional[Issue] = None):
         self.project = project
         self.issue = issue
 

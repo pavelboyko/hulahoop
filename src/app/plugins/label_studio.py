@@ -52,6 +52,64 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         if not self.check_webhook_exists(webhook_url):
             self.create_webhook(webhook_url)
 
+    def create_task(self, example: Example) -> None:
+        logger.debug(f"Creating {self.name} task for example_id={example.id}")
+        # Assume all examples are images for a while
+        self.client.create(
+            path=f"/api/projects/{self.ls_project_id}/import",  # NB! no slash at the end
+            data={"image": example.media_url, self.token_field: str(example.id)},
+        )
+
+    def check_webhook_exists(self, url: str) -> bool:
+        """Check if a given webhook url already registered in Label Studio"""
+        try:
+            webhooks = self.client.get(path="/api/webhooks/")
+            for wh in webhooks:
+                if wh["url"] == url:
+                    return True
+            return False
+        except (TypeError, ValueError, KeyError) as e:
+            raise RestClient.RequestError(e)
+
+    def create_webhook(self, url: str) -> None:
+        """Register webhook in Label Studio"""
+        logger.debug(f"Registering {self.name} webhook url={url}")
+        self.client.create(
+            path="/api/webhooks/",
+            data={
+                "project": self.ls_project_id,
+                "url": url,
+                "send_payload": True,
+                "send_for_all_actions": False,
+                "actions": (
+                    "ANNOTATION_CREATED",
+                    "ANNOTATIONS_CREATED",
+                    "ANNOTATION_UPDATED",
+                    "ANNOTATIONS_UPDATED",
+                    "ANNOTATIONS_DELETED",
+                ),
+            },
+        )
+
+    def receive_webhook(self, data: Any) -> None:
+        try:
+            example_id = IdOfExample(data["task"]["data"][self.token_field])
+            example = Example.objects.get(id=example_id)
+            action = self.event_map[data["action"]]
+            result = data["annotation"]
+            if self.callback:
+                self.callback(example, action, result)
+            else:
+                logger.warning(
+                    f"{self.name} plugin received a webhook but callback is not set. This looks like a programming error."
+                )
+        except (ValueError, KeyError, TypeError):
+            logger.error(
+                f"{self.name} plugin can't parse webhook request: {data}. Skipped."
+            )
+
+        # FIXME: catch exceptions from Example.objects.get
+
     @staticmethod
     def read_config_url(config: Dict[str, Any]) -> str:
         url = config.get("url")
@@ -83,60 +141,3 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         if project_id < 0:
             raise ConfigError("'project_id' field must be positive: {project_id}")
         return project_id
-
-    def create_task(self, example: Example) -> None:
-        logger.debug(f"Creating {self.name} task for example_id={example.id}")
-        # Assume all examples are images for a while
-        self.client.create(
-            path=f"/api/projects/{self.ls_project_id}/import",  # NB! no slash at the end
-            data={"image": example.media_url, self.token_field: str(example.id)},
-        )
-
-    def check_webhook_exists(self, url: str) -> bool:
-        """Check if a given webhook url already registered in Label Studio"""
-        try:
-            webhooks = self.client.get(path="/api/webhooks/")
-            for wh in webhooks:
-                if wh["url"] == url:
-                    return True
-            return False
-        except (TypeError, ValueError, KeyError) as e:
-            raise RestClient.RequestError(e)
-
-    def create_webhook(self, url: str) -> None:
-        """Register webhook in Label Studio"""
-        logger.debug(f"Registering {self.name} webhook url={url}")
-        self.client.create(
-            path="/api/webhooks/",
-            data={
-                "project": self.ls_project_id,
-                "url": url,
-                "send_payload": True,
-                "send_for_all_actions": False,
-                "actions": [
-                    "ANNOTATION_CREATED",
-                    "ANNOTATIONS_CREATED",
-                    "ANNOTATION_UPDATED",
-                    "ANNOTATIONS_DELETED",
-                ],
-            },
-        )
-
-    def receive_webhook(self, data: Any) -> None:
-        try:
-            example_id = IdOfExample(data["task"]["data"][self.token_field])
-            example = Example.objects.get(id=example_id)
-            action = self.event_map[data["action"]]
-            result = data["annotation"]
-            if self.callback:
-                self.callback(example, action, result)
-            else:
-                logger.warning(
-                    f"{self.name} plugin received a webhook but callback is not set. This looks like a programming error."
-                )
-        except (ValueError, KeyError, TypeError):
-            logger.error(
-                f"{self.name} plugin can't parse webhook request: {data}. Skipped."
-            )
-
-        # FIXME: catch exceptions from Example.objects.get
