@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Optional, Type
+from typing import Dict, Optional, Type, Any
 from app.models.idof import IdOfProject
 from .base import BaseLabelingPlugin
 from .label_studio import LabelStudioPlugin
@@ -15,7 +15,7 @@ labeling_plugins: Dict[str, Type[BaseLabelingPlugin]] = {
 
 
 def build_labeling_plugin(
-    project_id: IdOfProject, slug: str, config: str
+    project_id: IdOfProject, slug: str, config: Any
 ) -> Optional[BaseLabelingPlugin]:
     if slug in labeling_plugins:
         return labeling_plugins[slug](project_id, config)

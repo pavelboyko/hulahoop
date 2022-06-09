@@ -1,6 +1,8 @@
 import logging
 from typing import Dict, Any
 from django.urls import reverse
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 from app.models import Example
 from app.models.idof import IdOfProject, IdOfExample
@@ -14,9 +16,9 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     name: str = "Label Studio"
     slug: str = "label_studio"
 
-    base_url: str
-    api_key: str
-    ls_project_id: int
+    base_url: str = ""
+    api_key: str = ""
+    ls_project_id: int = -1
 
     token_field: str = "hulahoop_example_id"
     event_map: Dict[str, BaseLabelingPlugin.Event] = {
@@ -32,7 +34,13 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     def __init__(self, project_id: IdOfProject, config: Any):
         super().__init__(project_id, config)
         logger.debug(f"Initializing {self.name} plugin config={config}")
-        self.read_config(config)
+        if not isinstance(config, dict):
+            raise ConfigError("Plugin config must be a dict")
+
+        self.base_url = LabelStudioPlugin.read_config_url(config)
+        self.api_key = LabelStudioPlugin.read_config_api_key(config)
+        self.ls_project_id = LabelStudioPlugin.read_config_project_id(config)
+
         self.client = RestClient(
             base_url=self.base_url, headers={"Authorization": f"Token {self.api_key}"}
         )
@@ -44,18 +52,37 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         if not self.check_webhook_exists(webhook_url):
             self.create_webhook(webhook_url)
 
-    def read_config(self, config: Dict[str, Any]) -> None:
-        self.base_url = config.get("url")
-        if not self.base_url:
+    @staticmethod
+    def read_config_url(config: Dict[str, Any]) -> str:
+        url = config.get("url")
+        if url is None:
             raise ConfigError("Missing required 'url' field")
 
-        self.api_key = config.get("api_key")
-        if not self.api_key:
-            raise ConfigError("Missing required 'api_key' field")
+        validate_url = URLValidator()
+        try:
+            validate_url(url)
+        except ValidationError as e:
+            raise ConfigError("'url' field value is not a valid URL: {e}")
 
-        self.ls_project_id = config.get("project_id")
-        if not self.ls_project_id:
+        return url
+
+    @staticmethod
+    def read_config_api_key(config: Dict[str, Any]) -> str:
+        api_key = config.get("api_key")
+        if api_key is None:
+            raise ConfigError("Missing required 'api_key' field")
+        return api_key
+
+    @staticmethod
+    def read_config_project_id(config: Dict[str, Any]) -> int:
+        project_id = config.get("project_id")
+        if project_id is None:
             raise ConfigError("Missing required 'project_id' field")
+        if not isinstance(project_id, int):
+            raise ConfigError("'project_id' field must be int: {project_id}")
+        if project_id < 0:
+            raise ConfigError("'project_id' field must be positive: {project_id}")
+        return project_id
 
     def create_task(self, example: Example) -> None:
         logger.debug(f"Creating {self.name} task for example_id={example.id}")
