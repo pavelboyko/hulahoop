@@ -2,6 +2,7 @@ import configparser
 import logging
 from typing import Dict, Any
 from django.urls import reverse
+from django.core.exceptions import MultipleObjectsReturned
 from jsonschema import validate, draft7_format_checker
 from jsonschema.exceptions import ValidationError
 from hulahoop.settings import HTTP_SCHEME, HOSTNAME
@@ -112,5 +113,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
             logger.error(
                 f"{self.name} plugin can't parse webhook request: {data}. Skipped."
             )
-
-        # FIXME: catch exceptions from Example.objects.get
+        except (Example.DoesNotExist, MultipleObjectsReturned) as e:
+            logger.error(
+                f"{self.name} can't process received webhook request: {data}: {e}"
+            )

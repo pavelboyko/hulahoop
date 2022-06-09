@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 from enum import Enum
 from app.models.idof import IdOfProject
 from app.models import Example
@@ -26,7 +26,7 @@ class BaseLabelingPlugin(BasePlugin):
         # add more event types here if needed
 
     # called when labeling service returns an event related to specific Example
-    callback: Callable[[Example, Event, Any], None]
+    callback: Optional[Callable[[Example, Event, Any], None]] = None
 
     def __init__(self, project_id: IdOfProject, config: Any):
         pass
