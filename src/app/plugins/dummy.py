@@ -24,9 +24,7 @@ class DummyLabelingPlugin(BaseLabelingPlugin):
             f"Labeling started for example_id={example.id}, status={example.status}"
         )
         if self.callback:
-            self.callback(
-                example, BaseLabelingPlugin.Event.annotation_created, result={}
-            )
+            self.callback(example, BaseLabelingPlugin.Event.annotation_created, {})
             example.refresh_from_db()
             logger.debug(
                 f"Labeling completed for example_id={example.id}, status={example.status}"
