@@ -20,7 +20,12 @@
 {% endblock breadcrumb%}
 
 {% block header %}
-<h1 class="display-6">{{ issue.display_name }}</h1>
+<h1 class="display-6">
+    {% if issue.name %}
+        {{ issue.name }}
+    {% endif %}
+    <small class="text-muted">{{ issue }}</small>
+</h1>
 {% endblock header %}
 
 {% block header-buttons %}

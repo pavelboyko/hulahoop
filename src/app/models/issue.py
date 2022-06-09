@@ -28,16 +28,10 @@ class Issue(BaseModel):
         null=True, blank=True, default=None
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"#{self.id}"
 
-    def display_name(self):
-        if self.name:
-            return f"{self} {self.name}"
-        else:
-            return str(self)
-
-    def example_count(self):
+    def example_count(self) -> int:
         return self.example_set.filter().count()
 
 
