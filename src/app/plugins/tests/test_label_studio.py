@@ -67,7 +67,7 @@ class LabelStudioPluginTest(TestCase):
             LabelStudioPlugin.read_config_url(
                 {"url": "http://host.docker.internal:8080/"}
             )
-        except ConfigError as e:
+        except ConfigError as e:  # pragma: no cover
             self.fail(f"Unexpected ConfigError exception: {e}")
 
     def test_config_api_key(self) -> None:
@@ -78,7 +78,7 @@ class LabelStudioPluginTest(TestCase):
         )
         try:
             LabelStudioPlugin.read_config_api_key({"api_key": "xxx"})
-        except ConfigError as e:
+        except ConfigError as e:  # pragma: no cover
             self.fail(f"Unexpected ConfigError exception: {e}")
 
     def test_config_project_id(self) -> None:
@@ -99,7 +99,7 @@ class LabelStudioPluginTest(TestCase):
         )
         try:
             LabelStudioPlugin.read_config_project_id({"project_id": 0})
-        except ConfigError as e:
+        except ConfigError as e:  # pragma: no cover
             self.fail(f"Unexpected ConfigError exception: {e}")
 
     @responses.activate
