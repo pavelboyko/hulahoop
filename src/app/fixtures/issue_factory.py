@@ -1,13 +1,13 @@
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
-from app.models import Project, Issue
+from app.models import Issue
+from .project_factory import ProjectFactory
 
 
 class IssueFactory(DjangoModelFactory):
     class Meta:
         model = Issue
 
-    def __init__(self, project: Project):
-        self.project = project
-
-    name = "Cartoonish hotdogs"
-    description = "Cartoon style images of hot dogs are not properly classified"
+    project = SubFactory(ProjectFactory)
+    name = Faker("bs")
+    description = Faker("paragraph", nb_sentences=2)

@@ -1,18 +1,16 @@
-from typing import Optional
-from factory import Faker
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 from django.utils.timezone import get_current_timezone
 from app.models import Example, Issue, Project
+from .project_factory import ProjectFactory
 
 
 class ExampleFactory(DjangoModelFactory):
     class Meta:
         model = Example
 
-    def __init__(self, project: Project, issue: Optional[Issue] = None):
-        self.project = project
-        self.issue = issue
-
+    project = SubFactory(ProjectFactory)
+    issue = None
     created_at = Faker(
         "date_time_between",
         start_date="-90d",

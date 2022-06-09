@@ -1,24 +1,22 @@
-from factory import Faker
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 from django.utils.timezone import get_current_timezone
+from app.fixtures.user_factory import UserFactory
 from app.models import Project
+from .user_factory import UserFactory
 
 
 class ProjectFactory(DjangoModelFactory):
     class Meta:
         model = Project
 
-    name = "Not Hotdog"
-    description = "A demo project"
+    name = Faker("catch_phrase")
+    description = Faker("paragraph", nb_sentences=1)
     properties = {
         "plugins": {
             "labeling": {
-                "slug": "label_studio",
-                "config": {
-                    "url": "http://host.docker.internal:8080/",
-                    "api_key": "d3bca97b95da0820cadae2197c7ccde4ee6e77b7",
-                    "project_id": 2,
-                },
+                "slug": "dummy_labeling",
+                "config": {},
             }
         }
     }
@@ -29,4 +27,4 @@ class ProjectFactory(DjangoModelFactory):
         end_date="-30d",
         tzinfo=get_current_timezone(),
     )
-    created_by_id = 1
+    created_by = SubFactory(UserFactory)
