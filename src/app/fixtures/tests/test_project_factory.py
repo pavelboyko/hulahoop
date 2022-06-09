@@ -1,4 +1,5 @@
 from django.test import TestCase
+from app.models import Project
 from app.fixtures import ProjectFactory
 
 
@@ -8,7 +9,7 @@ class Test(TestCase):
     """
 
     def tearDown(self) -> None:
-        pass
+        Project.objects.all().delete()
 
     def test(self) -> None:
         p = ProjectFactory()
