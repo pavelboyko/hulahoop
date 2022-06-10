@@ -14,7 +14,7 @@
 {% endblock subheader %}
 
 {% block tabs %}
-<ul class="nav">
+<ul class="nav topnav">
     <li class="nav-item">
         <a class="nav-link" href="{% url 'issue_list' project.id %}">Issues</a>
     </li>
@@ -30,28 +30,36 @@
 </ul>
 {% endblock tabs %}
 
-
 {% block main %}
-
 <div class="row">
     <div class="col-2">
-        <ul>
-            <li>General</li>
-            <li>Issues clustering</li>
-            <li>Example labeling</li>
-            <li>Model training</li>
-            <li>Model registry</li>
-            <li>Alerts</li>
-            <li>Webhooks</li>
-            <li>Danger zone</li>
-        </ul>
+        <nav lass="navbar flex-column">
+            <nav class="nav nav-pills flex-column">
+              <a class="nav-link active" href="#">Integration</a>
+              <a class="nav-link" href="#">Issues</a>
+              <a class="nav-link" href="#">Labeling</a>
+            </nav>
+          </nav>
     </div>
-    <div class="col-10">
-        <p>Name</p>
-        <p>Project ID & Client key</p>
-        <p>API & SDK examples -- installation instructions</p>
+    <div class="col-10 p-2">
+        <h5>Integration</h5>
+        <p>To capture an example in this project <code>POST</code> to <code>{{ capture_endpoint }}</code>.</p>
+        <p>Examples:
+<pre><code class="language-bash">curl -X POST \
+  {{ capture_endpoint }} \
+  -H "Content-Type: application/json" \
+  -d '{"media_url": "https://upload.wikimedia.org/wikipedia/commons/9/98/Girl_twirling_Hula_Hoop%2C_1958.jpg"}'
+</code>
+</pre>
+        </p>
     </div>
 </div>
+
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
 
 {% endblock main %}
 

@@ -12,14 +12,14 @@
     text-decoration: underline;
 }
 
-.nav {
+.topnav {
     border-bottom: 1px solid rgb(222, 226, 230);
 }
-.nav-link {
+.topnav .nav-item .nav-link {
     color: rgb(110, 110, 110);
     font-weight: 500;
 }
-.nav-link.active {
+.topnav .nav-item .nav-link.active {
     color: rgb(33, 37, 41);
     background-color: white;
     border-radius: 0.5rem 0.5rem 0 0;
