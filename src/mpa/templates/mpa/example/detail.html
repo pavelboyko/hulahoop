@@ -1,5 +1,5 @@
 {% extends "mpa/base.html" %}
-{% block title %}Example — {{ project.name }}{% endblock title %}
+{% block title %}Example • {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item">
@@ -27,12 +27,11 @@
 </p>
 <p class="text-muted" style="margin-top: -0.5rem">
     {% if example.issue %}
-                <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
-                {{ example.issue.get_status_display }}
-            </span>
-    Issue:
+    <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
+        {{ example.issue.get_status_display }}
+    </span>
     <a href="{% url 'issue_detail' project.id example.issue.id %}">
-        {{ example.issue.display_name }}
+    Issue #{{example.issue.id}}: {{ example.issue.name }}
     </a>
     {% endif %}
 </p>

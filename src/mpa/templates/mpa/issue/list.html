@@ -1,7 +1,7 @@
 {% extends "mpa/base.html" %}
 {% load humanize %}
 
-{% block title %}Issues — {{ project.name }}{% endblock title %}
+{% block title %}Issues • {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item active" aria-current="page">{{ project.name | truncatechars:32 }}</li>
@@ -51,7 +51,7 @@
             <span class="badge rounded-pill bage-bg-{{ issue.get_status_display | lower }}">
                 {{ issue.get_status_display }}
             </span>
-            &nbsp; {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+            {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
             • Created {{ issue.created_at | naturaltime }}
             • Updated {{ issue.updated_at | naturaltime }}
         </small>
