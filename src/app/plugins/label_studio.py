@@ -18,7 +18,6 @@ class LabelStudioPlugin(BaseLabelingPlugin):
     name: str = "Label Studio"
     slug: str = "label_studio"
 
-    config: Any
     config_schema = {
         "type": "object",
         "properties": {
@@ -36,13 +35,12 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         "ANNOTATIONS_UPDATED": BaseLabelingPlugin.Event.annotation_updated,
         "ANNOTATIONS_DELETED": BaseLabelingPlugin.Event.annotation_deleted,
     }
-    client: RestClient
 
     def __init__(self, project_id: IdOfProject, config: Any):
         super().__init__(project_id, config)
         logger.debug(f"Initializing {self.name} plugin config={config}")
 
-        self.config = self.validate_config(config)
+        self.config: Dict[str, Any] = self.validate_config(config)
 
         self.client = RestClient(
             base_url=self.config["url"],

@@ -29,3 +29,6 @@ class DummyLabelingPlugin(BaseLabelingPlugin):
             logger.debug(
                 f"Labeling completed for example_id={example.id}, status={example.status}"
             )
+
+    def receive_webhook(self, data: Any) -> None:
+        logger.debug(f"{self.name} received some data on a webhook: {data}")
