@@ -49,7 +49,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
             headers={"Authorization": f"Token {self.config['api_key']}"},
         )
 
-        webhook_path = reverse("webhook_v1_0", args=[project_id, self.slug])
+        webhook_path = reverse("api_webhook", args=[project_id, self.slug])
         webhook_url = f"{HTTP_SCHEME}{HOSTNAME}{webhook_path}"
         # As we init plugin in every celery worker on every start
         # make sure that our webhook wasn't already registered

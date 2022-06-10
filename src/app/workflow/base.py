@@ -1,11 +1,11 @@
-from typing import Any, Iterable
+from typing import Any, List
 from app.plugins import BasePlugin
 from app.models.idof import IdOfProject, IdOfExample
 
 
 class BaseWorkflow:
     project_id: IdOfProject
-    webhook_receivers: Iterable[BasePlugin] = []
+    webhook_receivers: List[BasePlugin] = []
 
     def __init__(self, project_id: IdOfProject):
         self.project_id = project_id

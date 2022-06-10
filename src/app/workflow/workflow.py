@@ -10,7 +10,7 @@ logger = logging.getLogger(__package__)
 
 
 class Workflow(BaseWorkflow):
-    labeling_plugin: BaseLabelingPlugin = None
+    labeling_plugin: Optional[BaseLabelingPlugin] = None
 
     def __init__(
         self, project_id: IdOfProject, labeling_plugin: Optional[BaseLabelingPlugin]
