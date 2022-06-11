@@ -3,7 +3,7 @@
 {% block title %}Projects{% endblock title %}
 
 {% block header %}
-    <h1 class="display-6">Projects</h1>
+    <div class="page-header">Projects</div>
 {% endblock header%}
 
 {% block header-buttons %}
@@ -18,8 +18,7 @@
 <ul class="list-group">
     {% for project in project_list %}
     <li class="list-group-item d-flex flex-column list-group-item-action">
-        <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">{{ project.name }}</a>
-        {% if project.description %} <div class="mb-1">{{ project.description }}</div> {% endif %}
+        <a href="{% url 'project_detail' project.id %}" class="fs-6 text-decoration-none stretched-link">{{ project.name }}</a>
         <small class="text-muted">
               {% with count=project.issue_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} issue{{ count | pluralize }}{% endwith %}
             • {% with count=project.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}

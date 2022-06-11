@@ -15,10 +15,6 @@
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
 {% endblock breadcrumb%}
 
-{% block header %}
-<h1 class="display-6">{{ example }}</h1>
-{% endblock header %}
-
 {% block subheader %}
 <p class="text-muted">
     <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span>

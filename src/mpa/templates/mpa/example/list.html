@@ -3,16 +3,13 @@
 {% block title %}Examples • {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
-<li class="breadcrumb-item active" aria-current="page">{{ project.name | truncatechars:32 }}</li>
+<li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">{{ project.name | truncatechars:40 }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">Examples</li>
 {% endblock breadcrumb%}
 
 {% block header %}
-<h1 class="display-6">{{ project.name }}</h1>
+<div class="page-header">{{ project.name }}</div>
 {% endblock header %}
-
-{% block subheader %}
-{% if project.description %}<p>{{ project.description }}</p>{% endif %}
-{% endblock subheader %}
 
 {% block tabs %}
 <ul class="nav topnav">
@@ -21,9 +18,6 @@
     </li>
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#">Examples</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'project_dashboard' project.id %}">Insights</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'project_settings' project.id %}">Settings</a>

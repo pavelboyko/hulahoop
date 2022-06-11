@@ -69,9 +69,5 @@ class ProjectAdmin(BaseAdmin):
     )
     search_fields = ("name",)
 
-    def save_model(self, request, obj, form, change):
-        obj.created_by = request.user
-        obj.save()
-
 
 admin.site.register(Project, ProjectAdmin)

@@ -20,12 +20,11 @@
 {% endblock breadcrumb%}
 
 {% block header %}
-<h1 class="display-6">
+<div class="page-header">
     {% if issue.name %}
         {{ issue.name }}
     {% endif %}
-    <small class="text-muted">{{ issue }}</small>
-</h1>
+</div>
 {% endblock header %}
 
 {% block header-buttons %}
@@ -41,19 +40,24 @@
 {% endblock header-buttons %}
 
 {% block subheader %}
-{% if issue.description %} <div class="mb-1">{{ issue.description }}</div> {% endif %}
-<p class="text-muted">
+<div class="text-muted mb-2">
 <span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
         {{ issue.get_status_display }}
 </span>
     {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
     • Created {{ issue.created_at | naturaltime }}
     • Updated {{ issue.updated_at | naturaltime }}
-</p>
+</div>
 {% endblock subheader %}
 
-{% block main %}
-<h5>Examples</h5>
-{% include 'mpa/example/list_main.html' %}
+{% block tabs %}
+<ul class="nav topnav">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Examples</a>
+    </li>
+</ul>
+{% endblock tabs %}
 
+{% block main %}
+{% include 'mpa/example/list_main.html' %}
 {% endblock main %}

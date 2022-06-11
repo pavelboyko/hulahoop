@@ -12,6 +12,13 @@
     text-decoration: underline;
 }
 
+.page-header {
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .topnav {
     border-bottom: 1px solid rgb(222, 226, 230);
 }
