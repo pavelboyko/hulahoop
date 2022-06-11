@@ -34,7 +34,7 @@
 <ul class="list-group">
     {% for issue in issues %}
     <li class="list-group-item d-flex flex-column list-group-item-action">
-        <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-6 text-decoration-none stretched-link">
+        <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">
             {{ issue }}
             {% if issue.name %}
                 {{ issue.name }}

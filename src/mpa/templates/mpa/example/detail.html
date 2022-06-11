@@ -4,7 +4,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item">
     <a href="{% url 'project_detail' project.id %}">
-        {{ project.name|truncatechars:32 }}
+        {{ project.name | truncatechars:40 }}
     </a>
 </li>
 <li class="breadcrumb-item">
