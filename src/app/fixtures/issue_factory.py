@@ -10,4 +10,3 @@ class IssueFactory(DjangoModelFactory):
 
     project = SubFactory(ProjectFactory)
     name = Faker("bs")
-    description = Faker("paragraph", nb_sentences=2)

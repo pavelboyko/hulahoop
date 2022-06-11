@@ -14,7 +14,6 @@ class Test(TestCase):
     def test(self) -> None:
         p = ProjectFactory()
         self.assertIsNotNone(p.name)
-        self.assertIsNotNone(p.description)
         self.assertIsNotNone(p.properties)
         self.assertIsNotNone(p.created_at)
         self.assertIsNotNone(p.created_by)

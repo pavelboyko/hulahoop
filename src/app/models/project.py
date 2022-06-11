@@ -14,17 +14,7 @@ class Project(BaseModel):
     A container for examples, processing workflows, etc.
     """
 
-    class MediaType(models.IntegerChoices):
-        image = 0
-        # video, audio, etc. will be here
-
     name: models.TextField = models.TextField()
-    description: models.TextField = models.TextField(
-        null=True, blank=True, default=None
-    )
-    media_type: models.IntegerField = models.IntegerField(
-        choices=MediaType.choices, default=MediaType.image
-    )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     created_by = models.ForeignKey(
         "User", null=False, blank=False, on_delete=models.CASCADE
@@ -54,14 +44,11 @@ class ProjectAdmin(BaseAdmin):
     list_display = (
         "id",
         "name",
-        "media_type",
         "created_by",
     )
     fields = (
         "id",
         "name",
-        "description",
-        "media_type",
         "properties",
         "created_by",
         "created_at",

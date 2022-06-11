@@ -11,7 +11,6 @@ class ProjectFactory(DjangoModelFactory):
         model = Project
 
     name = Faker("catch_phrase")
-    description = Faker("paragraph", nb_sentences=1)
     properties = {
         "plugins": {
             "labeling": {
@@ -20,7 +19,6 @@ class ProjectFactory(DjangoModelFactory):
             }
         }
     }
-    media_type = Project.MediaType.image
     created_at = Faker(
         "date_time_between",
         start_date="-90d",

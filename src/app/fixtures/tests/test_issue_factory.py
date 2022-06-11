@@ -14,7 +14,6 @@ class Test(TestCase):
     def test(self) -> None:
         issue = IssueFactory()
         self.assertIsNotNone(issue.name)
-        self.assertIsNotNone(issue.description)
 
     def test_with_project(self) -> None:
         project = ProjectFactory()
