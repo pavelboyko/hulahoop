@@ -35,6 +35,12 @@ class Example(BaseModel):
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
     )
+    predictions: models.JSONField = models.JSONField(
+        null=True, blank=True, default=None
+    )
+    annotations: models.JSONField = models.JSONField(
+        null=True, blank=True, default=None
+    )
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     issue: models.ForeignKey = models.ForeignKey(
         "Issue", null=True, blank=True, on_delete=models.CASCADE

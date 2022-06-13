@@ -1,4 +1,4 @@
-from factory import Faker, SubFactory
+from factory import Faker, SubFactory, Dict
 from factory.django import DjangoModelFactory
 from django.utils.timezone import get_current_timezone
 from app.models import Example, Issue, Project
@@ -35,3 +35,11 @@ class ExampleFactory(DjangoModelFactory):
             "https://i.pinimg.com/564x/58/71/50/5871504d228189e217d3b02185841bda.jpg",
         ],
     )
+    predictions = Dict(
+        {
+            "label": Faker("random_element", elements=["Hotdog", "Not hotdog"]),
+            "score": Faker("pyfloat", min_value=0, max_value=1),
+            "choices": ["Hotdog", "Not hotdog"],
+        }
+    )
+    properties = {"a": "b"}

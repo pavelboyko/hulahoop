@@ -36,6 +36,11 @@ class Test(TestCase):
         data = {
             "media_url": "http://example.com",
             "properties": {"a": "b"},
+            "predictions": {
+                "label": "xxx",
+                "score": "0.99",
+                "choices": ["xxx", "yyy", "zzz"],
+            },
             "fingerprint": "xxx",
         }
         response = APIClient().post(path, data, format="json")
@@ -45,4 +50,5 @@ class Test(TestCase):
         self.assertEqual(example.project, project)
         self.assertEqual(example.media_url, data["media_url"])
         self.assertDictEqual(example.properties, data["properties"])
+        self.assertDictEqual(example.predictions, data["predictions"])
         self.assertEqual(example.fingerprint, data["fingerprint"])
