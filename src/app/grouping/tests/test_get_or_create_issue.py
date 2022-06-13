@@ -18,6 +18,8 @@ class Test(TestCase):
         issue, is_created = get_or_create_issue(example)
         self.assertIsNone(issue)
         self.assertFalse(is_created)
+        example.refresh_from_db()
+        self.assertIsNone(example.issue)
 
     def test_create(self) -> None:
         project = ProjectFactory.create()
@@ -26,6 +28,8 @@ class Test(TestCase):
         self.assertIsNotNone(issue)
         self.assertEqual(issue.fingerprint, example.fingerprint)
         self.assertTrue(is_created)
+        example.refresh_from_db()
+        self.assertEqual(example.issue, issue)
 
     def test_get(self) -> None:
         project = ProjectFactory.create()
@@ -35,3 +39,7 @@ class Test(TestCase):
         issue2, is_created = get_or_create_issue(example2)
         self.assertEqual(issue1, issue2)
         self.assertFalse(is_created)
+        example1.refresh_from_db()
+        example2.refresh_from_db()
+        self.assertEqual(example1.issue, issue2)
+        self.assertEqual(example2.issue, issue2)

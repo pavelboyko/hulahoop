@@ -32,4 +32,6 @@ def get_or_create_issue(example: Example) -> Tuple[Optional[Issue], bool]:
         the_issue = Issue.objects.create(
             project=example.project, fingerprint=example.fingerprint
         )
+        example.issue = the_issue
+        example.save(update_fields=["issue"])
         return the_issue, True

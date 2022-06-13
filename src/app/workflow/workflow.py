@@ -3,8 +3,9 @@ from typing import Any, Optional
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from app.workflow.base import BaseWorkflow
 from app.plugins.base import BaseLabelingPlugin
-from app.models import Example
+from app.models import Example, Issue
 from app.models.idof import IdOfProject, IdOfExample
+from app.grouping import get_or_create_issue
 
 logger = logging.getLogger(__package__)
 
@@ -27,11 +28,19 @@ class Workflow(BaseWorkflow):
     def start(self, example_id: IdOfExample):
         try:
             example = Example.objects.get(id=example_id)
+            self.group_example(example)
             self.label_example(example)
         except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
             logger.error(
                 f"Can't get a single example for example_id={example_id}: {e}. Aborted."
             )
+
+    def group_example(self, example: Example) -> Optional[Issue]:
+        logger.debug("Grouping example {example}")
+        issue, is_created = get_or_create_issue(example)
+        example.refresh_from_db()
+        logger.debug(f"issue={issue}, is_created={is_created}")
+        return issue
 
     def label_example(self, example: Example) -> None:
         if not self.labeling_plugin:

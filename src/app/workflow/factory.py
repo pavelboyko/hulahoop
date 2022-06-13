@@ -19,7 +19,7 @@ def build(project_id: IdOfProject) -> None:
     try:
         props = Project.objects.get(id=project_id).properties
         labeling_plugin = None
-        if "plugins" in props:
+        if props is not None and "plugins" in props:
             if "labeling" in props["plugins"]:
                 labeling_plugin = build_labeling_plugin(
                     project_id,

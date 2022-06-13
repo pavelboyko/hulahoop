@@ -80,3 +80,13 @@ class WorkflowTest(TestCase):
         labeling_plugin = DummyLabelingPlugin(project_id=project.id)
         wf = Workflow(project_id=project.id, labeling_plugin=labeling_plugin)
         wf.label_example(example=None)  # don't crash
+
+    def test_grouping(self) -> None:
+        project = ProjectFactory(properties={})
+        labeling_plugin = DummyLabelingPlugin(project_id=project.id)
+        wf = Workflow(project_id=project.id, labeling_plugin=labeling_plugin)
+        example = ExampleFactory(project=project, fingerprint="xxx")
+        wf.start(example.id)
+        example.refresh_from_db()
+        self.assertIsNotNone(example.issue)
+        self.assertEquals(example.fingerprint, example.issue.fingerprint)
