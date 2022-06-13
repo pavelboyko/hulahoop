@@ -25,4 +25,4 @@ def capture(request, project_id: int) -> Response:
     serializer = ExampleSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)  # return 400 on invalid request data
     serializer.save(project=project)
-    return Response(data={status: 1}, status=status.HTTP_200_OK)
+    return Response(data={"status": 1}, status=status.HTTP_200_OK)
