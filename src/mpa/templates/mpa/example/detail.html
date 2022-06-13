@@ -1,4 +1,6 @@
 {% extends "mpa/base.html" %}
+{% load humanize %}
+
 {% block title %}Example • {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
@@ -25,30 +27,36 @@
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
 {% endblock breadcrumb%}
 
-{% block subheader %}
-<p class="text-muted">
-    <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span>
-    &nbsp;Created: {{ example.created_at }}
-    • Updated: {{ example.updated_at }}
-</p>
-<p class="text-muted" style="margin-top: -0.5rem">
-    {% if example.issue %}
-    <span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
-        {{ example.issue.get_status_display }}
-    </span>
-    <a href="{% url 'issue_detail' project.id example.issue.id %}">
-    Issue #{{example.issue.id}}: {{ example.issue.name }}
-    </a>
+{% block header %}
+<div class="page-header">
+    {% if example.issue.name %}
+        {{ example.issue.name }}
     {% endif %}
-</p>
+</div>
+{% endblock header %}
+
+{% block subheader %}
+<div class="text-muted mb-2">
+<span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
+        {{ example.issue.get_status_display }}
+</span>
+    {% with count=example.issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+    • Created {{ example.issue.created_at | naturaltime }}
+    • Updated {{ example.issue.updated_at | naturaltime }}
+</div>
 {% endblock subheader %}
 
 {% block main %}
 <div class="container">
     <div class="row">
         <div class="col-xl-6 ps-0">
+            <p class="text-muted">
+                <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">{{ example.get_status_display }}</span>
+                &nbsp;Created: {{ example.created_at }}
+                • Updated: {{ example.updated_at }}
+            </p>            
             <a href="{{ example.media_url }}" target="_blank">
-            <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
+                <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
             </a>
         </div>
         <div class="col-xl">
