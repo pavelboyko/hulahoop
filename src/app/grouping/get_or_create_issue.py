@@ -30,7 +30,9 @@ def get_or_create_issue(example: Example) -> Tuple[Optional[Issue], bool]:
         return the_issue, False
     else:
         the_issue = Issue.objects.create(
-            project=example.project, fingerprint=example.fingerprint
+            project=example.project,
+            fingerprint=example.fingerprint,
+            name=example.fingerprint,  # this is experimental
         )
         example.issue = the_issue
         example.save(update_fields=["issue"])
