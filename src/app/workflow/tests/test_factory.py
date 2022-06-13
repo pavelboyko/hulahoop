@@ -30,7 +30,7 @@ class WorkflowFactoryTest(TestCase):
     def test_none_project_props(self) -> None:
         project = ProjectFactory.create(properties=None)
         workflow = get_workflow(project.id)
-        self.assertIsNone(workflow)
+        self.assertIsNotNone(workflow)
 
     def test_array_project_props(self) -> None:
         project = ProjectFactory.create(properties=[])

@@ -6,7 +6,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
-from .example_event import ExampleEvent
 
 logger = logging.getLogger(__package__)
 
@@ -57,44 +56,22 @@ class Example(BaseModel):
     def set_labeling_started(self):
         self.status = Example.Status.started
         self.save(update_fields=["status"])
-        ExampleEvent.objects.create(
-            example=self,
-            event_type=ExampleEvent.EventType.labeling_started,
-        )
 
     def set_labeling_error(self, message):
         self.status = Example.Status.error
         self.save(update_fields=["status"])
-        ExampleEvent.objects.create(
-            example=self,
-            event_type=ExampleEvent.EventType.labeling_error,
-            properties={"message": message},
-        )
 
     def set_labeling_completed(self, result: Any):
         self.status = Example.Status.completed
         self.save(update_fields=["status"])
-        ExampleEvent.objects.create(
-            example=self,
-            event_type=ExampleEvent.EventType.labeling_completed,
-            properties={"result": result},
-        )
 
     def set_labeling_updated(self, result: Any):
         # do not change status
-        ExampleEvent.objects.create(
-            example=self,
-            event_type=ExampleEvent.EventType.labeling_updated,
-            properties={"result": result},
-        )
+        pass
 
     def set_labeling_deleted(self):
         self.status = Example.Status.started
         self.save(update_fields=["status"])
-        ExampleEvent.objects.create(
-            example=self,
-            event_type=ExampleEvent.EventType.labeling_deleted,
-        )
 
 
 post_save.connect(Example.post_save, sender=Example)
