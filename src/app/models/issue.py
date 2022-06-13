@@ -24,6 +24,9 @@ class Issue(BaseModel):
         choices=Status.choices, default=Status.open
     )
     name: models.TextField = models.TextField(null=True, blank=True)
+    fingerprint: models.TextField = models.TextField(
+        null=True, blank=True, default=None
+    )
 
     def __str__(self) -> str:
         return f"#{self.id}"

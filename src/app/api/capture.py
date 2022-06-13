@@ -11,6 +11,7 @@ class ExampleSerializer(serializers.ModelSerializer):
         model = Example
         fields = [
             "media_url",
+            "fingerprint",
             "properties",
         ]
 

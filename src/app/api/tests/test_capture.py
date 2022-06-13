@@ -20,11 +20,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_invalid_request(self) -> None:
-        invalid_data = [
-            {},
-            {"media_url": {}},
-            {"properties": {}},
-        ]
+        invalid_data = [{}, {"media_url": {}}, {"properties": {}}, {"fingerprint": {}}]
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
 
@@ -37,7 +33,11 @@ class Test(TestCase):
 
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
-        data = {"media_url": "http://example.com", "properties": {"a": "b"}}
+        data = {
+            "media_url": "http://example.com",
+            "properties": {"a": "b"},
+            "fingerprint": "xxx",
+        }
         response = APIClient().post(path, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Example.objects.count(), 1)
@@ -45,3 +45,4 @@ class Test(TestCase):
         self.assertEqual(example.project, project)
         self.assertEqual(example.media_url, data["media_url"])
         self.assertDictEqual(example.properties, data["properties"])
+        self.assertEqual(example.fingerprint, data["fingerprint"])
