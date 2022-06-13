@@ -34,9 +34,34 @@
 {% endblock subheader %}
 
 {% block main %}
-<div class="d-flex">
-    <a href="{{ example.media_url }}" target="_blank">
-        <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
-    </a>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6 ps-0">
+            <a href="{{ example.media_url }}" target="_blank">
+            <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
+            </a>
+        </div>
+        <div class="col-xl">
+            {% if predictions %}
+            <h5>Predictions</h5> 
+            <pre><code class="language-json">{{ predictions }}</code></pre>
+            {% endif %}
+
+            {% if annotations %}
+            <h5>Annotations</h5> 
+            <pre><code class="language-json">{{ annotations }}</code></pre>
+            {% endif %}
+
+            {% if properties %}
+            <h5>Properties</h5> 
+            <pre><code class="language-json">{{ properties }}</code></pre>
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 {% endblock main %}
