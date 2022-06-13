@@ -8,8 +8,18 @@
     </a>
 </li>
 <li class="breadcrumb-item">
-    <a href="{% url 'example_list' project.id %}">
-        Examples
+    <a href="{% url 'issue_list' project.id %}">
+        Issues
+    </a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'issue_detail' project.id example.issue.id %}">
+        {{ example.issue }}
+    </a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'issue_detail' project.id example.issue.id %}">
+       Examples
     </a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
