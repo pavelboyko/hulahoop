@@ -1,5 +1,6 @@
 {% extends "mpa/base.html" %}
 {% load humanize %}
+{% load crispy_forms_tags %}
 
 {% block title %}Issues • {{ project.name }}{% endblock title %}
 
@@ -32,9 +33,27 @@
 
 {% block main %}
 <div class="container-limited mx-auto">
-{% if issues %}
+    <form method="get" novalidate>
+        <div class="row align-items-end">
+          <div class="col">
+              {{ filter.form.name | as_crispy_field }}
+          </div>
+          <div class="col-md-2">
+            {{ filter.form.examples__gt | as_crispy_field }}
+          </div>
+          <div class="col-md-2">
+            {{ filter.form.order | as_crispy_field }}
+          </div>
+          <div class="col-lg-1">
+            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+          </div>
+        </div>
+      </form>
+    
+
+{% if filter.qs %}
 <ul class="list-group">
-    {% for issue in issues %}
+    {% for issue in filter.qs %}
     <li class="list-group-item d-flex flex-column list-group-item-action">
         <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">
             {{ issue }}
@@ -46,9 +65,9 @@
             <span class="badge rounded-pill bage-bg-{{ issue.get_status_display | lower }}">
                 {{ issue.get_status_display }}
             </span>
-            {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-            • Created {{ issue.created_at | naturaltime }}
-            • Updated {{ issue.updated_at | naturaltime }}
+           {% with count=issue.examples %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+            • First seen {{ issue.created_at | naturaltime }}
+            • Last seen {{ issue.updated_at | naturaltime }}
         </small>
     </li>
     {% endfor %}
