@@ -7,9 +7,12 @@
         </a>
         <div class="card-img-overlay d-flex align-items-end">
             <small>
-        <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">
-            {{ example.predictions.label }}
-        </span>
+                <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">
+                    {{ example.predictions.label }}
+                </span>
+                <span class="badge rounded-pill bage-bg-completed">
+                    Price
+                </span>
             </small>
         </div>
     </div>
