@@ -1,14 +1,14 @@
 {% if examples %}
 <div class="d-flex flex-wrap">
     {% for example in examples %}
-    <div class="card m-1" style="width: 246px">
+    <div class="card m-1" style="width: 120px">
         <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link">
             <img src="{{ example.media_url }}" class="card-img-top" alt="Broken image :("/>
         </a>
         <div class="card-img-overlay d-flex align-items-end">
             <small>
         <span class="badge rounded-pill bage-bg-{{ example.get_status_display|lower }}">
-            {{ example.get_status_display }}
+            {{ example.predictions.label }}
         </span>
             </small>
         </div>
