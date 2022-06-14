@@ -19,6 +19,7 @@ class IssueFilter(django_filters.FilterSet):
             ("-updated_at", "Last seen"),
             ("-created_at", "First seen"),
         ),
+        label="Sort by",
     )
 
     class Meta:
