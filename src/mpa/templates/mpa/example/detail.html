@@ -55,6 +55,15 @@
             </a>
         </div>
         <div class="col">
+            {% if tags %}
+            <h5>Tags</h5>
+            <ul>
+            {% for tag in tags %}
+                <li><strong>{{ tag.key }}</strong>: {{ tag.value }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
             {% if predictions %}
             <h5>Predictions</h5> 
             <pre><code class="language-json">{{ predictions }}</code></pre>
@@ -69,6 +78,8 @@
             <h5>Properties</h5> 
             <pre><code class="language-json">{{ properties }}</code></pre>
             {% endif %}
+
+
         </div>
     </div>
 </div>

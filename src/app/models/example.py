@@ -41,6 +41,7 @@ class Example(BaseModel):
     annotations: models.JSONField = models.JSONField(
         null=True, blank=True, default=None
     )
+    tags: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
     issue: models.ForeignKey = models.ForeignKey(
         "Issue", null=True, blank=True, on_delete=models.CASCADE
@@ -97,6 +98,9 @@ class ExampleAdmin(BaseAdmin):
         "status",
         "media_url",
         "fingerprint",
+        "predictions",
+        "annotations",
+        "tags",
         "properties",
         "created_at",
         "updated_at",

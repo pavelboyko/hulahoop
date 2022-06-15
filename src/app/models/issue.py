@@ -27,6 +27,7 @@ class Issue(BaseModel):
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
     )
+    tags: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
         return f"#{self.id}"
@@ -52,6 +53,7 @@ class IssueAdmin(BaseAdmin):
         "project",
         "name",
         "status",
+        "tags",
         "created_at",
         "updated_at",
     )
