@@ -75,18 +75,18 @@
 
         <div class="mb-3 border-bottom">
         <h6>Predictions</h6>
-        <p><strong>Label</strong></p>
-        <p><strong>Score</strong></p>
+        <p>Label</p>
+        <p>Score</p>
         </div>
 
         <div class="mb-3">
         <h6>Tags</h6>
         {% for key, value in tag_count.items %}
         <p>
-        <strong>{{ key }}</strong>
+        {{ key }}
         <ul>
             {% for x in value %}
-            <li>{{ x.value }}: {{ x.count }}</li>
+            <li>{{ x.value }}: {{ x.share }}%</li>
             {% endfor %}
         </ul>
         </p>

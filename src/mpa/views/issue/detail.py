@@ -1,4 +1,5 @@
 from itertools import groupby
+from operator import itemgetter
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
@@ -14,7 +15,15 @@ def get_tag_count(issue: Issue):
         .values("key", "value", "count")
         .order_by("key")
     )
-    return {key: list(value) for key, value in groupby(tag_count, lambda x: x["key"])}
+    out = {}
+    for key, value in groupby(tag_count, itemgetter("key")):
+        data = sorted(list(value), key=itemgetter("count"), reverse=True)
+        norm = sum(x["count"] for x in data)
+        out[key] = [
+            {"value": x["value"], "count": x["count"], "share": x["count"] * 100 / norm}
+            for x in data
+        ]
+    return out
 
 
 @login_required
