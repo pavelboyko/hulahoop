@@ -49,12 +49,12 @@
 {% block main %}
 <div class="container">
     <div class="row">
-        <div class="col-6 ps-0">
+        <div class="col ps-0">
             <a href="{{ example.media_url }}" target="_blank">
                 <img src="{{ example.media_url }}" alt="Broken image :(" class="img-fluid border"/>
             </a>
         </div>
-        <div class="col-6">
+        <div class="col">
             {% if predictions %}
             <h5>Predictions</h5> 
             <pre><code class="language-json">{{ predictions }}</code></pre>

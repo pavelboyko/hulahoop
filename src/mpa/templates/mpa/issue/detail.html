@@ -64,5 +64,20 @@
 {% endblock tabs %}
 
 {% block main %}
-{% include 'mpa/example/list_main.html' %}
+<div class="row">
+    <div class="col">
+    {% include 'mpa/example/list_main.html' %}
+    </div>
+    <div style="width: 300px; border-left: 1px solid rgb(222, 226, 230)">
+        <h6 class="text-muted">Examples last 30 days</h6>
+        <div style="margin-top: -50px; margin-bottom: -20px;">
+        {{ examples_last_30_days | safe}}
+        </div>
+
+        <h6 class="text-muted">Predictions</h6>
+
+        <h6 class="text-muted">Tags</h6>
+
+    </div>
+</div>
 {% endblock main %}
