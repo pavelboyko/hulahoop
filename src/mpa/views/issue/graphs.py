@@ -42,6 +42,7 @@ def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
         .set_global_opts(
             tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="shadow"),
             legend_opts=opts.LegendOpts(is_show=False),
+            yaxis_opts=opts.AxisOpts(is_show=True),
         )
         .set_colors(colors)
     )
