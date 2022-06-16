@@ -44,7 +44,7 @@ class IssueFilter(django_filters.FilterSet):
 @login_required
 def issue_list(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    issues = project.issue_set.filter(status=Issue.Status.open).annotate(
+    issues = project.issue_set.filter(status=Issue.Status.open).annotate(  # type: ignore
         examples=Count("example")
     )
     filter = IssueFilter(request.GET, queryset=issues)

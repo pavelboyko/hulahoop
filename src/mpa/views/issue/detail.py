@@ -30,7 +30,7 @@ def get_tag_count(issue: Issue):
 def issue_detail(request, project_id, issue_id):
     project = get_object_or_404(Project, id=project_id)
     issue = get_object_or_404(Issue, id=issue_id, project=project)
-    examples = issue.example_set.all()
+    examples = issue.example_set.all()  # type: ignore
     examples_last_30_days = plot_examples_last_n_days(issue, ndays=30)
     tag_count = get_tag_count(issue)
     return render(
