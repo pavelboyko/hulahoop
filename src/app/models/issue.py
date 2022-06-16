@@ -27,13 +27,12 @@ class Issue(BaseModel):
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
     )
-    tags: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
-        return f"#{self.id}"
+        return f"#{self.id}"  # type: ignore
 
     def example_count(self) -> int:
-        return self.example_set.filter().count()
+        return self.example_set.filter().count()  # type: ignore
 
 
 class IssueAdmin(BaseAdmin):
@@ -53,7 +52,6 @@ class IssueAdmin(BaseAdmin):
         "project",
         "name",
         "status",
-        "tags",
         "created_at",
         "updated_at",
     )

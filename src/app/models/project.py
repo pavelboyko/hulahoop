@@ -24,10 +24,10 @@ class Project(BaseModel):
         return self.name
 
     def example_count(self):
-        return self.example_set.filter().count()
+        return self.example_set.filter().count()  # type: ignore
 
     def issue_count(self):
-        return self.issue_set.filter().count()
+        return self.issue_set.filter().count()  # type: ignore
 
     def start_workflow(self, example_id: IdOfExample) -> None:
         """Workflow entry point, executed after an example was created"""
@@ -35,7 +35,7 @@ class Project(BaseModel):
         # because we call start_workflow from an Example post_save signal
         # see https://stackoverflow.com/a/45279060
         transaction.on_commit(
-            lambda: app.send_task("start_workflow", [self.id, example_id])
+            lambda: app.send_task("start_workflow", [self.pk, example_id])
         )
 
 
