@@ -43,11 +43,10 @@
 
 {% block subheader %}
 <div class="text-muted mb-2">
-<span class="badge rounded-pill bage-bg-{{ issue.get_status_display|lower }}">
+<span class="badge bage-bg-{{ issue.get_status_display|lower }}">
         {{ issue.get_status_display }}
 </span>
-    {% with count=issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-    • First seen {{ issue.created_at | naturaltime }}
+    First seen {{ issue.created_at | naturaltime }}
     • Last seen {{ issue.updated_at | naturaltime }}
 </div>
 {% endblock subheader %}
@@ -55,7 +54,12 @@
 {% block tabs %}
 <ul class="nav topnav">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Examples</a>
+        <a class="nav-link active" aria-current="page" href="#">
+            Examples 
+            <span class="badge bg-light text-dark">
+            {{ issue.example_count | intcomma }}
+            </span>
+        </a>
     </li>
     <!--
     <li class="nav-item">

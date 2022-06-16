@@ -23,7 +23,12 @@
 {% block tabs %}
 <ul class="nav topnav">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Issues</a>
+        <a class="nav-link active" aria-current="page" href="#">
+            Issues
+            <span class="badge bg-light text-dark">
+                {{ project.issue_count | intcomma }}
+            </span>    
+        </a>
     </li>
 </ul>
 {% endblock tabs %}
@@ -51,22 +56,38 @@
 
 {% if filter.qs %}
 <ul class="list-group">
+    <li class="list-group-item list-group-item-action bg-light"> 
+        <div class="row">
+            <div class="col">
+                <small>Issue</small>
+            </div>
+            <div class="col-1 d-flex justify-content-end">
+                <small>Examples</small>
+            </div>
+    </li>
     {% for issue in filter.qs %}
-    <li class="list-group-item d-flex flex-column list-group-item-action">
-        <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">
-            {{ issue }}
-            {% if issue.name %}
-                {{ issue.name }}
-            {% endif %}
-        </a>
-        <small class="text-muted">
-            <span class="badge rounded-pill bage-bg-{{ issue.get_status_display | lower }}">
-                {{ issue.get_status_display }}
-            </span>
-           {% with count=issue.examples %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-            • First seen {{ issue.created_at | naturaltime }}
-            • Last seen {{ issue.updated_at | naturaltime }}
-        </small>
+    <li class="list-group-item list-group-item-action"> 
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none stretched-link">
+                    {{ issue }}
+                    {% if issue.name %}
+                        {{ issue.name }}
+                    {% endif %}
+                </a>
+                <br/>
+                <small class="text-muted">
+                    <span class="badge bage-bg-{{ issue.get_status_display | lower }}">
+                        {{ issue.get_status_display }}
+                    </span>
+                    First seen {{ issue.created_at | naturaltime }}
+                    • Last seen {{ issue.updated_at | naturaltime }}
+                </small>
+            </div>
+            <div class="col-1 d-flex align-items-center justify-content-end">
+                <strong class="mx-3">{{ issue.examples }}</strong>
+            </div>
+        </div>
     </li>
     {% endfor %}
 </ul>

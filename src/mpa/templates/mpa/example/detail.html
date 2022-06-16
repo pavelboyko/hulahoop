@@ -37,12 +37,11 @@
 
 {% block subheader %}
 <div class="text-muted mb-2">
-<span class="badge rounded-pill bage-bg-{{ example.issue.get_status_display|lower }}">
+<span class="badge bage-bg-{{ example.issue.get_status_display|lower }}">
         {{ example.issue.get_status_display }}
 </span>
-    {% with count=example.issue.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-    • Created {{ example.issue.created_at | naturaltime }}
-    • Updated {{ example.issue.updated_at | naturaltime }}
+    First seen {{ example.issue.created_at | naturaltime }}
+    • Last seen {{ example.issue.updated_at | naturaltime }}
 </div>
 {% endblock subheader %}
 
@@ -59,7 +58,7 @@
             <h5>Tags</h5>
             <ul>
             {% for tag in tags %}
-                <li><strong>{{ tag.key }}</strong>: {{ tag.value }}</li>
+                <li>{{ tag.key }}: {{ tag.value }}</li>
             {% endfor %}
             </ul>
             {% endif %}

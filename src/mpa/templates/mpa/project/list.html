@@ -13,24 +13,24 @@
 {% endblock header-buttons%}
 
 {% block main %}
-
-{% if project_list %}
-<ul class="list-group">
-    {% for project in project_list %}
-    <li class="list-group-item d-flex flex-column list-group-item-action">
-        <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">{{ project.name }}</a>
-        <small class="text-muted">
-              {% with count=project.issue_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} issue{{ count | pluralize }}{% endwith %}
-            • {% with count=project.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
-            • Updated {{ project.updated_at | naturaltime }} </small>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>
-    No results found.
-    <a href="{% url 'project_create' %}">Create new project.</a>
-</p>
-{% endif %}
-
+<div class="container-limited mx-auto">
+    {% if project_list %}
+    <ul class="list-group">
+        {% for project in project_list %}
+        <li class="list-group-item d-flex flex-column list-group-item-action">
+            <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">{{ project.name }}</a>
+            <small class="text-muted">
+                {% with count=project.issue_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} issue{{ count | pluralize }}{% endwith %}
+                • {% with count=project.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}
+                • Updated {{ project.updated_at | naturaltime }} </small>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>
+        No results found.
+        <a href="{% url 'project_create' %}">Create new project.</a>
+    </p>
+    {% endif %}
+</div>
 {% endblock main %}
