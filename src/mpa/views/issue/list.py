@@ -2,6 +2,7 @@ from email.policy import default
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 import django_filters
+from django import forms
 from crispy_forms.helper import FormHelper
 from django.db.models import Count
 from app.models import Project, Issue
@@ -9,7 +10,9 @@ from app.models import Project, Issue
 
 class IssueFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(
-        lookup_expr="icontains", label="Search issues by name"
+        lookup_expr="icontains",
+        label="Search issues by name",
+        widget=forms.TextInput(attrs={"class": "search", "autocomplete": "off"}),
     )
     status = django_filters.ChoiceFilter(choices=Issue.Status.choices)
     examples__gte = django_filters.NumberFilter(
@@ -39,6 +42,8 @@ class IssueFilter(django_filters.FilterSet):
         self.form.helper = FormHelper()
         self.form.helper.form_method = "get"
         self.form.helper.label_class = "text-muted"
+        for _, field in self.form.fields.items():
+            field.widget.attrs.update({"onchange": "this.form.submit()"})
 
 
 @login_required

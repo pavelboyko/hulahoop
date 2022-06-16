@@ -7,19 +7,14 @@ from app.models import Project, Issue
 
 
 class IssueForm(forms.Form):
-    name = forms.CharField(label="Issue name")
+    name = forms.CharField(label="Issue name", required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.form_show_labels = False
-        self.fields["name"].widget.attrs.update(
-            {
-                "autofocus": "autofocus",
-                "required": "required",
-            }
-        )
+        self.fields["name"].widget.attrs.update({"autofocus": "autofocus"})
 
 
 @login_required

@@ -8,6 +8,10 @@ from app.models import Project
 class ProjectForm(forms.Form):
     name = forms.CharField(label="Project name")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs.update({"autofocus": "autofocus"})
+
 
 @login_required
 def project_create(request):

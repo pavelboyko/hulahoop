@@ -18,8 +18,10 @@
 <form action="{% url 'project_create' %}" method="post">
     {% csrf_token %}
     {{ form | crispy }}
-    <button type="submit" value="Create" class="btn btn-primary me-1">Create and take me to settings</button>
-    <a href="/" class="btn btn-outline-secondary">Cancel</a>
+    <button type="submit" value="Create" class="btn btn-primary me-1">
+        <i class="bi bi-check2"></i> Create and take me to settings
+    </button>
+    <a href="/" class="btn btn-light"><i class="bi bi-x-lg"></i> Cancel</a>
 </form>
 </div>
 {% endblock main %}
