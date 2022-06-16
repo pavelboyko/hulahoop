@@ -7,6 +7,7 @@ from pyecharts.charts.chart import Chart
 from pyecharts.globals import RenderType
 from pyecharts import options as opts
 
+echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
 colors = [
     "#DD5703",
@@ -30,6 +31,13 @@ def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
         .values("created_at__date", "status", "count")
         .order_by("created_at__date")
     )
+    labels = [(now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)]
+    values = {status.value: [0] * ndays for status in Example.Status}
+    for x in examples:
+        values[x["status"]][(x["created_at__date"] - now.date()).days + ndays - 1] = x[
+            "count"
+        ]
+
     chart = (
         Bar(
             init_opts=opts.InitOpts(
@@ -46,12 +54,7 @@ def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
         )
         .set_colors(colors)
     )
-    labels = [(now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)]
-    values = {status.value: [0] * ndays for status in Example.Status}
-    for x in examples:
-        values[x["status"]][(x["created_at__date"] - now.date()).days + ndays - 1] = x[
-            "count"
-        ]
+    chart.js_host = echarts_host
     chart.add_xaxis(labels)
     for key, value in values.items():
         chart.add_yaxis(
