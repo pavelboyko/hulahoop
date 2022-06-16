@@ -35,4 +35,9 @@ urlpatterns = [
         issue.issue_detail,
         name="issue_detail",
     ),
+    path(
+        f"projects/<{IdOfProjectPathConverter}:project_id>/issues/<{IdOfIssuePathConverter}:issue_id>/edit/",
+        issue.issue_edit,
+        name="issue_edit",
+    ),
 ]
