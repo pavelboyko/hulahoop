@@ -22,14 +22,20 @@ class IssueFilter(django_filters.FilterSet):
             ("-created_at", "First seen"),
         ),
         label="Sort by",
+        empty_label=None,
+        null_label=None,
     )
 
     class Meta:
         model = Issue
         fields = ["name", "status"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, data, *args, **kwargs):
+        if not data.get("order"):
+            data = data.copy()
+            data["order"] = "-examples"
+
+        super().__init__(data, *args, **kwargs)
         self.form.helper = FormHelper()
         self.form.helper.form_method = "get"
         self.form.helper.label_class = "text-muted"

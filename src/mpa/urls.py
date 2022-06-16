@@ -16,11 +16,6 @@ urlpatterns = [
         name="project_detail",
     ),
     path(
-        f"projects/<{IdOfProjectPathConverter}:project_id>/examples/",
-        example.example_list,
-        name="example_list",
-    ),
-    path(
         f"projects/<{IdOfProjectPathConverter}:project_id>/settings/",
         project.project_settings,
         name="project_settings",
