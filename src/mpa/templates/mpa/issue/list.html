@@ -4,14 +4,17 @@
 
 {% block title %}Issues • {{ project.name }}{% endblock title %}
 
+
 {% block breadcrumb %}
 <li class="breadcrumb-item" ><a href="{% url 'project_detail' project.id %}">{{ project.name | truncatechars:40 }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">Issues</li>
 {% endblock breadcrumb%}
 
+
 {% block header %}
 <div class="page-header">{{ project.name }}</div>
 {% endblock header %}
+
 
 {% block header-buttons %}
     <a href="{% url 'project_settings' project.id %}" class="btn btn-outline-primary">
@@ -60,17 +63,48 @@
 <ul class="list-group">
     <li class="list-group-item list-group-item-action bg-light"> 
         <div class="row">
-            <div class="col">
-                <small>Issue</small>
+            <!--
+            <div class="p-1" style="width: 1.5rem">
+                <input class="form-check-input" type="checkbox" value="" >
             </div>
-            <div class="col-1 d-flex justify-content-end">
+            -->
+            <div class="col px-2 d-flex align-items-center">
+                <small>
+                    Issue
+                </small>
+                <!--
+                <small class="me-3">
+                    No issues selected
+                </small>
+
+                <small>
+                    <button href="#" class="btn btn-sm btn-success me-1" disabled>
+                        <i class="bi bi-check-lg"></i> Resolve
+                    </button>
+
+                    <button href="#" class="btn btn-sm btn-outline-primary me-1" disabled>
+                        <i class="bi bi-x-lg"></i> Mute
+                    </button>
+
+                    <button href="#" class="btn btn-sm btn-outline-primary me-1" disabled>
+                        <i class="bi bi-files"></i> Merge
+                    </button>
+                </small>
+                -->
+            </div>
+            <div class="col-1 d-flex justify-content-end align-items-center">
                 <small>Examples</small>
             </div>
     </li>
     {% for issue in filter.qs %}
     <li class="list-group-item list-group-item-action"> 
         <div class="row">
-            <div class="col">
+            <!--
+            <div class="p-1" style="width: 1.5rem;">
+                <input class="form-check-input" type="checkbox" value="" >
+            </div>
+            -->
+            <div class="col px-2">
                 <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none">
                     {{ issue }}
                     {% if issue.name %}
@@ -99,6 +133,5 @@
 </p>
 {% endif %}
 </div>
-
 {% endblock main %}
 
