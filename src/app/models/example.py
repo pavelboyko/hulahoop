@@ -15,14 +15,6 @@ class Example(BaseModel):
     A single ML example
     """
 
-    class Status(models.IntegerChoices):
-        pending = 0
-        skipped = 10
-        started = 20
-        completed = 30
-        canceled = 40
-        error = 50
-
     # Use UUID pk to allow client-side ID allocation
     id: models.UUIDField = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
@@ -30,7 +22,6 @@ class Example(BaseModel):
     project: models.ForeignKey = models.ForeignKey(
         "Project", null=False, blank=False, on_delete=models.CASCADE
     )
-    status = models.IntegerField(choices=Status.choices, default=Status.pending)
     media_url: models.TextField = models.TextField(null=False, blank=False)
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
@@ -59,26 +50,6 @@ class Example(BaseModel):
         if created:
             instance.project.start_workflow(instance.id)
 
-    def set_labeling_started(self):
-        self.status = Example.Status.started
-        self.save(update_fields=["status"])
-
-    def set_labeling_error(self, message):
-        self.status = Example.Status.error
-        self.save(update_fields=["status"])
-
-    def set_labeling_completed(self, result: Any):
-        self.status = Example.Status.completed
-        self.save(update_fields=["status"])
-
-    def set_labeling_updated(self, result: Any):
-        # do not change status
-        pass
-
-    def set_labeling_deleted(self):
-        self.status = Example.Status.started
-        self.save(update_fields=["status"])
-
 
 post_save.connect(Example.post_save, sender=Example)
 
@@ -89,12 +60,11 @@ class ExampleAdmin(BaseAdmin):
         "created_at",
         "updated_at",
     )
-    list_display = ("id", "project", "issue", "status")
+    list_display = ("id", "project", "issue")
     fields = (
         "id",
         "project",
         "issue",
-        "status",
         "media_url",
         "fingerprint",
         "predictions",

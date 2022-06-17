@@ -47,20 +47,12 @@ class Workflow(BaseWorkflow):
             return
 
         try:
-            example.set_labeling_started()
             self.labeling_plugin.create_task(example)
         except Exception as e:
             logger.error(f"Error creating labeling task for example={example}: {e}")
-            if example:
-                example.set_labeling_error(str(e))
 
     def on_labeling_event(
         self, example: Example, event: BaseLabelingPlugin.Event, result: Any
     ) -> None:
-        match event:
-            case BaseLabelingPlugin.Event.annotation_created:
-                example.set_labeling_completed(result)
-            case BaseLabelingPlugin.Event.annotation_updated:
-                example.set_labeling_updated(result)
-            case BaseLabelingPlugin.Event.annotation_deleted:
-                example.set_labeling_deleted()
+        # TODO: save or update annotation results, we will return to this when we better undertand annotations data structure
+        pass
