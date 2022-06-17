@@ -1,4 +1,5 @@
 from urllib import response
+from dateutil import parser
 from django.test import TestCase
 from requests import request
 from rest_framework.test import APIClient
@@ -87,3 +88,14 @@ class Test(TestCase):
         et: ExampleTag = ExampleTag.objects.first()  # type: ignore
         self.assertEqual(et.key, "a" * 32)
         self.assertEqual(et.value, "b" * 255)
+
+    def test_timestamp(self):
+        Example.objects.all().delete()
+        project = ProjectFactory.create()
+        path = f"/api/capture/{project.id}/"
+        data = {"media_url": "http://example.com", "timestamp": "2011-05-02T17:41:36Z"}
+        response = APIClient().post(path, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Example.objects.count(), 1)
+        example: Example = Example.objects.first()  # type: ignore
+        self.assertEqual(example.created_at, parser.parse(data["timestamp"]))

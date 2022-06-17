@@ -12,6 +12,7 @@ logger = logging.getLogger(__package__)
 
 class ExampleSerializer(serializers.ModelSerializer):
     tags = serializers.JSONField(allow_null=True, required=False)
+    timestamp = serializers.DateTimeField(allow_null=True, required=False)
 
     class Meta:
         model = Example
@@ -21,10 +22,14 @@ class ExampleSerializer(serializers.ModelSerializer):
             "predictions",
             "properties",
             "tags",
+            "timestamp",
         ]
 
     def create(self, validated_data) -> Example:
         tags = validated_data.pop("tags") if "tags" in validated_data else None
+        if "timestamp" in validated_data:
+            validated_data["created_at"] = validated_data.pop("timestamp")
+
         example = Example.objects.create(**validated_data)
         if tags is not None and type(tags) is dict:
             for key, value in tags.items():
