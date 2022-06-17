@@ -1,13 +1,13 @@
 from collections import OrderedDict
-from factory import Faker, SubFactory, Dict
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
-from app.models import ExampleTag
+from app.models import Tag
 from .example_factory import ExampleFactory
 
 
-class ExampleTagFactory(DjangoModelFactory):
+class TagFactory(DjangoModelFactory):
     class Meta:
-        model = ExampleTag
+        model = Tag
 
     example = SubFactory(ExampleFactory)
     key = Faker("random_element", elements=["device.os", "make", "model"])

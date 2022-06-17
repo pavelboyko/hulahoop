@@ -3,7 +3,7 @@ from dateutil import parser
 from django.test import TestCase
 from requests import request
 from rest_framework.test import APIClient
-from app.models import Project, Example, ExampleTag
+from app.models import Project, Example, Tag
 from app.fixtures import ProjectFactory
 
 
@@ -21,7 +21,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_invalid_request(self) -> None:
-        invalid_data = [{}, {"media_url": {}}, {"properties": {}}, {"fingerprint": {}}]
+        invalid_data = [{}, {"metadata": {}}, {"fingerprint": {}}]
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
 
@@ -35,11 +35,15 @@ class Test(TestCase):
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
         data = {
-            "media_url": "http://example.com",
-            "properties": {"a": "b"},
+            "attachments": [{"url": "http://example.com", "type": "image"}],
+            "metadata": {"a": "b"},
             "predictions": {
                 "label": "xxx",
                 "score": "0.99",
+                "choices": ["xxx", "yyy", "zzz"],
+            },
+            "annotations": {
+                "label": "yyy",
                 "choices": ["xxx", "yyy", "zzz"],
             },
             "fingerprint": "xxx",
@@ -49,8 +53,8 @@ class Test(TestCase):
         self.assertEqual(Example.objects.count(), 1)
         example: Example = Example.objects.first()  # type: ignore
         self.assertEqual(example.project, project)
-        self.assertEqual(example.media_url, data["media_url"])
-        self.assertDictEqual(example.properties, data["properties"])
+        # self.assertEqual(example.media_url, data["media_url"])
+        self.assertDictEqual(example.matadata, data["metadata"])
         self.assertDictEqual(example.predictions, data["predictions"])
         self.assertEqual(example.fingerprint, data["fingerprint"])
 
@@ -67,8 +71,8 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Example.objects.count(), 1)
         example = Example.objects.first()
-        self.assertEqual(ExampleTag.objects.count(), 2)
-        for et in ExampleTag.objects.all():
+        self.assertEqual(Tag.objects.count(), 2)
+        for et in Tag.objects.all():
             self.assertEqual(et.example, example)
             self.assertIn(et.key, tags)
             self.assertEqual(et.value, str(tags[et.key]))
@@ -79,13 +83,13 @@ class Test(TestCase):
         path = f"/api/capture/{project.id}/"
         tags = {"a" * 100: "b" * 500}
         data = {
-            "media_url": "http://example.com",
+            # "media_url": "http://example.com",
             "tags": tags,
         }
         response = APIClient().post(path, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(ExampleTag.objects.count(), 1)
-        et: ExampleTag = ExampleTag.objects.first()  # type: ignore
+        self.assertEqual(Tag.objects.count(), 1)
+        et: Tag = Tag.objects.first()  # type: ignore
         self.assertEqual(et.key, "a" * 32)
         self.assertEqual(et.value, "b" * 255)
 

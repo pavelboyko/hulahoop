@@ -11,10 +11,6 @@ logger = logging.getLogger(__package__)
 
 
 class Example(BaseModel):
-    """
-    A single ML example
-    """
-
     # Use UUID pk to allow client-side ID allocation
     id: models.UUIDField = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
@@ -22,7 +18,9 @@ class Example(BaseModel):
     project: models.ForeignKey = models.ForeignKey(
         "Project", null=False, blank=False, on_delete=models.CASCADE
     )
-    media_url: models.TextField = models.TextField(null=False, blank=False)
+    issue: models.ForeignKey = models.ForeignKey(
+        "Issue", null=True, blank=True, on_delete=models.CASCADE
+    )
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
     )
@@ -32,10 +30,7 @@ class Example(BaseModel):
     annotations: models.JSONField = models.JSONField(
         null=True, blank=True, default=None
     )
-    properties: models.JSONField = models.JSONField(null=True, blank=True, default=None)
-    issue: models.ForeignKey = models.ForeignKey(
-        "Issue", null=True, blank=True, on_delete=models.CASCADE
-    )
+    matadata: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
     def __str__(self):
         return str(self.id)[:8]
@@ -65,14 +60,15 @@ class ExampleAdmin(BaseAdmin):
         "id",
         "project",
         "issue",
-        "media_url",
         "fingerprint",
         "predictions",
         "annotations",
-        "properties",
+        "metadata",
         "created_at",
         "updated_at",
     )
+    # TODO: attachments table
+    # TODO: tags table
 
 
 admin.site.register(Example, ExampleAdmin)

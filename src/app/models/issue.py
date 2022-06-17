@@ -8,16 +8,9 @@ from datetime import timedelta
 from django.db import models
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
-from .example_tag import ExampleTag
+from .tag import Tag
 
 logger = logging.getLogger(__package__)
-
-
-@dataclass
-class ValueCounter:
-    value: str
-    count: int
-    share: float
 
 
 class Issue(BaseModel):
@@ -67,9 +60,15 @@ class Issue(BaseModel):
             values[(x["created_at__date"] - now.date()).days + ndays - 1] = x["count"]
         return labels, values
 
-    def tag_count(self) -> Dict[str, List[ValueCounter]]:
+    @dataclass
+    class ValueCounter:
+        value: str
+        count: int
+        share: float
+
+    def tag_values_count(self) -> Dict[str, List[ValueCounter]]:
         tag_count = list(
-            ExampleTag.objects.filter(example__issue=self)
+            Tag.objects.filter(example__issue=self)
             .values("key", "value")
             .annotate(count=models.Count("id"))
             .values("key", "value", "count")
@@ -80,7 +79,7 @@ class Issue(BaseModel):
             data = sorted(list(value), key=itemgetter("count"), reverse=True)
             norm = sum(x["count"] for x in data)
             out[key] = [
-                ValueCounter(
+                Issue.ValueCounter(
                     value=x["value"],
                     count=x["count"],
                     share=x["count"] * 100 / norm,

@@ -6,7 +6,7 @@ from .base import BaseModel, BaseAdmin
 logger = logging.getLogger(__package__)
 
 
-class ExampleTag(BaseModel):
+class Tag(BaseModel):
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
@@ -17,7 +17,7 @@ class ExampleTag(BaseModel):
         return f"{self.key}:{self.value}"
 
 
-class ExampleTagAdmin(BaseAdmin):
+class TagAdmin(BaseAdmin):
     readonly_fields = (
         "id",
         "created_at",
@@ -39,4 +39,4 @@ class ExampleTagAdmin(BaseAdmin):
     )
 
 
-admin.site.register(ExampleTag, ExampleTagAdmin)
+admin.site.register(Tag, TagAdmin)

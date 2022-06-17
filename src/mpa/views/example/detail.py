@@ -20,7 +20,7 @@ def example_detail(request, project_id, example_id):
             "example": example,
             "predictions": pretty_print(example.predictions),
             "annotations": pretty_print(example.annotations),
-            "properties": pretty_print(example.properties),
+            "properties": pretty_print(example.matadata),
             "tags": example.exampletag_set.all(),  # type: ignore
         },
     )

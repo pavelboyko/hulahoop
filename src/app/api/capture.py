@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from app.models import Example, Project, ExampleTag
+from app.models import Example, Project, Tag
 
 
 logger = logging.getLogger(__package__)
@@ -12,30 +12,41 @@ logger = logging.getLogger(__package__)
 
 class ExampleSerializer(serializers.ModelSerializer):
     tags = serializers.JSONField(allow_null=True, required=False)
+    attachments = serializers.JSONField(allow_null=True, required=False)
     timestamp = serializers.DateTimeField(allow_null=True, required=False)
 
     class Meta:
         model = Example
         fields = [
-            "media_url",
+            "attachments",
             "fingerprint",
             "predictions",
-            "properties",
+            "annotations",
+            "metadata",
             "tags",
             "timestamp",
         ]
 
     def create(self, validated_data) -> Example:
         tags = validated_data.pop("tags") if "tags" in validated_data else None
+        attachments = (
+            validated_data.pop("attachments")
+            if "attachments" in validated_data
+            else None
+        )
         if "timestamp" in validated_data:
             validated_data["created_at"] = validated_data.pop("timestamp")
 
         example = Example.objects.create(**validated_data)
+
+        # TODO: create attachments
+
         if tags is not None and type(tags) is dict:
             for key, value in tags.items():
-                ExampleTag.objects.create(
+                Tag.objects.create(
                     example=example, key=str(key)[:32], value=str(value)[:255]
                 )
+
         return example
 
 
