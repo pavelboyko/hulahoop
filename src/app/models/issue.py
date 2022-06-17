@@ -1,9 +1,23 @@
 import logging
+from typing import List, Tuple, Dict
+from dataclasses import dataclass
+from itertools import groupby
+from operator import itemgetter
+from django.utils import timezone
+from datetime import timedelta
 from django.db import models
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
+from .example_tag import ExampleTag
 
 logger = logging.getLogger(__package__)
+
+
+@dataclass
+class ValueCounter:
+    value: str
+    count: int
+    share: float
 
 
 class Issue(BaseModel):
@@ -33,6 +47,47 @@ class Issue(BaseModel):
 
     def example_count(self) -> int:
         return self.example_set.filter().count()  # type: ignore
+
+    def example_count_last_n_days(self, ndays: int = 30) -> Tuple[List[str], List[int]]:
+        now = timezone.now()
+        examples = (
+            self.example_set.filter(  # type: ignore
+                created_at__gte=now - timedelta(days=ndays),
+            )
+            .values("created_at__date")
+            .annotate(count=models.Count("id"))
+            .values("created_at__date", "count")
+            .order_by("created_at__date")
+        )
+        labels = [
+            (now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)
+        ]
+        values = [0] * ndays
+        for x in examples:
+            values[(x["created_at__date"] - now.date()).days + ndays - 1] = x["count"]
+        return labels, values
+
+    def tag_count(self) -> Dict[str, List[ValueCounter]]:
+        tag_count = list(
+            ExampleTag.objects.filter(example__issue=self)
+            .values("key", "value")
+            .annotate(count=models.Count("id"))
+            .values("key", "value", "count")
+            .order_by("key")
+        )
+        out = {}
+        for key, value in groupby(tag_count, itemgetter("key")):
+            data = sorted(list(value), key=itemgetter("count"), reverse=True)
+            norm = sum(x["count"] for x in data)
+            out[key] = [
+                ValueCounter(
+                    value=x["value"],
+                    count=x["count"],
+                    share=x["count"] * 100 / norm,
+                )
+                for x in data
+            ]
+        return out
 
 
 class IssueAdmin(BaseAdmin):

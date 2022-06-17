@@ -1,7 +1,4 @@
-from django.utils import timezone
-from datetime import timedelta
-from django.db.models import Count
-from app.models import Issue, Example
+from app.models import Issue
 from pyecharts.charts import Bar
 from pyecharts.charts.chart import Chart
 from pyecharts.globals import RenderType
@@ -11,22 +8,7 @@ echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
 
 def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
-    now = timezone.now()
-    examples = (
-        Example.objects.filter(
-            issue=issue,
-            created_at__gte=now - timedelta(days=ndays),
-        )
-        .values("created_at__date")
-        .annotate(count=Count("id"))
-        .values("created_at__date", "count")
-        .order_by("created_at__date")
-    )
-    labels = [(now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)]
-    values = [0] * ndays
-    for x in examples:
-        values[(x["created_at__date"] - now.date()).days + ndays - 1] = x["count"]
-
+    labels, values = issue.example_count_last_n_days(ndays)
     chart = Bar(
         init_opts=opts.InitOpts(
             width="100%",
