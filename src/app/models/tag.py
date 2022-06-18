@@ -7,11 +7,14 @@ logger = logging.getLogger(__package__)
 
 
 class Tag(BaseModel):
+    key_max_length: int = 30
+    value_max_length: int = 200
+
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
-    key: models.CharField = models.CharField(max_length=32)
-    value: models.CharField = models.CharField(max_length=255)
+    key: models.CharField = models.CharField(max_length=key_max_length)
+    value: models.CharField = models.CharField(max_length=value_max_length)
 
     def __str__(self):
         return f"{self.key}:{self.value}"

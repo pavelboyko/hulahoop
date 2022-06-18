@@ -8,17 +8,18 @@ logger = logging.getLogger(__package__)
 
 class Attachment(BaseModel):
     class Type(models.IntegerChoices):
-        image = 0
-        vieo = 1
-        audio = 2
-        text = 3
+        unknown = 0
+        image = 1
+        video = 2
+        audio = 3
+        text = 4
 
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
     url: models.TextField = models.TextField()
     type: models.IntegerField = models.IntegerField(
-        choices=Type.choices, default=Type.image
+        choices=Type.choices, default=Type.unknown
     )
 
     def __str__(self):

@@ -1,5 +1,6 @@
 import logging
 from random import choice
+import re
 from subprocess import list2cmdline
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -12,10 +13,18 @@ from app.models import Example, Project, Tag, Attachment
 logger = logging.getLogger(__package__)
 
 
+class AttachmentTypeSerializer(serializers.Field):
+    def to_internal_value(self, name: str) -> Attachment.Type:
+        try:
+            return Attachment.Type[name]
+        except KeyError:
+            raise serializers.ValidationError(
+                f"attachment.type value '{name}' is invalid"
+            )
+
+
 class AttachmentSerializer(serializers.ModelSerializer):
-    type = serializers.ChoiceField(
-        choices=Attachment.Type.choices, default=Attachment.Type.image, required=False
-    )
+    type = AttachmentTypeSerializer(required=False)
 
     class Meta:
         model = Attachment
@@ -27,7 +36,9 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
 class ExampleSerializer(serializers.ModelSerializer):
     tags = serializers.JSONField(allow_null=True, required=False)
-    attachments = serializers.JSONField(allow_null=True, required=False)
+    attachments = serializers.ListField(
+        child=AttachmentSerializer(), allow_empty=False, required=True
+    )
     timestamp = serializers.DateTimeField(allow_null=True, required=False)
 
     class Meta:
@@ -45,25 +56,22 @@ class ExampleSerializer(serializers.ModelSerializer):
     def create(self, validated_data) -> Example:
         tags = validated_data.pop("tags") if "tags" in validated_data else None
         attachments = (
-            validated_data.pop("attachments")
-            if "attachments" in validated_data
-            else None
+            validated_data.pop("attachments") if "attachments" in validated_data else []
         )
         if "timestamp" in validated_data:
             validated_data["created_at"] = validated_data.pop("timestamp")
 
         example = Example.objects.create(**validated_data)
 
-        if attachments is not None and type(attachments) is list:
-            for a in attachments:
-                serializer = AttachmentSerializer(data=a)
-                serializer.is_valid(raise_exception=True)
-                serializer.save(example=example)
+        for attachment_data in attachments:
+            Attachment.objects.create(example=example, **attachment_data)
 
         if tags is not None and type(tags) is dict:
             for key, value in tags.items():
                 Tag.objects.create(
-                    example=example, key=str(key)[:32], value=str(value)[:255]
+                    example=example,
+                    key=str(key)[: Tag.key_max_length],
+                    value=str(value)[: Tag.value_max_length],
                 )
 
         return example
