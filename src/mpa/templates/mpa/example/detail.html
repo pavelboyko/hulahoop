@@ -5,10 +5,11 @@
 
 {% block breadcrumb %}
 <li class="breadcrumb-item">
-    <a href="{% url 'project_detail' project.id %}">
+    <a href="{% url 'project_detail' example.project.id %}">
         {{ project.name | truncatechars:40 }}
     </a>
 </li>
+{% if example.issue %}
 <li class="breadcrumb-item">
     <a href="{% url 'issue_list' project.id %}">
         Issues
@@ -24,18 +25,26 @@
        Examples
     </a>
 </li>
+{% endif %}
 <li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
 {% endblock breadcrumb%}
 
 {% block header %}
+{% if example.issue %}
 <div class="page-header">
     {% if example.issue.name %}
         {{ example.issue.name }}
     {% endif %}
 </div>
+{% else %}
+<div class="page-header">
+    Not assigned to an issue
+</div>
+{% endif %}
 {% endblock header %}
 
 {% block subheader %}
+{% if example.issue %}
 <div class="text-muted mb-2">
 <span class="badge bage-bg-{{ example.issue.get_status_display|lower }}">
         {{ example.issue.get_status_display }}
@@ -43,6 +52,7 @@
     First seen {{ example.issue.created_at | naturaltime }}
     • Last seen {{ example.issue.updated_at | naturaltime }}
 </div>
+{% endif %}
 {% endblock subheader %}
 
 {% block main %}

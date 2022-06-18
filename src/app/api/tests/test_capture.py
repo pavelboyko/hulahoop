@@ -21,7 +21,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_invalid_request(self) -> None:
-        invalid_data = []  # TODO: put some invalid requests here
+        invalid_data = [{}]
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
 
