@@ -14,7 +14,7 @@ def issue_detail(request, project_id, issue_id):
     tag_count = issue.tag_values_count()
 
     paginator = Paginator(examples, 100)
-    page_number = request.GET.get("page")
+    page_number = request.GET.get("page", 1)
 
     return render(
         request,
