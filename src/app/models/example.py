@@ -30,7 +30,7 @@ class Example(BaseModel):
     annotations: models.JSONField = models.JSONField(
         null=True, blank=True, default=None
     )
-    matadata: models.JSONField = models.JSONField(null=True, blank=True, default=None)
+    metadata: models.JSONField = models.JSONField(null=True, blank=True, default=None)
 
     def __str__(self):
         return str(self.id)[:8]

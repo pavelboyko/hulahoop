@@ -1,13 +1,28 @@
 import logging
+from random import choice
+from subprocess import list2cmdline
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import serializers
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from app.models import Example, Project, Tag
+from app.models import Example, Project, Tag, Attachment
 
 
 logger = logging.getLogger(__package__)
+
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    type = serializers.ChoiceField(
+        choices=Attachment.Type.choices, default=Attachment.Type.image, required=False
+    )
+
+    class Meta:
+        model = Attachment
+        fields = [
+            "url",
+            "type",
+        ]
 
 
 class ExampleSerializer(serializers.ModelSerializer):
@@ -18,13 +33,13 @@ class ExampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Example
         fields = [
+            "timestamp",
             "attachments",
-            "fingerprint",
             "predictions",
             "annotations",
             "metadata",
             "tags",
-            "timestamp",
+            "fingerprint",
         ]
 
     def create(self, validated_data) -> Example:
@@ -39,7 +54,11 @@ class ExampleSerializer(serializers.ModelSerializer):
 
         example = Example.objects.create(**validated_data)
 
-        # TODO: create attachments
+        if attachments is not None and type(attachments) is list:
+            for a in attachments:
+                serializer = AttachmentSerializer(data=a)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(example=example)
 
         if tags is not None and type(tags) is dict:
             for key, value in tags.items():
