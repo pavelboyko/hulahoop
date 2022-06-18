@@ -36,6 +36,10 @@ class Test(TestCase):
         example = ExampleFactory(attachments=10)
         self.assertEqual(example.attachment_set.count(), 10)  # type: ignore
 
+    def test_without_attachments(self) -> None:
+        example = ExampleFactory(attachments=0)
+        self.assertEqual(example.attachment_set.count(), 0)  # type: ignore
+
     def test_with_one_tag(self) -> None:
         example = ExampleFactory()
         self.assertEqual(example.tag_set.count(), 1)  # type: ignore
@@ -47,3 +51,7 @@ class Test(TestCase):
     def test_with_ten_tags(self) -> None:
         example = ExampleFactory(tags=10)
         self.assertEqual(example.tag_set.count(), 10)  # type: ignore
+
+    def test_without_tags(self) -> None:
+        example = ExampleFactory(tags=0)
+        self.assertEqual(example.tag_set.count(), 0)  # type: ignore

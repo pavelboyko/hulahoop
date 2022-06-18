@@ -86,8 +86,8 @@ class ExampleFactory(DjangoModelFactory):
         if not create:
             return
 
-        if extracted:
-            for n in range(extracted):
+        if extracted is not None:
+            for _ in range(extracted):
                 AttachmentFactory.create(example=obj)
         else:
             AttachmentFactory.create(example=obj)
@@ -101,8 +101,8 @@ class ExampleFactory(DjangoModelFactory):
         if not create:
             return
 
-        if extracted:
-            for n in range(extracted):
+        if extracted is not None:
+            for _ in range(extracted):
                 TagFactory.create(example=obj)
         else:
             TagFactory.create(example=obj)

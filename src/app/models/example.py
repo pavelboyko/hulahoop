@@ -1,11 +1,12 @@
 import logging
-from typing import Any
+from typing import Any, Optional
 import uuid
 from django.utils import timezone
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin
+from .attachment import Attachment
 
 logger = logging.getLogger(__package__)
 
@@ -34,6 +35,18 @@ class Example(BaseModel):
 
     def __str__(self):
         return str(self.id)[:8]
+
+    def get_display_image(self) -> Optional[str]:
+        """
+        Find the first image attachment for the example
+        This image is used to display example previews in UI.
+        """
+        attachment = (
+            self.attachment_set.filter(type=Attachment.Type.image)  # type: ignore
+            .order_by("id")
+            .first()
+        )
+        return attachment.url if attachment is not None else None
 
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):

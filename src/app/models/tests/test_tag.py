@@ -1,6 +1,7 @@
 from django.test import TestCase
 from app.models import Project
-from app.fixtures import TagFactory
+from app.fixtures import ExampleFactory
+from app.models import Tag
 
 
 class Test(TestCase):
@@ -12,5 +13,5 @@ class Test(TestCase):
         Project.objects.all().delete()
 
     def test_str(self) -> None:
-        et = TagFactory.create(key="a", value="b")
-        self.assertEqual(str(et), "a:b")
+        example = ExampleFactory.create(tags=1)
+        self.assertIn(":", str(example.tag_set.first()))

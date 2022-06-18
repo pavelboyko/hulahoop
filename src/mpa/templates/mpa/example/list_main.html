@@ -3,7 +3,7 @@
     {% for example in examples %}
     <div class="card m-1" style="height: 200px">
         <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link" style="height:100%">
-            <img src="{{ example.media_url }}" class="rounded" style="height: 100%" alt="Broken image :("/>
+            <img src="{{ example.get_display_image }}" class="rounded" style="height: 100%" alt="Broken image :("/>
         </a>
         <div class="card-img-overlay d-flex align-items-end">
             <small>

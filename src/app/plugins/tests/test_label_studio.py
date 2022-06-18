@@ -137,7 +137,7 @@ class LabelStudioPluginTest(TestCase):
             match=[
                 matchers.json_params_matcher(
                     {
-                        "image": example.media_url,
+                        "image": example.get_display_image(),
                         LabelStudioPlugin.token_field: str(example.id),
                     }
                 )

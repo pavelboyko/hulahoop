@@ -26,7 +26,7 @@
 <pre><code class="language-bash">curl -X POST \
   {{ capture_endpoint }} \
   -H "Content-Type: application/json" \
-  -d '{"media_url": "https://upload.wikimedia.org/wikipedia/commons/9/98/Girl_twirling_Hula_Hoop%2C_1958.jpg"}'
+  -d '{"attachments": [{"url": "https://upload.wikimedia.org/wikipedia/commons/9/98/Girl_twirling_Hula_Hoop%2C_1958.jpg", "type": "image"}]}'
 </code>
 </pre>
         </p>

@@ -66,7 +66,10 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         # Assume all examples are images for a while
         self.client.create(
             path=f"/api/projects/{self.config['project_id']}/import",  # NB! no slash at the end
-            data={"image": example.media_url, self.token_field: str(example.id)},
+            data={
+                "image": example.get_display_image(),
+                self.token_field: str(example.id),
+            },
         )
 
     def check_webhook_exists(self, url: str) -> bool:
