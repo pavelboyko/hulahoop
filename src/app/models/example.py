@@ -37,16 +37,10 @@ class Example(BaseModel):
         return str(self.id)[:8]
 
     def get_display_image(self) -> Optional[str]:
-        """
-        Find the first image attachment for the example
-        This image is used to display example previews in UI.
-        """
-        attachment = (
-            self.attachment_set.filter(type=Attachment.Type.image)  # type: ignore
-            .order_by("id")
-            .first()
+        urls = Attachment.objects.filter(example_id=self.id).values_list(
+            "url", flat=True
         )
-        return attachment.url if attachment is not None else None
+        return urls[0] if urls else None
 
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):

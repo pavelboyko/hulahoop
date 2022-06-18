@@ -49,9 +49,11 @@
 <div class="container">
     <div class="row">
         <div class="col ps-0">
-            <a href="{{ example.get_display_image }}" target="_blank">
-                <img src="{{ example.get_display_image }}" alt="Broken image :(" class="img-fluid border"/>
+            {% for attachment in attachments %}
+            <a href="{{ attachment.url }}" target="_blank">
+                <img src="{{ attachment.url }}" alt="Not an image :(" class="img-fluid border mb-3"/>
             </a>
+            {% endfor %}
         </div>
         <div class="col">
             {% if tags %}
@@ -73,9 +75,9 @@
             <pre><code class="language-json">{{ annotations }}</code></pre>
             {% endif %}
 
-            {% if properties %}
-            <h5>Properties</h5> 
-            <pre><code class="language-json">{{ properties }}</code></pre>
+            {% if metadata %}
+            <h5>Metadata</h5> 
+            <pre><code class="language-json">{{ metadata }}</code></pre>
             {% endif %}
 
 
