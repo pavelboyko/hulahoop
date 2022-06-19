@@ -1,10 +1,52 @@
+<!-- Alpine Plugins -->
+<script src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+<!-- Alpine Core -->
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div x-data="{ previewHeight: $persist(200) }">
 {% if examples_page %}
+<div class="d-flex justify-content-between">
+    <nav aria-label="Pagination">
+        <ul class="pagination pagination-sm mb-2">
+        {% if examples_page.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ examples_page.previous_page_number }}">
+                <i class="bi bi-chevron-left"></i> Previous
+            </a>
+          </li>
+        {% endif %}
+            
+        {% if examples_page.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ examples_page.next_page_number }}">
+                Next <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+        {% endif %}
+        </ul>
+    </nav>
+    
+    <ul class="pagination pagination-sm mb-2">
+        <li class="page-item">
+            <button class="page-link" x-on:click="previewHeight*=1.2">
+                <i class="bi bi-zoom-in"></i> Larger
+            </button>
+        </li>
+        <li class="page-item">
+            <button class="page-link" x-on:click="previewHeight/=1.2">
+                <i class="bi bi-zoom-out"></i> Smaller
+            </button>
+        </li>
+    </ul>
+</div>
+  
 <div class="d-flex flex-wrap mb-3">
     {% for example in examples_page %}
-    <div class="card m-1" style="height: 200px">
+    <div class="card m-1" :style="`height: ${previewHeight}px`">
         <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link" style="height:100%">
             <img src="{{ example.attachment_set.first.url }}" class="rounded" style="height: 100%" alt="Broken image :("/>
         </a>
+        <!--
         <div class="card-img-overlay d-flex flex-wrap align-items-end">
             {% for tag in example.tag_set.all %}
             <small>
@@ -14,11 +56,15 @@
             </small>
             {% endfor %}
         </div>
+        -->
     </div>
     {% endfor %}
 
 </div>
+<!--
 {% include 'mpa/example/pagination.html' with page_obj=examples_page page_range=examples_page_range %}
+-->
 {% else %}
 <p>No examples found. Use API to upload examples.</p>
 {% endif %}
+</div>
