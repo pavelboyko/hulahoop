@@ -38,6 +38,13 @@
     margin-bottom: -1px;
 }
 
+.progress {
+    width: 100%; 
+    height: 8px; 
+    border-radius: 6px;
+    overflow: hidden;
+}
+
 .bage-bg-pending { background: #DD5703; }
 .bage-bg-skipped { background: #000000; }
 .bage-bg-started { background: #215DE8; }

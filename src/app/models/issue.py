@@ -65,6 +65,7 @@ class Issue(BaseModel):
         value: str
         count: int
         share: float
+        color: str
 
     def tag_values_count(self) -> Dict[str, List[ValueCounter]]:
         tag_count = list(
@@ -83,6 +84,7 @@ class Issue(BaseModel):
                     value=x["value"],
                     count=x["count"],
                     share=x["count"] * 100 / norm,
+                    color="",  # to be determined later
                 )
                 for x in data
             ]

@@ -15,6 +15,7 @@ def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
             height="200px",
             animation_opts=opts.AnimationOpts(animation=False),
             renderer=RenderType.SVG,
+            theme="white",
         ),
     ).set_global_opts(
         tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="shadow"),

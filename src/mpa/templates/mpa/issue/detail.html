@@ -88,16 +88,7 @@
 
         <div class="mb-3">
         <h6>Tags</h6>
-        {% for key, value in tag_count.items %}
-        <p>
-        {{ key }}
-        <ul>
-            {% for x in value %}
-            <li>{{ x.value }}: {{ x.share }}%</li>
-            {% endfor %}
-        </ul>
-        </p>
-        {% endfor %}
+        {% include 'mpa/issue/tags.html' %}
         </div>
     </div>
 
