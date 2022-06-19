@@ -7,21 +7,12 @@ from pyecharts import options as opts
 echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
 colormap = [
-    "#C1232B",
-    "#27727B",
-    "#FCCE10",
-    "#E87C25",
-    "#B5C334",
-    "#FE8463",
-    "#9BCA63",
-    "#FAD860",
-    "#F3A43B",
-    "#60C0DD",
-    "#D7504B",
-    "#C6E579",
-    "#F4E001",
-    "#F0805A",
-    "#26C0C0",
+    "#3fb1e3",
+    "#6be6c1",
+    "#626c91",
+    "#a0a7e6",
+    "#c4ebad",
+    "#96dee8",
 ]
 
 
@@ -47,6 +38,7 @@ def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
         values,
         stack="stack",
         label_opts=opts.LabelOpts(is_show=False),
+        color="#626c91",
     )
 
     return chart
