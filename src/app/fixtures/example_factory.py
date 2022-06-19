@@ -94,12 +94,17 @@ class ExampleFactory(DjangoModelFactory):
 
     @post_generation
     def tags(obj, create, extracted, **kwargs):
-        """
-        If called like: ExampleFactory(tags=4) it generates an Example with 4
-        tags. If called without `tags` argument, it generates a single tag for this example
-        """
         if not create:
             return
+
+        if (
+            obj.predictions is not None
+            and type(obj.predictions) is dict
+            and "label" in obj.predictions
+        ):
+            TagFactory.create(
+                example=obj, key="predicted", value=obj.predictions["label"]
+            )
 
         if extracted is not None:
             for _ in range(extracted):
