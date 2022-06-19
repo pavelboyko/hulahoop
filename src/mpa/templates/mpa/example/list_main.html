@@ -14,8 +14,9 @@
         </div>
     </div>
     {% endfor %}
+
 </div>
-{% include 'mpa/example/pagination.html' with page_obj=examples_page page_range=examples_page_range%}
+{% include 'mpa/example/pagination.html' with page_obj=examples_page page_range=examples_page_range %}
 {% else %}
 <p>No examples found. Use API to upload examples.</p>
 {% endif %}

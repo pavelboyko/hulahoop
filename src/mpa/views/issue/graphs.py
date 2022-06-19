@@ -6,6 +6,24 @@ from pyecharts import options as opts
 
 echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
+colormap = [
+    "#C1232B",
+    "#27727B",
+    "#FCCE10",
+    "#E87C25",
+    "#B5C334",
+    "#FE8463",
+    "#9BCA63",
+    "#FAD860",
+    "#F3A43B",
+    "#60C0DD",
+    "#D7504B",
+    "#C6E579",
+    "#F4E001",
+    "#F0805A",
+    "#26C0C0",
+]
+
 
 def plot_examples_last_n_days(issue: Issue, ndays: int = 30) -> Chart:
     labels, values = issue.example_count_last_n_days(ndays)

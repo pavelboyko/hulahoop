@@ -56,5 +56,5 @@ def issue_list(request, project_id):
     return render(
         request,
         "mpa/issue/list.html",
-        {"project": project, "filter": None, "issues": issues, "filter": filter},
+        {"project": project, "issues": issues, "filter": filter},
     )
