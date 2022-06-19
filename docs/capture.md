@@ -22,7 +22,7 @@ The capture endpoint supports only JSON payloads. While not enforced by the endp
 Content-Type: application/json
 ```
 
-## JSON Payload
+## Request Payload
 
 ### Required Attributes
 
@@ -93,21 +93,17 @@ Optional. A map of tags for this example. Tag key is limited to 30 characters an
 
 `predictions`
 
-TODO
+Optional. An ML predictions results related to the example. The structure and meaning of this field will be defined in the future.
 
 `annotations`
 
-TODO
+Optional. A manual labeling results related to the example. The structure and meaning of this field will be defined in the future.
 
 `metadata`
 
 Optional. Metadata is useful for storing additional, structured information on an example, especially information that can help you analyse the example or keep track of what context this example corresponds to. Metadata is not used by Hulahoop.
 
-### Response
-
-TODO
-
-## A Working Example
+### A Complete Example
 
 The capture request payload should resemble the following:
 
@@ -139,3 +135,25 @@ The capture request payload should resemble the following:
   }
 }
 ```
+
+## Response
+
+### 200
+
+On success status code 200 OK is returned with the following JSON payload:
+
+```json
+{ "status": 1 }
+```
+
+### 400
+
+On request payload validation errors status code 400 Bad Request is returned with error description in the JSON payload. Example error description:
+
+```json
+{ "attachments": ["This field is required."] }
+```
+
+### 404
+
+On unknown project id status code 404 Not Found is returned.

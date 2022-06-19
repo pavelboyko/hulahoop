@@ -1,9 +1,10 @@
-# Starting developing locally
+# Starting Developing Locally
 
 ## Prerequisites
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 2. Clone the Hulahoop respository. All future commands assume you're inside the root repository folder:
+
 ```
 git clone https://github.com/pavelboyko/hulahoop.git && cd hulahoop/
 ```
@@ -11,22 +12,25 @@ git clone https://github.com/pavelboyko/hulahoop.git && cd hulahoop/
 ## Running locally
 
 1. Launch database and app services
+
 ```
 docker-compose up
 ```
 
 2. On the first run create a superuser
+
 ```
-docker exec -it hulahoop_app /opt/hulahoop/manage.py createsuperuser 
+docker exec -it hulahoop_app /opt/hulahoop/manage.py createsuperuser
 ```
 
 3. Open http://localhost:8000 to see the app. Use login and password from the previous step to login.
 
 ## Changing code locally
 
-There is no need to rebuild or restart the app container if you only change code, since the code is mounted directly to the container. 
+There is no need to rebuild or restart the app container if you only change code, since the code is mounted directly to the container.
 
 If requirements change (e.g. you're using new `pip` or system package) you have to rebuild and restart the app:
+
 ```
 docker-compose down
 docker-compose build
@@ -43,6 +47,7 @@ docker exec -it hulahoop_app /opt/hulahoop/manage.py migrate
 ## What's inside Hulahoop
 
 Services:
+
 - db: the PostgreSQL database
 - redis: the Redis database
 - app: the Django app
@@ -64,6 +69,7 @@ The following environment variables are defined in the `app` container:
 Hulahoop uses PostgreSQL 14 as a transactional database. When running locally the database is launched in a separate container named `hulahoop_db`.
 
 ## Source code structure
+
 - `docs` -- Keep this up to date, please.
 - `src`
   - `app` -- Backend sources
@@ -75,6 +81,3 @@ Hulahoop uses PostgreSQL 14 as a transactional database. When running locally th
 - `docker-compose.yml` -- service launch instructions
 - `Dockerfile` -- app container build instructions. Update this file when you add new system dependencies.
 - `requirements.txt` -- Python requirements. Update this file when you add new `pip` packages.
-
-
-
