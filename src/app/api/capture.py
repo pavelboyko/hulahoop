@@ -1,7 +1,4 @@
 import logging
-from random import choice
-import re
-from subprocess import list2cmdline
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import serializers
