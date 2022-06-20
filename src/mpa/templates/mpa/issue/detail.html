@@ -68,11 +68,6 @@
             </span>
         </a>
     </li>
-    <!--
-    <li class="nav-item">
-        <a class="nav-link" href="#">Activity</a>
-    </li>
-    -->
 </ul>
 {% endblock tabs %}
 
@@ -80,15 +75,22 @@
 <div class="row">
     <div style="width: 300px">
         <div class="mb-3 border-bottom">
-        <h6>Last 30 days</h6>
-        <div style="margin-top: -50px; margin-bottom: -20px;">
-        {{ examples_last_30_days | safe}}
+            <h6>Last 30 Days</h6>
+            <div style="margin-top: -50px; margin-bottom: -20px;">
+            {{ examples_last_30_days | safe }}
+            </div>
         </div>
+        <!--
+        <div class="mb-3 border-bottom">
+            <h6>Linked Issues</h6>
+            <button class="btn btn-link p-0 mb-3">
+                <i class="bi bi-link-45deg"></i> Link Jira issue
+            </button>
         </div>
-
+        -->
         <div class="mb-3">
-        <h6>Tags</h6>
-        {% include 'mpa/issue/tags.html' %}
+            <h6>Tags</h6>
+            {% include 'mpa/issue/tags.html' %}
         </div>
     </div>
 
