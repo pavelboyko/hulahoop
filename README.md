@@ -8,7 +8,7 @@ Hulahoop is a service that helps teams collect, analyze and fix mistakes in ML-b
 
 Successful software products based on machine learning have amazing features but frequently require constant maintenance and babysitting of the ML models used.
 The purpose of Hulahoop is to make the process of identifying and eliminating ML mistakes repeatable and transparent.
-Hulahoop helps teams to automate the collection of ML mistakes examples, the systematization of similar examples for various issues, the analysis and resolution of issues, and regression control.
+Hulahoop helps teams to automate the collection of ML mistakes examples, the grouping of similar examples to issues, the analysis and resolution of issues, and regression testing.
 Hulahoop gives product stakeholders a transparent picture of what mistakes ML makes, and how and when they are fixed.
 
 Signs that you may benefit from Hulahoop:
