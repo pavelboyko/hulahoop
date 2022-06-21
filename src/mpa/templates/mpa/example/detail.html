@@ -66,6 +66,7 @@
             {% endfor %}
         </div>
         <div class="col">
+            Created: {{ example.created_at | naturaltime }} • Updated: {{ example.updated_at | naturaltime }}
             {% if tags %}
             <h5>Tags</h5>
             <ul>
