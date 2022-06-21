@@ -7,6 +7,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db import models
 from django.contrib import admin
+
+from app.models.example import Example
 from .base import BaseModel, BaseAdmin
 from .tag import Tag
 
@@ -34,9 +36,28 @@ class Issue(BaseModel):
     fingerprint: models.TextField = models.TextField(
         null=True, blank=True, default=None
     )
+    first_seen: models.DateTimeField = models.DateTimeField(
+        default=timezone.now,
+        null=True,
+    )
+    last_seen: models.DateTimeField = models.DateTimeField(
+        default=timezone.now,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return f"#{self.id}"  # type: ignore
+
+    def add_example(self, example: Example) -> None:
+        example.issue = self
+        example.save(update_fields=["issue"])
+        if example.created_at < self.first_seen:
+            self.first_seen = example.created_at
+            self.save(update_fields=["first_seen"])
+        if example.created_at > self.last_seen:
+            self.last_seen = example.created_at
+            self.save(update_fields=["last_seen"])
+        # TODO: reopen resolved issue here?
 
     def example_count(self) -> int:
         return self.example_set.filter().count()  # type: ignore

@@ -49,8 +49,8 @@
 <span class="badge bage-bg-{{ example.issue.get_status_display|lower }}">
         {{ example.issue.get_status_display }}
 </span>
-    First seen {{ example.issue.created_at | naturaltime }}
-    • Last seen {{ example.issue.updated_at | naturaltime }}
+    First seen {{ example.issue.first_seen | naturaltime }}
+    • Last seen {{ example.issue.last_seen | naturaltime }}
 </div>
 {% endif %}
 {% endblock subheader %}

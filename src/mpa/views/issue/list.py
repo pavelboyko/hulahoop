@@ -21,8 +21,8 @@ class IssueFilter(django_filters.FilterSet):
     order = django_filters.OrderingFilter(
         choices=(
             ("-examples", "Examples"),
-            ("-updated_at", "Last seen"),
-            ("-created_at", "First seen"),
+            ("-last_seen", "Last seen"),
+            ("-first_seen", "First seen"),
         ),
         label="Sort by",
         empty_label=None,

@@ -24,9 +24,9 @@ def get_or_create_issue(example: Example) -> Tuple[Optional[Issue], bool]:
         project=example.project, fingerprint=example.fingerprint
     )
     if issues:
-        the_issue = issues.first()
-        example.issue = the_issue
-        example.save(update_fields=["issue"])
+        the_issue: Issue = issues.first()  # type: ignore
+        the_issue.add_example(example)
+        the_issue.refresh_from_db()
         return the_issue, False
     else:
         the_issue = Issue.objects.create(
@@ -34,6 +34,6 @@ def get_or_create_issue(example: Example) -> Tuple[Optional[Issue], bool]:
             fingerprint=example.fingerprint,
             name=example.fingerprint,  # this is experimental
         )
-        example.issue = the_issue
-        example.save(update_fields=["issue"])
+        the_issue.add_example(example)
+        the_issue.refresh_from_db()
         return the_issue, True
