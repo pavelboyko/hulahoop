@@ -23,7 +23,7 @@ Signs that you may benefit from Hulahoop:
 
 We believe that quality assurance in machine learning is a complex creative work that goes far beyond the "label more data" mantra and that the path to quality lies through a deep understanding of the nuances of a particular product, data and model stack. Therefore, we are developing Hulahoop as open-source software with an emphasis on extensibility and customization.
 
-We also believe that every company should be able to fully own their data, which is why we are developing Hulahoop with the ability to self-host, although, a managed Hualahoop service may someday appear.
+We also believe that every company should be able to fully own their data, which is why we are developing Hulahoop with the ability to self-host, although, a managed Hulahoop service may someday appear.
 
 ## Docs
 
