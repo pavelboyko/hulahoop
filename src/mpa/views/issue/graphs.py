@@ -85,13 +85,13 @@ def plot_confusion_matrix(
             name="predicted",
             name_location="center",
             name_rotate=90,
-            name_gap=30,
+            name_gap=20,
             type_="category",
         ),
         xaxis_opts=opts.AxisOpts(
             name="annotated",
             name_location="center",
-            name_gap=30,
+            name_gap=20,
             type_="category",
         ),
     )
@@ -99,7 +99,7 @@ def plot_confusion_matrix(
     chart.add_yaxis(
         "",
         labels,  # type: ignore
-        values,  # type: ignore
+        [x if x[2] != 0 else (x[0], x[1], "-") for x in values],  # type: ignore
         label_opts=opts.LabelOpts(is_show=True, position=""),
     )
     chart.js_host = echarts_host

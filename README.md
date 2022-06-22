@@ -4,6 +4,8 @@ Hulahoop is a service that helps teams collect, analyze and fix mistakes in ML-b
 
 **⚠️ Hulahoop is currently in early development and features and APIs are likely to change quite often.**
 
+![Screenshot](./docs/screens/issue_detail.png)
+
 ## Purpose
 
 Software products based on machine learning have amazing features but frequently require lifelong maintenance and babysitting of the ML models used.
