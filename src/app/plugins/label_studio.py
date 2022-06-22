@@ -1,5 +1,6 @@
 import logging
-from typing import Dict, Any
+from this import d
+from typing import Dict, Any, Optional
 from django.urls import reverse
 from django.core.exceptions import MultipleObjectsReturned
 from jsonschema import validate, draft7_format_checker
@@ -31,7 +32,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         "ANNOTATION_CREATED": BaseLabelingPlugin.Event.annotation_created,
         "ANNOTATIONS_CREATED": BaseLabelingPlugin.Event.annotation_created,
         "ANNOTATION_UPDATED": BaseLabelingPlugin.Event.annotation_updated,
-        "ANNOTATIONS_UPDATED": BaseLabelingPlugin.Event.annotation_updated,
+        # "ANNOTATIONS_UPDATED": BaseLabelingPlugin.Event.annotation_updated,
         "ANNOTATIONS_DELETED": BaseLabelingPlugin.Event.annotation_deleted,
     }
 
@@ -97,12 +98,18 @@ class LabelStudioPlugin(BaseLabelingPlugin):
             },
         )
 
+    def get_label(self, data: Any) -> Optional[str]:
+        try:
+            return data["annotation"]["result"][0]["value"]["choices"][0]
+        except (TypeError, ValueError, KeyError) as e:
+            logger.debug(f"No label found in Label Studio webhook: {e}")
+
     def receive_webhook(self, data: Any) -> None:
         try:
             example_id = IdOfExample(data["task"]["data"][self.token_field])
             example = Example.objects.get(id=example_id)
             action = self.event_map[data["action"]]
-            result = data["annotation"]
+            result = {self.slug: data["annotation"], "label": self.get_label(data)}
             if self.callback:
                 self.callback(example, action, result)
             else:

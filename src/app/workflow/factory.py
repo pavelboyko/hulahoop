@@ -47,7 +47,7 @@ def get_workflow(project_id: IdOfProject) -> BaseWorkflow:
     if project_id not in project_workflow:
         build(project_id)
 
-    return project_workflow.get(project_id)
+    return project_workflow.get(project_id)  # type: ignore
 
 
 def start(project_id: IdOfProject, example_id: IdOfExample):

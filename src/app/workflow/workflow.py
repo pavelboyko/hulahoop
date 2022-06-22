@@ -54,5 +54,10 @@ class Workflow(BaseWorkflow):
     def on_labeling_event(
         self, example: Example, event: BaseLabelingPlugin.Event, result: Any
     ) -> None:
-        # TODO: save or update annotation results, we will return to this when we better undertand annotations data structure
-        pass
+        match event:
+            case BaseLabelingPlugin.Event.annotation_created | BaseLabelingPlugin.Event.annotation_updated:
+                example.annotations = result
+            case BaseLabelingPlugin.Event.annotation_deleted:
+                example.annotations = {}
+
+        example.save(update_fields=["annotations"])

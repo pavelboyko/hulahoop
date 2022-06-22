@@ -71,7 +71,6 @@ class LabelStudioPluginTest(TestCase):
                             "ANNOTATION_CREATED",
                             "ANNOTATIONS_CREATED",
                             "ANNOTATION_UPDATED",
-                            "ANNOTATIONS_UPDATED",
                             "ANNOTATIONS_DELETED",
                         ],
                     }
@@ -165,7 +164,7 @@ class LabelStudioPluginTest(TestCase):
         self, example: Example, action: BaseLabelingPlugin.Event, result: Any
     ) -> None:
         self.assertEqual(action, BaseLabelingPlugin.Event.annotation_created)
-        self.assertEqual(result, "RESULT")
+        self.assertDictEqual(result, {"label_studio": "RESULT", "label": None})
 
     def test_receive_webhook(self) -> None:
         example = ExampleFactory.create()
