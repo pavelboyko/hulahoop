@@ -20,7 +20,7 @@
 {% endblock breadcrumb%}
 
 {% block header %}
-<div class="page-header" style="width: 100%">
+<div class="page-header d-flex" style="width: 100%">
     <div hx-target="this" hx-swap="outerHTML">
         {% if issue.name %}
             {{ issue.name }}
@@ -33,19 +33,18 @@
             </button>
         {% endif %}
     </div>
+    <div class="ms-auto">
+        <button href="#" class="btn btn-outline-secondary me-1">
+            <i class="bi bi-x-lg"></i> Mute
+        </button>
+        <button href="#" class="btn btn-success">
+            <i class="bi bi-check-lg"></i> Resolve
+        </button>
+    </div>
 </div>
 {% endblock header %}
 
-{% block header-buttons %}
-    
-    <!--
-    <button href="#" class="btn btn-outline-secondary me-1">
-        <i class="bi bi-x-lg"></i> Mute
-    </button>
-    <button href="#" class="btn btn-success">
-        <i class="bi bi-check-lg"></i> Resolve
-    </button>
-    -->
+{% block header-buttons %}    
 {% endblock header-buttons %}
 
 {% block subheader %}
@@ -64,7 +63,7 @@
         <a class="nav-link active" aria-current="page" href="#">
             Examples 
             <span class="badge bg-light text-dark">
-            {{ issue.example_count | intcomma }}
+            {{ example_count | intcomma }}
             </span>
         </a>
     </li>
@@ -74,32 +73,8 @@
 {% block main %}
 <div class="row">
     <div style="width: 300px">
-        <div class="mb-3 border-bottom">
-            <h6>Last 30 Days</h6>
-            <div style="margin-top: -50px; margin-bottom: -20px;">
-            {{ examples_last_30_days | safe }}
-            </div>
-        </div>
-        <!--
-        <div class="mb-3 border-bottom">
-            <h6>Linked Issues</h6>
-            <button class="btn btn-link p-0 mb-3">
-                <i class="bi bi-link-45deg"></i> Link Jira issue
-            </button>
-        </div>
-        <div class="mb-3 border-bottom">
-            <h6>Linked Models</h6>
-            <button class="btn btn-link p-0 mb-3">
-                <i class="bi bi-link-45deg"></i> Link MLFlow model
-            </button>
-        </div>
-        -->
-        <div class="mb-3">
-            <h6>Tags</h6>
-            {% include 'mpa/issue/tags.html' %}
-        </div>
+        {% include 'mpa/issue/detail_panel.html' %}
     </div>
-
     <div class="col">          
         {% include 'mpa/example/list_main.html' %}
     </div>

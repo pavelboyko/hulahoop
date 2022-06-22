@@ -1,0 +1,17 @@
+<div class="mb-3 border-bottom">
+    <h6>Last 30 Days</h6>
+    <div style="margin-top: -3em; margin-bottom: -1.75em;">
+    {{ examples_last_30_days | safe }}
+    </div>
+</div>
+<div class="mb-3 border-bottom">
+    <h6>Tags</h6>
+    {% include 'mpa/issue/tags.html' %}
+</div>
+<div class="mb-3">
+    <h6>Confusion Matrix</h6>
+    <div style="margin-top: -3em; margin-bottom: -1.75em;">
+    {{ confusion_matrix | safe }}
+    </div>
+</div>
+

@@ -97,15 +97,6 @@ class ExampleFactory(DjangoModelFactory):
         if not create:
             return
 
-        if (
-            obj.predictions is not None
-            and type(obj.predictions) is dict
-            and "label" in obj.predictions
-        ):
-            TagFactory.create(
-                example=obj, key="predicted", value=obj.predictions["label"]
-            )
-
         if extracted is not None:
             for _ in range(extracted):
                 TagFactory.create(example=obj)

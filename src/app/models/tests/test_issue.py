@@ -17,11 +17,6 @@ class Test(TestCase):
         issue = IssueFactory.create()
         self.assertEqual(str(issue), f"#{issue.id}")
 
-    def test_example_count(self) -> None:
-        issue = IssueFactory.create()
-        example = ExampleFactory.create(project=issue.project, issue=issue)
-        self.assertEqual(issue.example_count(), 1)
-
     def test_add_example(self) -> None:
         issue: Issue = IssueFactory.create()
         example1: Example = ExampleFactory.create(

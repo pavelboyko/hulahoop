@@ -14,7 +14,7 @@ class IssueForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.form_show_labels = False
-        self.fields["name"].widget.attrs.update({"autofocus": "autofocus"})
+        self.fields["name"].widget.attrs.update({"autofocus": "autofocus", "size": 25})
 
 
 @login_required

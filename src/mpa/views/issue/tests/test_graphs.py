@@ -1,9 +1,6 @@
 from imghdr import tests
 from django.test import TestCase
-from app.fixtures.example_factory import ExampleFactory
-from app.models import Project
-from app.fixtures import IssueFactory
-from mpa.views.issue.graphs import plot_examples_last_n_days
+from mpa.views.issue.graphs import plot_examples_last_n_days, plot_confusion_matrix
 
 
 class Test(TestCase):
@@ -12,9 +9,16 @@ class Test(TestCase):
     """
 
     def tearDown(self) -> None:
-        Project.objects.all().delete()
+        pass
 
     def test_plot_examples_last_n_days(self) -> None:
-        issue = IssueFactory.create(examples=10)
-        chart = plot_examples_last_n_days(issue, ndays=100)
-        self.assertIsNotNone(chart)  # at least
+        labels = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+        ]
+        values = [1, 2, 3]
+
+        chart = plot_examples_last_n_days(labels, values)
+        self.assertIsNotNone(chart)  # chart is created
+        self.assertIsNotNone(chart.render_embed())  # at least render does not fail

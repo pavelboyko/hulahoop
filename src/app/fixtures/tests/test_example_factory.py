@@ -42,7 +42,7 @@ class Test(TestCase):
 
     def test_with_one_tag(self) -> None:
         example = ExampleFactory()
-        self.assertEqual(example.tag_set.count(), 2)  # type: ignore
+        self.assertEqual(example.tag_set.count(), 1)  # type: ignore
         tag: Tag = example.tag_set.first()  # type: ignore
         self.assertEqual(tag.example, example)
         self.assertIsNotNone(tag.key)
@@ -50,8 +50,8 @@ class Test(TestCase):
 
     def test_with_ten_tags(self) -> None:
         example = ExampleFactory(tags=10)
-        self.assertEqual(example.tag_set.count(), 11)  # type: ignore
+        self.assertEqual(example.tag_set.count(), 10)  # type: ignore
 
     def test_without_tags(self) -> None:
         example = ExampleFactory(tags=0)
-        self.assertEqual(example.tag_set.count(), 1)  # type: ignore
+        self.assertEqual(example.tag_set.count(), 0)  # type: ignore
