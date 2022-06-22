@@ -13,6 +13,7 @@ click-plugins==1.1.1
 click-repl==0.2.0
 coverage==6.4.1
 crispy-bootstrap5==0.6
+cycler==0.11.0
 Deprecated==1.2.13
 Django==4.0.4
 django-crispy-forms==1.14.0
@@ -23,14 +24,19 @@ djangorestframework==3.13.1
 drf-nested-routers==0.93.4
 factory-boy==3.2.1
 Faker==13.12.1
+fonttools==4.33.3
 idna==3.3
 Jinja2==3.1.2
 jsonschema==4.6.0
+kiwisolver==1.4.3
 kombu==5.2.4
 MarkupSafe==2.1.1
+matplotlib==3.5.2
 mypy-extensions==0.4.3
+numpy==1.22.4
 packaging==21.3
 pathspec==0.9.0
+Pillow==9.1.1
 platformdirs==2.5.2
 prettytable==3.3.0
 prompt-toolkit==3.0.29

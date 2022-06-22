@@ -5,26 +5,13 @@ from django.core.paginator import Paginator
 from app.models import Project, Issue
 from app.utils.example_stats import (
     examples_confusion_matrix,
+    examples_confusion_matrix2,
+    ColoredMatrix,
     issue_tag_values_count,
     issue_example_count,
     issue_example_count_last_n_days,
 )
-from .graphs import plot_confusion_matrix, plot_examples_last_n_days, colors
-
-
-def colored_tag_count(issue: Issue) -> Dict[str, List[Dict[str, Any]]]:
-    out = {}
-    for key, stats in issue_tag_values_count(issue).items():
-        out[key] = []
-        for i, data in enumerate(stats):
-            out[key].append(
-                {
-                    "value": data.value,
-                    "share": data.share,
-                    "color": colors[i % len(colors)],
-                }
-            )
-    return out
+from .graphs import plot_confusion_matrix, plot_examples_last_n_days
 
 
 @login_required
@@ -41,9 +28,11 @@ def issue_detail(request, project_id, issue_id):
     examples_last_30_days = plot_examples_last_n_days(
         ex30_labels, ex30_values
     ).render_embed()
-    tag_count = colored_tag_count(issue)
+    tag_count = issue_tag_values_count(issue)
     cm_labels, cm_values = examples_confusion_matrix(examples)
     confusion_matrix = plot_confusion_matrix(cm_labels, cm_values).render_embed()
+
+    confusion_matrix2 = examples_confusion_matrix2(examples)
 
     return render(
         request,
@@ -56,5 +45,6 @@ def issue_detail(request, project_id, issue_id):
             "examples_last_30_days": examples_last_30_days,
             "tag_count": tag_count,
             "confusion_matrix": confusion_matrix,
+            "confusion_matrix2": confusion_matrix2,
         },
     )

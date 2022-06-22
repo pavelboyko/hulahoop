@@ -1,0 +1,12 @@
+<div width="100%">
+    {% for row in matrix %}
+        <div class="d-flex">
+            {% for cell in row %}
+            <div class="d-flex justify-content-center align-items-center" 
+                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}}">
+                <small class="text-muted">{{cell.value}}</small>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

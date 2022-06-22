@@ -8,32 +8,6 @@ import random
 
 echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
-colors = [
-    "#2f4554",
-    "#61a0a8",
-    "#d48265",
-    "#749f83",
-    "#ca8622",
-    "#bda29a",
-    "#6e7074",
-    "#546570",
-    "#c4ccd3",
-    "#f05b72",
-    "#ef5b9c",
-    "#f47920",
-    "#905a3d",
-    "#fab27b",
-    "#2a5caa",
-    "#444693",
-    "#726930",
-    "#b2d235",
-    "#6d8346",
-    "#ac6767",
-    "#1d953f",
-    "#6950a1",
-    "#918597",
-]
-
 
 def plot_examples_last_n_days(labels: Sequence, values: Sequence) -> Chart:
     chart = Bar(
@@ -56,7 +30,7 @@ def plot_examples_last_n_days(labels: Sequence, values: Sequence) -> Chart:
         values,
         stack="stack",
         label_opts=opts.LabelOpts(is_show=False),
-        color=colors[0],
+        color="#440154",
     )
 
     return chart

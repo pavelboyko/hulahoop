@@ -10,7 +10,7 @@ from app.utils.example_stats import (
     issue_example_count_last_n_days,
     issue_tag_values_count,
     examples_confusion_matrix,
-    ValueCounter,
+    ColoredCounter,
 )
 
 
@@ -51,14 +51,14 @@ class Test(TestCase):
         self.assertTrue("key_1" in tag_count)
         self.assertTrue("key_2" in tag_count)
         self.assertEqual(len(tag_count["key_1"]), 1)
-        self.assertEqual(tag_count["key_1"][0], ValueCounter("value_1", 2, 100.0))
+        self.assertEqual(tag_count["key_1"][0], ColoredCounter("value_1", 2, 100.0))
         self.assertEqual(len(tag_count["key_2"]), 2)
         self.assertSetEqual(
             set(tag_count["key_2"]),
             set(
                 [
-                    ValueCounter("value_21", 1, 50.0),
-                    ValueCounter("value_22", 1, 50.0),
+                    ColoredCounter("value_21", 1, 50.0),
+                    ColoredCounter("value_22", 1, 50.0),
                 ]
             ),
         )

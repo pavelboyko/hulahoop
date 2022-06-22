@@ -14,4 +14,9 @@
     {{ confusion_matrix | safe }}
     </div>
 </div>
+<div class="mb-3">
+    <h6>Also Confusion Matrix</h6>
+    {% include 'mpa/issue/heatmap.html' with matrix=confusion_matrix2 width=280%}
+</div>
+
 

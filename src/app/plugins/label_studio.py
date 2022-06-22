@@ -1,5 +1,4 @@
 import logging
-from this import d
 from typing import Dict, Any, Optional
 from django.urls import reverse
 from django.core.exceptions import MultipleObjectsReturned
