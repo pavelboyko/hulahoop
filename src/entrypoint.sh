@@ -9,11 +9,13 @@ while ! nc -z $SQL_HOST $SQL_PORT; do
   sleep 5
 done
 
-# we don't wait for Redis here because it starts faster than Postgres
+# We don't wait for Redis here because it starts faster than Postgres
 # though we should in principle wait for both to start before starting the app
 echo "Postgres is up - starting service"
 
-# Obtain an exclusive lock for preparation to prevent parallel installs and migrations
+# We use a file-based lock to prevent parallel migrations for now
+# To make this work we have a shared /var/lock/ volume across app and celery workers containers
+# This must be somehow reworked for cluster deployment 
 prepare() {
   python manage.py migrate --noinput && \
   python manage.py collectstatic --noinput

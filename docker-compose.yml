@@ -16,7 +16,7 @@ services:
     command: redis-server
     volumes:
       - ./volumes/redis:/var/lib/redis
-      - ./volumes/etc/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./etc/redis:/usr/local/etc/redis
     ports:
       - "6379:6379"
 
@@ -24,6 +24,9 @@ services:
     container_name: hulahoop_app
     build: ""
     command: gunicorn hulahoop.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./volumes/static:/var/www/hulahoop/static
+      - ./volumes/lock:/var/lock
     expose:
       - 8000
     env_file:
@@ -36,6 +39,8 @@ services:
     container_name: hulahoop_celery_worker
     build: ""
     command: "./celery-worker.sh"
+    volumes:
+      - ./volumes/lock:/var/lock
     env_file:
       - ./.env
     depends_on:
@@ -47,9 +52,10 @@ services:
     container_name: hulahoop_nginx
     image: nginx:1.23-alpine
     volumes:
-      - ./volumes/etc/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./etc/nginx:/etc/nginx/conf.d
+      - ./volumes/static:/var/www/hulahoop/static
     ports:
-      - 1337:80
+      - 80:80
     depends_on:
       - app
 
