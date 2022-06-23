@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
 HOSTNAME = os.environ.get("SITE_HOSTNAME", "localhost")
 HTTP_SCHEME = os.environ.get("SITE_HTTP_SCHEME", "http")
@@ -136,10 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "/var/www/app/static/")
+STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "/var/www/hulahoop/static/")
 
-DEFAULT_FILE_STORAGE = "utils.storages.file.CommonFileSystemStorage"
-STATICFILES_STORAGE = "utils.storages.static.ManifestStaticFilesStorage"
+# DEFAULT_FILE_STORAGE = "utils.storages.file.CommonFileSystemStorage"
+# STATICFILES_STORAGE = "utils.storages.static.ManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
