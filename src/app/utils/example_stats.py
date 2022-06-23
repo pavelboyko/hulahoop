@@ -13,6 +13,7 @@ from app.models import Example, Issue, Tag
 logger = logging.getLogger(__package__)
 
 colormap = "Blues"
+primary_color = "#08306b"
 
 
 @dataclass(frozen=True)
@@ -27,18 +28,22 @@ class ColoredCounter:
 class ColoredMatrixValue:
     x: str
     y: str
-    value: str
+    value: float | str  # in % or an empty string
     color: str | None
 
 
 ColoredMatrix = List[List[ColoredMatrixValue]]
 
 
-def issue_example_count(issue: Issue) -> int:
+def rgba_to_hex(rgba: Tuple[float, float, float, float]) -> str:
+    return f"#{int(rgba[0] * 255):02x}{int(rgba[1] * 255):02x}{int(rgba[2] * 255):02x}"
+
+
+def example_count(issue: Issue) -> int:
     return issue.example_set.filter().count()  # type: ignore
 
 
-def issue_example_count_last_n_days(
+def example_count_last_n_days(
     issue: Issue, ndays: int = 30
 ) -> Tuple[List[str], List[int]]:
     """
@@ -61,7 +66,7 @@ def issue_example_count_last_n_days(
     return labels, values
 
 
-def issue_tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
+def tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
     """
     :returns: dict of tag name to list of (value, count, share) for every tag value, sorted by count descending
     """
@@ -80,8 +85,8 @@ def issue_tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
         out[key] = []
         for i, x in enumerate(data):
             share = x["count"] / norm
-            rgba = cmap(1 - math.modf(i * 0.19)[0])
-            color = f"#{int(rgba[0] * 255):02x}{int(rgba[1] * 255):02x}{int(rgba[2] * 255):02x}"
+            # 0.19 is an arbitraty factor here to make the colors look better
+            color = rgba_to_hex(cmap(1 - math.modf(i * 0.19)[0]))
             out[key].append(
                 ColoredCounter(
                     value=x["value"],
@@ -93,44 +98,12 @@ def issue_tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
     return out
 
 
-def examples_confusion_matrix(
-    examples: QuerySet[Example],
-) -> Tuple[List[str], List[Tuple[int, int, int]]]:
-    """
-    :returns: (list of labels, list of tuples (annotated_label_id, predicted_label_id, count))
-    """
-    cm = (
-        examples.values("annotations__label", "predictions__label")
-        .annotate(count=Count("id"))
-        .values_list("annotations__label", "predictions__label", "count")
-    )
-    labels = list(
-        set(str(x[0]) for x in cm).union(set(str(x[1]) for x in cm))
-    )  # convert everything to str btw
-    labels.sort()
-    values = []
-    for annotated_id, annotated in enumerate(labels):
-        for predicted_id, predicted in enumerate(labels):
-            values.append(
-                (
-                    annotated_id,
-                    predicted_id,
-                    sum(
-                        x[2]
-                        for x in cm
-                        if str(x[0]) == annotated and str(x[1]) == predicted
-                    ),
-                )
-            )
-    return labels, values
-
-
-def examples_confusion_matrix2(examples: QuerySet[Example]) -> ColoredMatrix:
+def confusion_matrix(examples: QuerySet[Example]) -> ColoredMatrix:
     """
     :returns: list of matrix rows, where each row is a list of ColoredMatrixValue
     """
 
-    def zero_to_dash(x) -> str:
+    def zero_to_empty(x) -> str:
         return x if x else ""
 
     sparse = (
@@ -139,14 +112,16 @@ def examples_confusion_matrix2(examples: QuerySet[Example]) -> ColoredMatrix:
         .values_list("annotations__label", "predictions__label", "count")
     )
     value_norm = sum(x[2] for x in sparse)
-    labels = list(
-        set(str(x[0]) for x in sparse).union(set(str(x[1]) for x in sparse))
-    )  # convert everything to str btw
+    # combine annoated and predicted labels and convert to strings in the process
+    labels = list(set(str(x[0]) for x in sparse).union(set(str(x[1]) for x in sparse)))
+    if not labels:
+        return []
     labels.sort()
 
+    # prepare color palette
     cmap = cm.get_cmap(colormap)
     max_count = max(x[2] for x in sparse) / value_norm * 100
-    color_norm = colors.Normalize(vmin=0, vmax=max_count)  # TODO: check for None
+    color_norm = colors.Normalize(vmin=0, vmax=max_count)
 
     matrix = []
     for predicted in labels:
@@ -157,16 +132,12 @@ def examples_confusion_matrix2(examples: QuerySet[Example]) -> ColoredMatrix:
                 for x in sparse
                 if str(x[0]) == annotated and str(x[1]) == predicted
             )
-            if count == 0:
-                color = None
-            else:
-                rgba = cmap(color_norm(count))
-                color = f"#{int(rgba[0] * 255):02x}{int(rgba[1] * 255):02x}{int(rgba[2] * 255):02x}"
+            color = rgba_to_hex(cmap(color_norm(count))) if count > 0 else None
             row.append(
                 ColoredMatrixValue(
                     x=annotated,
                     y=predicted,
-                    value=zero_to_dash(count),
+                    value=zero_to_empty(count),
                     color=color,
                 )
             )

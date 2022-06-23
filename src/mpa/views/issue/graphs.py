@@ -4,7 +4,7 @@ from pyecharts.charts import Bar, HeatMap
 from pyecharts.charts.chart import Chart
 from pyecharts.globals import RenderType
 from pyecharts import options as opts
-import random
+from app.utils.example_stats import primary_color
 
 echarts_host = "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/"
 
@@ -35,7 +35,7 @@ def plot_examples_last_n_days(labels: Sequence, values: Sequence) -> Chart:
         values,
         stack="stack",
         label_opts=opts.LabelOpts(is_show=False),
-        color="#08306b",
+        color=primary_color,
     )
 
     return chart
