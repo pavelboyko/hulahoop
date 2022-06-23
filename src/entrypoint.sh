@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+# wait until Postgres is ready
 SQL_HOST="db"
 SQL_PORT=5432
 while ! nc -z $SQL_HOST $SQL_PORT; do
