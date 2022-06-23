@@ -42,7 +42,7 @@ echo "To stop the stack run 'docker-compose stop'"
 echo "To start the stack again run 'docker-compose start'"
 echo "It is generally a good idea to setup backups of the database located in ./volumes/postgres/"
 echo ""
-echo "Hulahoop will be up at the location you provided!"
+echo "Hulahoop will soon be up at the location you provided:"
 echo "${SITE_HTTP_SCHEME}://${SITE_HOSTNAME}"
 echo ""
 
