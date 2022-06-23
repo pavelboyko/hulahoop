@@ -132,7 +132,7 @@ dmypy.json
 .idea
 
 # Dev environment database
-.data
+volumes
 
 # Dev environment static files
 src/static/

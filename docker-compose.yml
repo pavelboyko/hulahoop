@@ -1,3 +1,4 @@
+# Production environmet. For the dev environment, see docker-compose.dev.yml
 version: "3"
 
 services:
@@ -5,30 +6,28 @@ services:
     container_name: hulahoop_db
     image: postgres:14-alpine
     volumes:
-      - ./.data/db:/var/lib/postgresql/data
+      - ./volumes/postgres:/var/lib/postgresql/data
     env_file:
-      - ./.env.dev
+      - ./.env
 
   redis:
     container_name: hulahoop_redis
     image: redis:6-alpine
     command: redis-server
     volumes:
-      - ./.data/redis:/var/lib/redis
-      - ./etc/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./volumes/redis:/var/lib/redis
+      - ./volumes/etc/redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
 
   app:
     container_name: hulahoop_app
     build: ""
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./src:/opt/hulahoop
-    ports:
-      - "8000:8000"
+    command: gunicorn hulahoop.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
       - redis
@@ -37,11 +36,20 @@ services:
     container_name: hulahoop_celery_worker
     build: ""
     command: "./celery-worker.sh"
-    volumes:
-      - ./src:/opt/hulahoop
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
       - redis
       - app
+
+  nginx:
+    container_name: hulahoop_nginx
+    image: nginx:1.23-alpine
+    volumes:
+      - ./volumes/etc/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - 1337:80
+    depends_on:
+      - app
+
