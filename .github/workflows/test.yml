@@ -37,6 +37,7 @@ jobs:
       - name: Run tests
         env:
           DJANGO_SECRET_KEY: "t0p s3cr3t"
+          REDIS_SERVICE_ENDPOINT: redis
         run: |
           cd src
           python manage.py test
