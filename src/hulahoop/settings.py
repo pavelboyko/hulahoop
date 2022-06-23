@@ -14,9 +14,6 @@ import os
 import sys
 from pathlib import Path
 
-HTTP_SCHEME = "http://"
-HOSTNAME = "host.docker.internal:8000"
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6adc!959=99x3&^z)vhq@_gl02n1$ml1f6ius*%l+00!10y6f@"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["host.docker.internal", "localhost"]
+HOSTNAME = os.environ.get("SITE_HOSTNAME", "localhost")
+HTTP_SCHEME = os.environ.get("SITE_HTTP_SCHEME", "http")
+
+ALLOWED_HOSTS = [HOSTNAME]
 
 
 # Application definition
@@ -135,8 +135,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
+STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "/var/www/app/static/")
+
+DEFAULT_FILE_STORAGE = "utils.storages.file.CommonFileSystemStorage"
+STATICFILES_STORAGE = "utils.storages.static.ManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
