@@ -64,7 +64,7 @@ jobs:
           tags: |
             docker.pkg.github.com/pavelboyko/hulahoop/hulahoop:${{ github.run_number }}
             docker.pkg.github.com/pavelboyko/hulahoop/hulahoop:latest
-      - name: Delete oldest package version
-        uses: actions/delete-package-versions@v1
-        with:
-          package-name: "hulahoop"
+      #- name: Delete oldest package version
+      #  uses: actions/delete-package-versions@v1
+      #  with:
+      #    package-name: "hulahoop"
