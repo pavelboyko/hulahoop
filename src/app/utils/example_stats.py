@@ -12,7 +12,7 @@ from app.models import Example, Issue, Tag
 
 logger = logging.getLogger(__package__)
 
-colormap = "viridis"
+colormap = "Blues"
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,7 @@ def issue_tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
         out[key] = []
         for i, x in enumerate(data):
             share = x["count"] / norm
-            rgba = cmap(math.modf(i * 0.29)[0])
+            rgba = cmap(1 - math.modf(i * 0.19)[0])
             color = f"#{int(rgba[0] * 255):02x}{int(rgba[1] * 255):02x}{int(rgba[2] * 255):02x}"
             out[key].append(
                 ColoredCounter(
@@ -138,13 +138,14 @@ def examples_confusion_matrix2(examples: QuerySet[Example]) -> ColoredMatrix:
         .annotate(count=Count("id"))
         .values_list("annotations__label", "predictions__label", "count")
     )
+    value_norm = sum(x[2] for x in sparse)
     labels = list(
         set(str(x[0]) for x in sparse).union(set(str(x[1]) for x in sparse))
     )  # convert everything to str btw
     labels.sort()
 
     cmap = cm.get_cmap(colormap)
-    max_count = max(x[2] for x in sparse)
+    max_count = max(x[2] for x in sparse) / value_norm * 100
     color_norm = colors.Normalize(vmin=0, vmax=max_count)  # TODO: check for None
 
     matrix = []
@@ -152,7 +153,7 @@ def examples_confusion_matrix2(examples: QuerySet[Example]) -> ColoredMatrix:
         row = []
         for annotated in labels:
             count = sum(
-                x[2]
+                x[2] / value_norm * 100
                 for x in sparse
                 if str(x[0]) == annotated and str(x[1]) == predicted
             )

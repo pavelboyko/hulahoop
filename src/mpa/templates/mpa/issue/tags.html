@@ -4,7 +4,12 @@
 <small style="font-weight: 500">{{ key }}</small>
 <div class="d-flex progress">
     {% for x in value %}
-    <div style="width: {{x.share}}%; background: {{ x.color }}; padding: 0; margin: 0;">&nbsp;</div>
+    <div style="width: {{x.share}}%; background: {{ x.color }}; padding: 0; margin: 0; cursor: pointer;"
+        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
+        title="{{ x.value }}: {{x.share | floatformat:0}}%"
+    >
+        &nbsp;
+    </div>
     {% endfor %}
 </div>
 <div class="d-flex flex-wrap">

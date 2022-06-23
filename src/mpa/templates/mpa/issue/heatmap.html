@@ -1,10 +1,17 @@
-<div width="100%">
+<div class="border rounded">
     {% for row in matrix %}
         <div class="d-flex">
             {% for cell in row %}
             <div class="d-flex justify-content-center align-items-center" 
-                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}}">
-                <small class="text-muted">{{cell.value}}</small>
+                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}}; cursor: pointer;"
+                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
+                 title="Annotated: {{cell.x}}<br/>Predicted: {{cell.y}}<br/>Share: {{cell.value | floatformat:0}}%"
+            >
+                <small style="color: {{cell.color}}; filter: invert(100%); font-size: 0.75em;">
+                    {% if cell.value > 0%}
+                    {{cell.value | floatformat:0 }}%
+                    {% endif %}
+                </small>
             </div>
             {% endfor %}
         </div>

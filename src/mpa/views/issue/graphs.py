@@ -19,7 +19,12 @@ def plot_examples_last_n_days(labels: Sequence, values: Sequence) -> Chart:
             theme="white",
         ),
     ).set_global_opts(
-        tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="shadow"),
+        tooltip_opts=opts.TooltipOpts(
+            trigger="axis",
+            axis_pointer_type="shadow",
+            background_color="black",
+            textstyle_opts=opts.TextStyleOpts(color="white"),
+        ),
         legend_opts=opts.LegendOpts(is_show=False),
         yaxis_opts=opts.AxisOpts(is_show=True),
     )
@@ -30,7 +35,7 @@ def plot_examples_last_n_days(labels: Sequence, values: Sequence) -> Chart:
         values,
         stack="stack",
         label_opts=opts.LabelOpts(is_show=False),
-        color="#440154",
+        color="#08306b",
     )
 
     return chart
