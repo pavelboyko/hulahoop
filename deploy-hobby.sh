@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 # The single instance production install script.
-# More install options will be added in the future.
 # Adapted from the beautiful https://raw.githubusercontent.com/posthog/posthog/HEAD/bin/deploy-hobby 
 
 # Generate new secrets
