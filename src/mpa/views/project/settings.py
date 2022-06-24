@@ -9,7 +9,7 @@ from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 def project_settings(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     capture_endpoint = (
-        f"{HTTP_SCHEME}{HOSTNAME}{reverse('api_capture', args=[project_id])}"
+        f"{HTTP_SCHEME}://{HOSTNAME}{reverse('api_capture', args=[project_id])}"
     )
     return render(
         request,
