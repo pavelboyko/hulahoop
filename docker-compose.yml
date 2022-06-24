@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: hulahoop_app
-    build: ""
+    image: ghcr.io/pavelboyko/hulahoop/hulahoop:latest 
     command: gunicorn hulahoop.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./volumes/static:/var/www/hulahoop/static
@@ -39,7 +39,7 @@ services:
 
   celery_worker:
     container_name: hulahoop_celery_worker
-    build: ""
+    image: ghcr.io/pavelboyko/hulahoop/hulahoop:latest
     command: "./celery-worker.sh"
     volumes:
       - ./volumes/lock:/var/lock
