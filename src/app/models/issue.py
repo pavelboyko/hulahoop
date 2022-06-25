@@ -27,9 +27,9 @@ class Issue(BaseModel):
     status: models.IntegerField = models.IntegerField(
         choices=Status.choices, default=Status.open
     )
-    name: models.TextField = models.TextField(null=True, blank=True)
+    name: models.TextField = models.TextField(null=True, blank=True, db_index=True)
     fingerprint: models.TextField = models.TextField(
-        null=True, blank=True, default=None
+        null=True, blank=True, default=None, db_index=True
     )
     first_seen: models.DateTimeField = models.DateTimeField(
         default=timezone.now,

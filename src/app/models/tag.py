@@ -13,8 +13,10 @@ class Tag(BaseModel):
     example: models.ForeignKey = models.ForeignKey(
         "Example", null=False, blank=False, on_delete=models.CASCADE
     )
-    key: models.CharField = models.CharField(max_length=key_max_length)
-    value: models.CharField = models.CharField(max_length=value_max_length)
+    key: models.CharField = models.CharField(max_length=key_max_length, db_index=True)
+    value: models.CharField = models.CharField(
+        max_length=value_max_length, db_index=True
+    )
 
     def __str__(self):
         return f"{self.key}:{self.value}"
