@@ -10,6 +10,7 @@ class BaseModel(models.Model):
         # see https://github.com/FactoryBoy/factory_boy/issues/102#issuecomment-28010862
         default=timezone.now,
         null=True,
+        db_index=True,
     )
     updated_at: models.DateTimeField = models.DateTimeField(auto_now=True, null=True)
 
