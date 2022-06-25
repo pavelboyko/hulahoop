@@ -67,4 +67,4 @@ jobs:
       - name: Delete oldest package version
         uses: actions/delete-package-versions@v3
         with:
-          package-name: "hulahoop"
+          package-name: "hulahoop/hulahoop"
