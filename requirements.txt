@@ -17,6 +17,7 @@ cycler==0.11.0
 Deprecated==1.2.13
 Django==4.0.4
 django-crispy-forms==1.14.0
+django-extensions==3.1.5
 django-filter==21.1
 django-prettyjson==0.4.1
 django-rest-framework==0.1.0

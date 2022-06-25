@@ -7,8 +7,9 @@ RUN apt update && \
 
 COPY requirements.txt /opt/hulahoop/
 WORKDIR /opt/hulahoop/
-RUN pip3 install --no-cache-dir -r requirements.txt \
-    && rm -rf ~/.cache/ && rm -rf /tmp/*
+RUN pip install --upgrade pip && \
+    pip3 install --no-cache-dir -r requirements.txt && \
+    rm -rf ~/.cache/ && rm -rf /tmp/*
 
 COPY src /opt/hulahoop
 

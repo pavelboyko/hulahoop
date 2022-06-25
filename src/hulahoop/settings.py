@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     "rest_framework",  # required by app
     "rest_framework.authtoken",  # required by app
     "prettyjson",  # required by app
