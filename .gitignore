@@ -131,8 +131,9 @@ dmypy.json
 # PyCharm IDE
 .idea
 
-# Dev environment database
+# Prod and dev environment database
 volumes
+dev-volumes
 
 # Dev environment static files
 src/static/
