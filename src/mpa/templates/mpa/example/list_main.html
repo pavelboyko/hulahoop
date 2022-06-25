@@ -4,21 +4,26 @@
 <script src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
 
 <div x-data="{ previewHeight: $persist(200) }">
-{% if examples_page %}
+{% if page %}
 <div class="d-flex justify-content-between ms-1">
-    <nav aria-label="Pagination">
+    <nav aria-label="Pagination" class="d-flex">
+        <div>
+        <small class="align-middle">
+            Showing {{ page.start_index }} - {{ page.end_index }} of {{ total_count }} examples &nbsp;
+        </small>
+        </div>
         <ul class="pagination pagination-sm mb-2">
-        {% if examples_page.has_previous %}
+        {% if page.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ examples_page.previous_page_number }}">
+            <a class="page-link" href="?page={{ page.previous_page_number }}">
                 <i class="bi bi-chevron-left"></i> Previous
             </a>
           </li>
         {% endif %}
             
-        {% if examples_page.has_next %}
+        {% if page.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ examples_page.next_page_number }}">
+            <a class="page-link" href="?page={{ page.next_page_number }}">
                 Next <i class="bi bi-chevron-right"></i>
             </a>
           </li>
@@ -41,7 +46,7 @@
 </div>
   
 <div class="d-flex flex-wrap mb-3">
-    {% for example in examples_page %}
+    {% for example in page %}
     <div class="card m-1" :style="`height: ${previewHeight}px`">
         <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link" style="height:100%">
             <img src="{{ example.attachment_set.first.url }}" class="rounded" style="height: 100%" alt="Broken image :("/>

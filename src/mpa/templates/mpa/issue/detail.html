@@ -1,5 +1,6 @@
 {% extends "mpa/base.html" %}
 {% load humanize %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ issue }} • {{ project.name }}{% endblock title %}
 
@@ -71,12 +72,29 @@
 {% endblock tabs %}
 
 {% block main %}
+<div class="row" class="mx-0">
+    <form method="get" novalidate>
+        <div class="row align-items-end">
+            <div style="width: 300px">
+                {{ filter.form.created_at | as_crispy_field }}
+            </div>
+            <div class="col">
+            {{ filter.form.search | as_crispy_field }}
+            </div>
+            <div style="width: 120px">
+            <a href="{% url 'issue_detail' project.id issue.id%}" class="btn btn-light mb-3" style="width: 100%">
+                <i class="bi bi-x-lg"></i> Clear
+            </a>
+            </div>
+        </div>
+    </form>    
+</div>
 <div class="row">
     <div style="width: 300px">
         {% include 'mpa/issue/detail_panel.html' %}
     </div>
     <div class="col">          
-        {% include 'mpa/example/list_main.html' %}
+        {% include 'mpa/example/list_main.html' with page=examples_page total_count=example_count%}
     </div>
 </div>
 {% endblock main %}

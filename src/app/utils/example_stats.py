@@ -43,35 +43,35 @@ def example_count(issue: Issue) -> int:
     return issue.example_set.filter().count()  # type: ignore
 
 
-def example_count_last_n_days(
-    issue: Issue, ndays: int = 30
-) -> Tuple[List[str], List[int]]:
+def example_count_daily(examples: QuerySet[Example]) -> Tuple[List[str], List[int]]:
     """
     :returns: list of days and list of example counts
     """
     now = timezone.now()
-    examples = (
-        issue.example_set.filter(  # type: ignore
-            created_at__gte=now - timedelta(days=ndays),
-        )
-        .values("created_at__date")
+    sparse = (
+        examples.values("created_at__date")
         .annotate(count=Count("id"))
         .values("created_at__date", "count")
         .order_by("created_at__date")
     )
-    labels = [(now - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)]
+    min_date = min(x["created_at__date"] for x in sparse)
+    max_date = max(x["created_at__date"] for x in sparse)
+    ndays = (max_date - min_date).days
+    labels = [
+        (max_date - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)
+    ]
     values = [0] * ndays
-    for x in examples:
-        values[(x["created_at__date"] - now.date()).days + ndays - 1] = x["count"]
+    for x in sparse:
+        values[(x["created_at__date"] - max_date).days + ndays - 1] = x["count"]
     return labels, values
 
 
-def tag_values_count(issue: Issue) -> Dict[str, List[ColoredCounter]]:
+def tag_values_count(examples: QuerySet[Example]) -> Dict[str, List[ColoredCounter]]:
     """
     :returns: dict of tag name to list of (value, count, share) for every tag value, sorted by count descending
     """
     tag_count = list(
-        Tag.objects.filter(example__issue=issue)
+        Tag.objects.filter(example__in=examples)
         .values("key", "value")
         .annotate(count=Count("id"))
         .values("key", "value", "count")
