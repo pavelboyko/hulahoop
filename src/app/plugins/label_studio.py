@@ -8,6 +8,7 @@ from hulahoop.settings import HTTP_SCHEME, HOSTNAME
 from app.models import Example
 from app.models.idof import IdOfProject, IdOfExample
 from app.utils.rest_client import RestClient
+from app.utils.fix_docker_hostname import fix_docker_hostname
 from .base import BaseLabelingPlugin, ConfigError
 
 logger = logging.getLogger(__package__)
@@ -47,7 +48,7 @@ class LabelStudioPlugin(BaseLabelingPlugin):
         )
 
         webhook_path = reverse("api_webhook", args=[project_id, self.slug])
-        webhook_url = f"{HTTP_SCHEME}{HOSTNAME}{webhook_path}"
+        webhook_url = f"{HTTP_SCHEME}://{fix_docker_hostname(HOSTNAME)}{webhook_path}"
         # As we init plugin in every celery worker on every start
         # make sure that our webhook wasn't already registered
         if not self.check_webhook_exists(webhook_url):

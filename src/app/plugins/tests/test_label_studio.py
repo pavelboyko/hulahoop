@@ -11,6 +11,7 @@ from app.utils.rest_client import RestClient
 from app.fixtures import ProjectFactory, ExampleFactory
 from app.models import Project, Example
 from app.plugins.label_studio import LabelStudioPlugin
+from app.utils.fix_docker_hostname import fix_docker_hostname
 
 valid_config = {"url": "http://example.com", "api_key": "xxx", "project_id": 1}
 
@@ -64,7 +65,7 @@ class LabelStudioPluginTest(TestCase):
                 matchers.json_params_matcher(
                     {
                         "project": valid_config["project_id"],
-                        "url": f"{HTTP_SCHEME}{HOSTNAME}/api/webhook/{IdOfProject()}/label_studio/",
+                        "url": f"{HTTP_SCHEME}://{fix_docker_hostname(HOSTNAME)}/api/webhook/{IdOfProject()}/label_studio/",
                         "send_for_all_actions": False,
                         "send_payload": True,
                         "actions": [
@@ -86,7 +87,11 @@ class LabelStudioPluginTest(TestCase):
     def test_webhook_exists(self) -> None:
         responses.get(
             url="http://example.com/api/webhooks/",
-            json=[{"url": f"{HTTP_SCHEME}{HOSTNAME}/api/webhook/0/label_studio/"}],
+            json=[
+                {
+                    "url": f"{HTTP_SCHEME}://{fix_docker_hostname(HOSTNAME)}/api/webhook/0/label_studio/"
+                }
+            ],
             status=200,
         )
         try:
