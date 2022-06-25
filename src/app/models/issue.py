@@ -49,10 +49,29 @@ class Issue(BaseModel):
         if example.created_at < self.first_seen:
             self.first_seen = example.created_at
             self.save(update_fields=["first_seen"])
+
         if example.created_at > self.last_seen:
             self.last_seen = example.created_at
             self.save(update_fields=["last_seen"])
-        # TODO: reopen resolved issue here?
+
+        if self.status == Issue.Status.resolved:
+            self.reopen()
+
+    def mute(self) -> None:
+        self.status = Issue.Status.muted
+        self.save(update_fields=["status"])
+
+    def reopen(self) -> None:
+        self.status = Issue.Status.open
+        self.save(update_fields=["status"])
+
+    def resolve(self) -> None:
+        self.status = Issue.Status.resolved
+        self.save(update_fields=["status"])
+
+    def close(self) -> None:
+        self.status = Issue.Status.closed
+        self.save(update_fields=["status"])
 
 
 class IssueAdmin(BaseAdmin):
