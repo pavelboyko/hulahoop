@@ -8,7 +8,14 @@ class IssueFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(
         lookup_expr="icontains",
         label="Search issues by name",
-        widget=forms.TextInput(attrs={"class": "search", "autocomplete": "off"}),
+        widget=forms.TextInput(
+            attrs={
+                "type": "search",
+                "autocomplete": "off",
+                # submit form on input clear
+                "oninput": "if (this.value.length == 0) { this.form.submit() }",
+            }
+        ),
     )
     status = django_filters.ChoiceFilter(choices=Issue.Status.choices)
     examples__gte = django_filters.NumberFilter(

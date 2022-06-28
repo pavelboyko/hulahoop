@@ -4,7 +4,7 @@
     {% for row in matrix %}
         <div class="d-flex">
             {% for cell in row %}
-            <a href="{% query_string request.GET search=cell.search %}">
+            <a href="{% query_string request.GET search=cell.search page=1%}">
             <div class="d-flex justify-content-center align-items-center" 
                  style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}};"
                  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 

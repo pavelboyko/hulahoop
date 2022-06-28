@@ -38,11 +38,20 @@ def issue_detail(request, project_id, issue_id):
         daily_count_labels, daily_count_values
     ).render_embed()
     tag_count = tag_values_count(filter.qs)  # type: ignore
+    for key, data in tag_count.items():
+        for tag in data:
+            query = (
+                copy.deepcopy(filter.search_query)
+                if filter.search_query is not None
+                else ExampleSearchQuery({}, {})
+            )
+            query.tags[key] = tag.value
+            tag.search = query_to_string(query)
 
     cm = confusion_matrix(filter.qs)  # type: ignore
     for row in cm:
         for cell in row:
-            query: ExampleSearchQuery = (
+            query = (
                 copy.deepcopy(filter.search_query)
                 if filter.search_query is not None
                 else ExampleSearchQuery({}, {})

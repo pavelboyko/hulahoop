@@ -4,12 +4,16 @@
     }
 }
 
-.breadcrumb-item a {
-    color: rgb(108, 117, 125);
+a {
     text-decoration: none;
 }
-.breadcrumb-item a:hover {
+
+a:hover {
     text-decoration: underline;
+}
+
+.breadcrumb-item a {
+    color: rgb(108, 117, 125);
 }
 
 .page-header {

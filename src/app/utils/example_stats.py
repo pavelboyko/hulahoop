@@ -16,12 +16,13 @@ colormap = "Blues"
 primary_color = "#08306b"
 
 
-@dataclass(frozen=True)
+@dataclass
 class ColoredCounter:
     value: str
     count: int
     share: float  # in %
     color: str | None
+    search: str | None = None
 
 
 @dataclass

@@ -22,10 +22,12 @@ class ExampleFilter(django_filters.FilterSet):
         method="do_search",
         widget=forms.TextInput(
             attrs={
-                "id": "search",
+                "type": "search",
                 "class": "search form-control ms-1",
                 "autocomplete": "off",
                 "placeholder": "Filter examples by tags, predictions, annotations, and metadata...",
+                # submit form on input clear
+                "oninput": "if (this.value.length == 0) { this.form.submit() }",
             }
         ),
     )
