@@ -1,3 +1,6 @@
+{% load humanize %}
+{% load utils %}
+
 <!-- Alpine Plugins -->
 <script src="https://unpkg.com/@alpinejs/persist@3.10.2/dist/cdn.min.js"></script>
 <!-- Alpine Core -->
@@ -8,13 +11,13 @@
     <nav aria-label="Pagination" class="d-flex">
         <div class="d-flex mb-2 me-2 align-items-center">
         <small>
-            Showing {{ page.start_index }} - {{ page.end_index }} of {{ total_count }} examples
+            Showing {{ page.start_index }}-{{ page.end_index }} of {{ total_count | intcomma }} examples
         </small>
         </div>
         <ul class="pagination pagination-sm mb-2">
         {% if page.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page.previous_page_number }}">
+            <a class="page-link" href="{% query_string request.GET page=page.previous_page_number %}">
                 <i class="bi bi-chevron-left"></i> Previous
             </a>
           </li>
@@ -22,7 +25,7 @@
             
         {% if page.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page.next_page_number }}">
+            <a class="page-link" href="{% query_string request.GET page=page.next_page_number %}" >
                 Next <i class="bi bi-chevron-right"></i>
             </a>
           </li>
