@@ -47,13 +47,17 @@ def example_count_daily(examples: QuerySet[Example]) -> Tuple[List[str], List[in
     """
     :returns: list of days and list of example counts
     """
-    now = timezone.now()
     sparse = (
         examples.values("created_at__date")
         .annotate(count=Count("id"))
         .values("created_at__date", "count")
-        .order_by("created_at__date")
+        .order_by(
+            "created_at__date"
+        )  # FIXME: order_by doesn't work with random=<int> parameter
     )
+    if not sparse:
+        return [], []
+
     min_date = min(x["created_at__date"] for x in sparse)
     max_date = max(x["created_at__date"] for x in sparse)
     ndays = (max_date - min_date).days

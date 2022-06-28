@@ -45,6 +45,15 @@
     overflow: hidden;
 }
 
+.page-link {
+    color: rgb(33, 37, 41);
+    text-decoration: none;
+}
+
+.page-item:focus {
+    background-color: red;
+}
+
 .bage-bg-open { background: #129504; }
 .bage-bg-muted { background: #cccccc; }
 .bage-bg-resolved { background: #215DE8; }

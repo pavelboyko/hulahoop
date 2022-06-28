@@ -4,12 +4,11 @@
 <script src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
 
 <div x-data="{ previewHeight: $persist(200) }">
-{% if page %}
 <div class="d-flex justify-content-between ms-1">
     <nav aria-label="Pagination" class="d-flex">
-        <div>
-        <small class="align-middle">
-            Showing {{ page.start_index }} - {{ page.end_index }} of {{ total_count }} examples &nbsp;
+        <div class="d-flex mb-2 me-2 align-items-center">
+        <small>
+            Showing {{ page.start_index }} - {{ page.end_index }} of {{ total_count }} examples
         </small>
         </div>
         <ul class="pagination pagination-sm mb-2">
@@ -29,8 +28,17 @@
           </li>
         {% endif %}
         </ul>
+
+        <ul class="pagination pagination-sm mb-2 ms-2">
+            <li class="page-item">
+                <button class="page-link">
+                    <i class="bi bi-dice-5"></i> Random
+                </button>
+            </li>
+        </ul>    
     </nav>
     
+    <div class="d-flex">
     <ul class="pagination pagination-sm mb-2">
         <li class="page-item">
             <button class="page-link" x-on:click="previewHeight/=1.2">
@@ -43,6 +51,15 @@
             </button>
         </li>
     </ul>
+
+    <ul class="pagination pagination-sm mb-2 ms-2">
+        <li class="page-item">
+            <button class="page-link">
+                <i class="bi bi-download"></i> Export
+            </button>
+        </li>
+    </ul>
+    </div>
 </div>
   
 <div class="d-flex flex-wrap mb-3">
@@ -61,7 +78,4 @@
     </div>
     {% endfor %}
 </div>
-{% else %}
-<p>No examples found. Use API to upload examples.</p>
-{% endif %}
 </div>

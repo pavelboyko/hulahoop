@@ -79,22 +79,29 @@
                 {{ filter.form.created_at | as_crispy_field }}
             </div>
             <div class="col">
-            {{ filter.form.search | as_crispy_field }}
-            </div>
-            <div style="width: 120px">
-            <a href="{% url 'issue_detail' project.id issue.id%}" class="btn btn-light mb-3" style="width: 100%">
-                <i class="bi bi-x-lg"></i> Clear
-            </a>
+                {{ filter.form.search | as_crispy_field }}
             </div>
         </div>
-    </form>    
+    </form>
 </div>
 <div class="row">
+{% if examples_page %}
     <div style="width: 300px">
         {% include 'mpa/issue/detail_panel.html' %}
     </div>
     <div class="col">          
         {% include 'mpa/example/list_main.html' with page=examples_page total_count=example_count%}
     </div>
+{% else %}
+<p class="text-center">
+{% if filter.search_error_message %}
+<span class="text-danger">
+{{ filter.search_error_message }}
+</span>
+{% else %}
+No examples found.
+{% endif %}
+</p>
+{% endif %}
 </div>
 {% endblock main %}
