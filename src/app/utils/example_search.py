@@ -71,8 +71,7 @@ def parse_query_string(query: str) -> ExampleSearchQuery:
 
 
 def query_to_Q(query: ExampleSearchQuery) -> Q:
-    q = Q()
-    q = q & Q(**query.fields)
+    q = Q(**query.fields)
     for key, value in query.tags.items():
         q = q & Q(tag__key=key, tag__value=value)
 
