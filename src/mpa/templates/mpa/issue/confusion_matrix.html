@@ -1,9 +1,12 @@
+{% load utils %}
+
 <div class="border rounded">
     {% for row in matrix %}
         <div class="d-flex">
             {% for cell in row %}
+            <a href="{% query_string request.GET search=cell.search %}">
             <div class="d-flex justify-content-center align-items-center" 
-                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}}; cursor: pointer;"
+                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}};"
                  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
                  title="Annotated: {{cell.x}}<br/>Predicted: {{cell.y}}<br/>Share: {{cell.value | floatformat:0}}%"
             >
@@ -13,6 +16,7 @@
                     {% endif %}
                 </small>
             </div>
+            </a>
             {% endfor %}
         </div>
     {% endfor %}

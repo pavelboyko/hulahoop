@@ -24,12 +24,13 @@ class ColoredCounter:
     color: str | None
 
 
-@dataclass(frozen=True)
+@dataclass
 class ColoredMatrixValue:
     x: str
     y: str
     value: float | str  # in % or an empty string
     color: str | None
+    search: str | None = None
 
 
 ColoredMatrix = List[List[ColoredMatrixValue]]

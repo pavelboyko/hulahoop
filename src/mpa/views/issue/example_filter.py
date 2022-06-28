@@ -3,7 +3,12 @@ import django_filters
 from django import forms
 from crispy_forms.helper import FormHelper
 from app.models import Example
-from app.utils.example_search import parse_query_string, query_to_Q, ParsingError
+from app.utils.example_search import (
+    ExampleSearchQuery,
+    parse_query_string,
+    query_to_Q,
+    ParsingError,
+)
 
 logger = logging.getLogger(__package__)
 
@@ -24,15 +29,17 @@ class ExampleFilter(django_filters.FilterSet):
             }
         ),
     )
+    search_query: ExampleSearchQuery | None = None
     search_error_message: str | None = None
 
     def do_search(self, queryset, name, value):
         self.search_error_message = None
+        self.search_query = None
         try:
-            query = parse_query_string(value)
-            qs = queryset.filter(query_to_Q(query))
-            if query.random is not None:
-                qs = qs.order_by("?")[: query.random]
+            self.search_query = parse_query_string(value)
+            qs = queryset.filter(query_to_Q(self.search_query))
+            if self.search_query.random is not None:
+                qs = qs.order_by("?")[: self.search_query.random]
             return qs
         except ParsingError as e:
             self.search_error_message = f"{e}"

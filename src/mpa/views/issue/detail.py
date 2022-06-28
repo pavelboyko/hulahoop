@@ -1,4 +1,5 @@
 import logging
+import copy
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
@@ -8,6 +9,7 @@ from app.utils.example_stats import (
     tag_values_count,
     example_count_daily,
 )
+from app.utils.example_search import ExampleSearchQuery, query_to_string
 from .graphs import plot_examples_last_n_days
 from .example_filter import ExampleFilter
 
@@ -36,7 +38,19 @@ def issue_detail(request, project_id, issue_id):
         daily_count_labels, daily_count_values
     ).render_embed()
     tag_count = tag_values_count(filter.qs)  # type: ignore
-    confusion_matrix2 = confusion_matrix(filter.qs)  # type: ignore
+
+    cm = confusion_matrix(filter.qs)  # type: ignore
+    for row in cm:
+        for cell in row:
+            query: ExampleSearchQuery = (
+                copy.deepcopy(filter.search_query)
+                if filter.search_query is not None
+                else ExampleSearchQuery({}, {})
+            )
+            query.fields["annotations__label"] = cell.x
+            query.fields["predictions__label"] = cell.y
+            cell.search = query_to_string(query)
+            logger.debug(f"{cell.x} {cell.y} {cell.search}")
 
     return render(
         request,
@@ -49,6 +63,6 @@ def issue_detail(request, project_id, issue_id):
             "example_count": count,
             "examples_last_30_days": daily_count_graph,
             "tag_count": tag_count,
-            "confusion_matrix2": confusion_matrix2,
+            "confusion_matrix": cm,
         },
     )
