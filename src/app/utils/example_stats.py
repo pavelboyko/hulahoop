@@ -72,9 +72,6 @@ def example_count_daily(
             )
 
     str_labels = [day.strftime("%b %d") for day in labels]
-    logger.info(str_labels)
-    logger.info(values)
-
     return str_labels, values
 
 

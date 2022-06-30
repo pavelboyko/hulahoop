@@ -34,9 +34,9 @@
 
         <ul class="pagination pagination-sm mb-2 ms-2">
             <li class="page-item">
-                <button class="page-link">
+                <a href="{% query_string request.GET search=random_search page=1 %}" class="page-link">
                     <i class="bi bi-dice-5"></i> Random
-                </button>
+                </a>
             </li>
         </ul>    
     </nav>

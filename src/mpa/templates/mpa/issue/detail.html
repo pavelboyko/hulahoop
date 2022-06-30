@@ -87,7 +87,7 @@
         {% include 'mpa/issue/detail_panel.html' %}
     </div>
     <div class="col">          
-        {% include 'mpa/example/list_main.html' with page=examples_page total_count=example_count%}
+        {% include 'mpa/example/list_main.html' with page=examples_page total_count=example_count random_search=random_search%}
     </div>
 {% else %}
 <p class="text-center">

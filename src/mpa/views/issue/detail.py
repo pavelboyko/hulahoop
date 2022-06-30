@@ -17,6 +17,10 @@ from .example_filter import ExampleFilter
 logger = logging.getLogger(__package__)
 
 
+def copy_query(query):
+    return copy.deepcopy(query) if query is not None else ExampleSearchQuery({}, {})
+
+
 @login_required
 def issue_detail(request, project_id, issue_id):
     project = get_object_or_404(Project, id=project_id)
@@ -48,25 +52,22 @@ def issue_detail(request, project_id, issue_id):
     tag_count = tag_values_count(filter.qs)  # type: ignore
     for key, data in tag_count.items():
         for tag in data:
-            query = (
-                copy.deepcopy(filter.search_query)
-                if filter.search_query is not None
-                else ExampleSearchQuery({}, {})
-            )
+            query = copy_query(filter.search_query)
             query.tags[key] = tag.value
             tag.search = query_to_string(query)
 
     cm = confusion_matrix(filter.qs)  # type: ignore
     for row in cm:
         for cell in row:
-            query = (
-                copy.deepcopy(filter.search_query)
-                if filter.search_query is not None
-                else ExampleSearchQuery({}, {})
-            )
+            query = copy_query(filter.search_query)
             query.fields["annotations__label"] = cell.x
             query.fields["predictions__label"] = cell.y
             cell.search = query_to_string(query)
+
+    rquery = copy_query(filter.search_query)
+    if rquery.random is None:
+        rquery.random = 5
+    random_search = query_to_string(rquery)
 
     return render(
         request,
@@ -80,5 +81,6 @@ def issue_detail(request, project_id, issue_id):
             "examples_last_30_days": daily_count_graph,
             "tag_count": tag_count,
             "confusion_matrix": cm,
+            "random_search": random_search,
         },
     )
