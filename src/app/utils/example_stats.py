@@ -68,7 +68,7 @@ def example_count_daily(
             values[i] = x["count"]
         except ValueError as e:
             logger.warning(
-                f"Can't find date {x['created_at__date']} in range {labels}: {e}. This is a bug."
+                f"Can't find date {x['created_at__date']} in range {labels}: {e}. If you see this warning not in a test, this is a bug."
             )
 
     str_labels = [day.strftime("%b %d") for day in labels]

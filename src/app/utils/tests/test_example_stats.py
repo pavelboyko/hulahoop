@@ -1,11 +1,12 @@
+from datetime import timedelta
 from django.test import TestCase
-from django.utils import timezone
+from django.utils.timezone import now
 from datetime import timedelta
 from app.models import Example, Project, Tag
 from app.fixtures import ExampleFactory, IssueFactory
 from app.utils.example_stats import (
     example_count,
-    example_count_last_n_days,
+    example_count_daily,
     tag_values_count,
     confusion_matrix,
     primary_color,
@@ -23,21 +24,24 @@ class Test(TestCase):
         Project.objects.all().delete()
 
     def test_example_count(self) -> None:
-        issue = IssueFactory.create()
-        ExampleFactory.create(project=issue.project, issue=issue)
-        self.assertEqual(example_count(issue), 1)
+        issue = IssueFactory.create(examples=4)
+        self.assertEqual(example_count(issue), 4)
 
-    def test_example_count_last_n_days(self) -> None:
+    def test_example_count_daily(self) -> None:
         issue = IssueFactory.create()
         for days in range(10):
-            ExampleFactory.create(
-                project=issue.project,
-                issue=issue,
-                created_at=timezone.now() - timedelta(days=days),
-            )
-        labels, values = example_count_last_n_days(issue, ndays=5)
+            for _ in range(2):
+                ExampleFactory.create(
+                    project=issue.project,
+                    issue=issue,
+                    created_at=now() - timedelta(days=days),
+                )
+        labels, values = example_count_daily(
+            issue.example_set.all(),
+            ((now() - timedelta(days=5 - x)).date() for x in range(5)),
+        )
         self.assertEqual(len(labels), 5)
-        self.assertListEqual(values, [1] * 5)
+        self.assertListEqual(values, [2] * 5)
 
     def test_tag_values_count(self) -> None:
         secondary_color = "#1461a8"
@@ -49,7 +53,7 @@ class Test(TestCase):
         example2 = ExampleFactory.create(project=issue.project, issue=issue, tags=0)
         Tag.objects.create(example=example2, key="key_1", value="value_1")
         Tag.objects.create(example=example2, key="key_2", value="value_22")
-        tag_count = tag_values_count(issue)
+        tag_count = tag_values_count(issue.example_set.all())
         self.assertTrue("key_1" in tag_count)
         self.assertTrue("key_2" in tag_count)
         self.assertEqual(len(tag_count["key_1"]), 1)
@@ -57,14 +61,14 @@ class Test(TestCase):
             tag_count["key_1"][0], ColoredCounter("value_1", 2, 100.0, primary_color)
         )
         self.assertEqual(len(tag_count["key_2"]), 2)
-        self.assertSetEqual(
-            set(tag_count["key_2"]),
-            set(
-                [
-                    ColoredCounter("value_21", 1, 50.0, primary_color),
-                    ColoredCounter("value_22", 1, 50.0, secondary_color),
-                ]
-            ),
+        ans = [
+            ColoredCounter("value_21", 1, 50.0, primary_color),
+            ColoredCounter("value_22", 1, 50.0, secondary_color),
+        ]
+        res = tag_count["key_2"]
+        self.assertTrue(
+            (res[0] == ans[0] and res[1] == ans[1])
+            or (res[0] == ans[1] and res[1] == ans[0])
         )
 
     def test_confusion_matrix_empty(self) -> None:
