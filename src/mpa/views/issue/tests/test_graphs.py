@@ -21,4 +21,4 @@ class Test(TestCase):
 
         chart = plot_example_count_daily(labels, values)
         self.assertIsNotNone(chart)  # chart is created
-        self.assertIn("svg", chart)
+        self.assertIn("echarts.init", chart)
