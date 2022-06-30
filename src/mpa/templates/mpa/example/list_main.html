@@ -57,9 +57,9 @@
 
     <ul class="pagination pagination-sm mb-2 ms-2">
         <li class="page-item">
-            <button class="page-link">
+            <a href="{% query_string request.GET export='json' %}" target="_blank" class="page-link">
                 <i class="bi bi-download"></i> Export
-            </button>
+            </a>
         </li>
     </ul>
     </div>
