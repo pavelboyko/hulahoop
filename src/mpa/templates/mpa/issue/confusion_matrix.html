@@ -4,19 +4,23 @@
     {% for row in matrix %}
         <div class="d-flex">
             {% for cell in row %}
-            <a href="{% query_string request.GET search=cell.search page=1%}">
-            <div class="d-flex justify-content-center align-items-center" 
-                 style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}};"
-                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
-                 title="Annotated: {{cell.x}}<br/>Predicted: {{cell.y}}<br/>Share: {{cell.value | floatformat:0}}%"
-            >
-                <small style="color: {{cell.color}}; filter: invert(100%); font-size: 0.75em;">
-                    {% if cell.value > 0%}
-                    {{cell.value | floatformat:0 }}%
-                    {% endif %}
-                </small>
-            </div>
-            </a>
+                {% if cell.value %}
+                    <a href="{% query_string request.GET search=cell.search page=1%}">
+                {% endif %}
+                <div class="d-flex justify-content-center align-items-center" 
+                    style="text-align: center; height: {% widthratio 1 row|length width %}px; width: {% widthratio 1 row|length width %}px; background: {{cell.color}};"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
+                    title="Annotated: {{cell.x}}<br/>Predicted: {{cell.y}}<br/>Share: {{cell.value | floatformat:0}}%"
+                >
+                    <small style="color: {{cell.color}}; filter: invert(100%); font-size: 0.75em;">
+                        {% if cell.value > 0%}
+                        {{cell.value | floatformat:0 }}%
+                        {% endif %}
+                    </small>
+                </div>
+                {% if cell.value %}
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}
