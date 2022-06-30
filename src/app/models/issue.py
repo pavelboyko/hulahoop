@@ -2,10 +2,8 @@ import logging
 from django.utils import timezone
 from django.db import models
 from django.contrib import admin
-
 from app.models.example import Example
 from .base import BaseModel, BaseAdmin
-from .tag import Tag
 
 logger = logging.getLogger(__package__)
 
