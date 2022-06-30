@@ -119,6 +119,7 @@ def confusion_matrix(examples: QuerySet[Example]) -> ColoredMatrix:
         examples.values("annotations__label", "predictions__label")
         .annotate(count=Count("id"))
         .values_list("annotations__label", "predictions__label", "count")
+        .order_by("annotations__label", "predictions__label")
     )
     value_norm = sum(x[2] for x in sparse)
     # combine annoated and predicted labels and convert to strings in the process
