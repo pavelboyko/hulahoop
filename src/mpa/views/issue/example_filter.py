@@ -45,8 +45,6 @@ class ExampleFilter(django_filters.FilterSet):
         try:
             self.search_query = parse_query_string(value)
             qs = queryset.filter(query_to_Q(self.search_query))
-            if self.search_query.random is not None:
-                qs = qs.order_by("?")[: self.search_query.random]
             return qs
         except ParsingError as e:
             self.search_error_message = f"{e}"

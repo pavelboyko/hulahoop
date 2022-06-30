@@ -1,3 +1,4 @@
+from cmath import e
 import logging
 import copy
 from django.contrib.auth.decorators import login_required
@@ -32,22 +33,12 @@ def issue_detail(request, project_id, issue_id):
     )
 
     filter = ExampleFilter(request.GET, queryset=examples)
-    paginator = Paginator(filter.qs, 100)
-    page_number = request.GET.get("page", 1)
 
-    count = filter.qs.count()
-
-    # only plot daily example counts if there are no "random=<int>" filter
-    if filter.search_query is None or filter.search_query.random is None:
-        daily_count_labels, daily_count_values = example_count_daily(
-            filter.qs,  # type: ignore
-            date_ranges[request.GET.get("created_at", "week")]["dayrange"](),
-        )
-        daily_count_graph = plot_example_count_daily(
-            daily_count_labels, daily_count_values
-        )
-    else:
-        daily_count_graph = None
+    daily_count_labels, daily_count_values = example_count_daily(
+        filter.qs,  # type: ignore
+        date_ranges[request.GET.get("created_at", "week")]["dayrange"](),
+    )
+    daily_count_graph = plot_example_count_daily(daily_count_labels, daily_count_values)
 
     tag_count = tag_values_count(filter.qs)  # type: ignore
     for key, data in tag_count.items():
@@ -68,6 +59,16 @@ def issue_detail(request, project_id, issue_id):
     if rquery.random is None:
         rquery.random = 5
     random_search = query_to_string(rquery)
+
+    if filter.search_query is not None and filter.search_query.random is not None:
+        examples_to_display = filter.qs.order_by("?")[: filter.search_query.random]
+    else:
+        examples_to_display = filter.qs
+
+    paginator = Paginator(examples_to_display, 100)
+    page_number = request.GET.get("page", 1)
+
+    count = examples_to_display.count()
 
     return render(
         request,
