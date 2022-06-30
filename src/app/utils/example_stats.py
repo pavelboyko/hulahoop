@@ -1,10 +1,10 @@
 import logging
 import math
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Generator
 from dataclasses import dataclass
 from itertools import groupby
 from operator import itemgetter
-from django.utils import timezone
+from datetime import date
 from datetime import timedelta
 from django.db.models import QuerySet, Count
 from matplotlib import cm, colors
@@ -45,7 +45,9 @@ def example_count(issue: Issue) -> int:
     return issue.example_set.filter().count()  # type: ignore
 
 
-def example_count_daily(examples: QuerySet[Example]) -> Tuple[List[str], List[int]]:
+def example_count_daily(
+    examples: QuerySet[Example], dayrange: Generator[date, None, None]
+) -> Tuple[List[str], List[int]]:
     """
     :returns: list of days and list of example counts
     """
@@ -53,23 +55,27 @@ def example_count_daily(examples: QuerySet[Example]) -> Tuple[List[str], List[in
         examples.values("created_at__date")
         .annotate(count=Count("id"))
         .values("created_at__date", "count")
-        .order_by(
-            "created_at__date"
-        )  # FIXME: order_by doesn't work with random=<int> parameter
+        .order_by("created_at__date")
     )
     if not sparse:
         return [], []
 
-    min_date = min(x["created_at__date"] for x in sparse)
-    max_date = max(x["created_at__date"] for x in sparse)
-    ndays = (max_date - min_date).days
-    labels = [
-        (max_date - timedelta(days=ndays - i)).strftime("%b %d") for i in range(ndays)
-    ]
-    values = [0] * ndays
+    labels = list(dayrange)
+    values = [0] * len(labels)
     for x in sparse:
-        values[(x["created_at__date"] - max_date).days + ndays - 1] = x["count"]
-    return labels, values
+        try:
+            i = labels.index(x["created_at__date"])
+            values[i] = x["count"]
+        except ValueError as e:
+            logger.warning(
+                f"Can't find date {x['created_at__date']} in range {labels}: {e}. This is a bug."
+            )
+
+    str_labels = [day.strftime("%b %d") for day in labels]
+    logger.info(str_labels)
+    logger.info(values)
+
+    return str_labels, values
 
 
 def tag_values_count(examples: QuerySet[Example]) -> Dict[str, List[ColoredCounter]]:

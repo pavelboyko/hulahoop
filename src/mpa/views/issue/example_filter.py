@@ -9,13 +9,18 @@ from app.utils.example_search import (
     query_to_Q,
     ParsingError,
 )
+from app.utils.date_ranges import date_ranges
 
 logger = logging.getLogger(__package__)
 
 
 class ExampleFilter(django_filters.FilterSet):
     created_at = django_filters.DateRangeFilter(
-        field_name="created_at", label="Example timestamp"
+        field_name="created_at",
+        label="Example timestamp",
+        empty_label=None,
+        choices=[(key, value["label"]) for key, value in date_ranges.items()],
+        filters={key: value["filter"] for key, value in date_ranges.items()},
     )
     search = django_filters.CharFilter(
         label="Search",

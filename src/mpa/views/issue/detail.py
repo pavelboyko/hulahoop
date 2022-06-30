@@ -10,6 +10,7 @@ from app.utils.example_stats import (
     example_count_daily,
 )
 from app.utils.example_search import ExampleSearchQuery, query_to_string
+from app.utils.date_ranges import date_ranges
 from .graphs import plot_examples_last_n_days
 from .example_filter import ExampleFilter
 
@@ -31,12 +32,19 @@ def issue_detail(request, project_id, issue_id):
     page_number = request.GET.get("page", 1)
 
     count = filter.qs.count()
-    daily_count_labels, daily_count_values = example_count_daily(
-        filter.qs  # type: ignore
-    )
-    daily_count_graph = plot_examples_last_n_days(
-        daily_count_labels, daily_count_values
-    ).render_embed()
+
+    # only plot daily example counts if there are no "random=<int>" filter
+    if filter.search_query is None or filter.search_query.random is None:
+        daily_count_labels, daily_count_values = example_count_daily(
+            filter.qs,  # type: ignore
+            date_ranges[request.GET.get("created_at", "week")]["dayrange"](),
+        )
+        daily_count_graph = plot_examples_last_n_days(
+            daily_count_labels, daily_count_values
+        ).render_embed()
+    else:
+        daily_count_graph = None
+
     tag_count = tag_values_count(filter.qs)  # type: ignore
     for key, data in tag_count.items():
         for tag in data:
@@ -59,7 +67,6 @@ def issue_detail(request, project_id, issue_id):
             query.fields["annotations__label"] = cell.x
             query.fields["predictions__label"] = cell.y
             cell.search = query_to_string(query)
-            logger.debug(f"{cell.x} {cell.y} {cell.search}")
 
     return render(
         request,
