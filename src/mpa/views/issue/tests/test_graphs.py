@@ -1,6 +1,6 @@
 from imghdr import tests
 from django.test import TestCase
-from mpa.views.issue.graphs import plot_examples_last_n_days, plot_confusion_matrix
+from mpa.views.issue.graphs import plot_example_count_daily
 
 
 class Test(TestCase):
@@ -11,7 +11,7 @@ class Test(TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_plot_examples_last_n_days(self) -> None:
+    def test_plot_example_count_daily(self) -> None:
         labels = [
             "Monday",
             "Tuesday",
@@ -19,6 +19,6 @@ class Test(TestCase):
         ]
         values = [1, 2, 3]
 
-        chart = plot_examples_last_n_days(labels, values)
+        chart = plot_example_count_daily(labels, values)
         self.assertIsNotNone(chart)  # chart is created
-        self.assertIsNotNone(chart.render_embed())  # at least render does not fail
+        self.assertIn("svg", chart)

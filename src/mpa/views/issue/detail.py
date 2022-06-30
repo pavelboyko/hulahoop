@@ -11,7 +11,7 @@ from app.utils.example_stats import (
 )
 from app.utils.example_search import ExampleSearchQuery, query_to_string
 from app.utils.date_ranges import date_ranges
-from .graphs import plot_examples_last_n_days
+from .graphs import plot_example_count_daily
 from .example_filter import ExampleFilter
 
 logger = logging.getLogger(__package__)
@@ -43,9 +43,9 @@ def issue_detail(request, project_id, issue_id):
             filter.qs,  # type: ignore
             date_ranges[request.GET.get("created_at", "week")]["dayrange"](),
         )
-        daily_count_graph = plot_examples_last_n_days(
+        daily_count_graph = plot_example_count_daily(
             daily_count_labels, daily_count_values
-        ).render_embed()
+        )
     else:
         daily_count_graph = None
 
