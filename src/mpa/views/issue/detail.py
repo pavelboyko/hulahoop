@@ -1,10 +1,13 @@
 from cmath import e
 import logging
 import copy
+import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from django.core.paginator import Paginator
-from app.models import Project, Issue
+from django.db.models import QuerySet
+from app.models import Project, Issue, Example
 from app.utils.example_stats import (
     confusion_matrix,
     tag_values_count,
@@ -20,6 +23,13 @@ logger = logging.getLogger(__package__)
 
 def copy_query(query):
     return copy.deepcopy(query) if query is not None else ExampleSearchQuery({}, {})
+
+
+def export_json(examples: QuerySet[Example]) -> HttpResponse:
+    data = [example.to_dict() for example in examples]
+    response = HttpResponse(json.dumps(data), content_type="application/json")
+    response["Content-Disposition"] = "examples.json"
+    return response
 
 
 @login_required
@@ -64,6 +74,9 @@ def issue_detail(request, project_id, issue_id):
         examples_to_display = filter.qs.order_by("?")[: filter.search_query.random]
     else:
         examples_to_display = filter.qs
+
+    if "export" in request.GET:
+        return export_json(examples_to_display)  # type: ignore
 
     paginator = Paginator(examples_to_display, 100)
     page_number = request.GET.get("page", 1)

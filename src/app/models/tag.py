@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Any
 from django.db import models
 from django.contrib import admin
 from .base import BaseModel, BaseAdmin

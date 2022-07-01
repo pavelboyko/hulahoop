@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 import uuid
 from django.utils import timezone
 from django.db import models
@@ -41,6 +41,20 @@ class Example(BaseModel):
             "url", flat=True
         )
         return urls[0] if urls else None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": str(self.id),
+            "project": self.project.id,
+            "issue": self.issue.id,
+            "fingerprint": self.fingerprint,
+            "predictions": self.predictions,
+            "annotations": self.annotations,
+            "metadata": self.metadata,
+            "tags": {
+                tag["key"]: tag["value"] for tag in self.tag_set.values("key", "value")  # type: ignore
+            },
+        }
 
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):
