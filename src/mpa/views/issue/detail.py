@@ -4,10 +4,8 @@ import copy
 import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
 from django.core.paginator import Paginator
-from django.db.models import QuerySet
-from app.models import Project, Issue, Example
+from app.models import Project, Issue
 from app.utils.example_stats import (
     confusion_matrix,
     tag_values_count,
@@ -17,19 +15,13 @@ from app.utils.example_search import ExampleSearchQuery, query_to_string
 from app.utils.date_ranges import date_ranges
 from .graphs import plot_example_count_daily
 from .example_filter import ExampleFilter
+from .export import export_json
 
 logger = logging.getLogger(__package__)
 
 
 def copy_query(query):
     return copy.deepcopy(query) if query is not None else ExampleSearchQuery({}, {})
-
-
-def export_json(examples: QuerySet[Example]) -> HttpResponse:
-    data = [example.to_dict() for example in examples]
-    response = HttpResponse(json.dumps(data), content_type="application/json")
-    response["Content-Disposition"] = "examples.json"
-    return response
 
 
 @login_required
@@ -75,13 +67,13 @@ def issue_detail(request, project_id, issue_id):
     else:
         examples_to_display = filter.qs
 
+    count = examples_to_display.count()
+
     if "export" in request.GET:
-        return export_json(examples_to_display)  # type: ignore
+        return export_json(examples_to_display.iterator(), count)  # type: ignore
 
     paginator = Paginator(examples_to_display, 100)
     page_number = request.GET.get("page", 1)
-
-    count = examples_to_display.count()
 
     return render(
         request,
