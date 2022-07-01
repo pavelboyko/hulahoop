@@ -7,7 +7,7 @@ from app.models import Issue
 class IssueFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(
         lookup_expr="icontains",
-        label="Search issues by name",
+        label="Search issues",
         widget=forms.TextInput(
             attrs={
                 "type": "search",
@@ -17,7 +17,9 @@ class IssueFilter(django_filters.FilterSet):
             }
         ),
     )
-    status = django_filters.ChoiceFilter(choices=Issue.Status.choices)
+    status = django_filters.ChoiceFilter(
+        choices=Issue.Status.choices, empty_label="All"
+    )
     examples__gte = django_filters.NumberFilter(
         field_name="examples", lookup_expr="gte", label="Min examples"
     )

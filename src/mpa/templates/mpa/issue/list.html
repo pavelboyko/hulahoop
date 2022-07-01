@@ -23,33 +23,22 @@
 {% endblock header-buttons %}
 
 
-{% block tabs %}
-<ul class="nav topnav">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">
-            All Issues
-            <span class="badge bg-light text-dark">
-                {{ project.issue_count | intcomma }}
-            </span>    
-        </a>
-    </li>
-</ul>
-{% endblock tabs %}
-
-
 {% block main %}
 <div class="container-limited mx-auto">
     <form method="get" novalidate>
         <div class="row align-items-end">
-          <div class="col">
-              {{ filter.form.name | as_crispy_field }}
-          </div>
-          <div class="col-md-2">
-            {{ filter.form.examples__gte | as_crispy_field }}
-          </div>
-          <div class="col-md-2">
-            {{ filter.form.order | as_crispy_field }}
-          </div>
+            <div class="col">
+                {{ filter.form.name | as_crispy_field }}
+            </div>
+            <div class="col-md-2">
+                {{ filter.form.examples__gte | as_crispy_field }}
+            </div>
+            <div class="col-md-2">
+                {{ filter.form.status | as_crispy_field }}
+            </div>    
+            <div class="col-md-2">
+                {{ filter.form.order | as_crispy_field }}
+            </div>
         </div>
     </form>
     
