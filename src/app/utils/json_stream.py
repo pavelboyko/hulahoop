@@ -8,7 +8,7 @@ def json_stream(data: Iterable[Any], count: int) -> Iterator[str]:
     """
     yield "["
     for i, x in enumerate(data):
-        s = json.dumps(x)
+        s = json.dumps(x, separators=(",", ":"))  # no whitespaces
         if i < count - 1:
             s += ","
         yield s
