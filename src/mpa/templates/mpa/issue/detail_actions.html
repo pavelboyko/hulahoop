@@ -1,0 +1,50 @@
+<form action="{% url 'issue_change_status' project.id issue.id %}" method="post">
+{% csrf_token %}
+{% if issue.get_status_display == "Open" %}
+    <button type="submit"
+        name="action"
+        value="mute"
+        class="btn btn-outline-secondary me-1">
+        <i class="bi bi-volume-mute"></i> Mute
+    </button>
+    <button type="submit"
+        name="action"
+        value="resolve"
+        class="btn btn-success">
+        <i class="bi bi-check2"></i> Resolve
+    </button>
+{% elif issue.get_status_display == "Muted" %}
+    <button type="submit"
+        name="action"
+        value="reopen"
+        class="btn btn-outline-primary me-1">
+        <i class="bi bi-volume-up"></i> Unmute
+    </button>
+    <button type="submit"
+        name="action"
+        value="resolve"
+        class="btn btn-success">
+        <i class="bi bi-check2"></i> Resolve
+    </button>
+{% elif issue.get_status_display == "Resolved" %}
+    <button type="submit"
+        name="action"
+        value="reopen"
+        class="btn btn-outline-primary me-1">
+        <i class="bi bi-arrow-counterclockwise"></i> Reopen
+    </button>
+    <button type="submit"
+        name="action"
+        value="close"
+        class="btn btn-primary">
+        <i class="bi bi-check2-all"></i> Close
+    </button>
+{% elif issue.get_status_display == "Closed" %}
+    <button type="submit"
+        name="action"
+        value="reopen"
+        class="btn btn-outline-primary me-1">
+        <i class="bi bi-arrow-counterclockwise"></i> Reopen
+    </button>
+{% endif %}
+</form>

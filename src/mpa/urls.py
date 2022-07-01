@@ -27,4 +27,9 @@ urlpatterns = [
         issue.issue_edit,
         name="issue_edit",
     ),
+    path(
+        "projects/<int:project_id>/issues/<int:issue_id>/change_status/",
+        issue.issue_change_status,
+        name="issue_change_status",
+    ),
 ]

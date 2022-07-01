@@ -25,28 +25,22 @@
     <div hx-target="this" hx-swap="outerHTML">
         {% if issue.name %}
             {{ issue.name }}
-            <button hx-get="{% url 'issue_edit' project.id issue.id %}" class="btn btn-light">
+            <button hx-get="{% url 'issue_edit' project.id issue.id %}" 
+                    class="btn btn-light">
                 <i class="bi bi-pencil"></i>
             </button>
         {% else %}
-            <button hx-get="{% url 'issue_edit' project.id issue.id %}" class="btn btn-primary">
+            <button hx-get="{% url 'issue_edit' project.id issue.id %}" 
+                    class="btn btn-primary">
                 <i class="bi bi-pencil"></i> Name this issue
             </button>
         {% endif %}
     </div>
     <div class="ms-auto">
-        <button href="#" class="btn btn-outline-secondary me-1">
-            <i class="bi bi-x-lg"></i> Mute
-        </button>
-        <button href="#" class="btn btn-success">
-            <i class="bi bi-check-lg"></i> Resolve
-        </button>
+        {% include "mpa/issue/detail_actions.html" %}
     </div>
 </div>
 {% endblock header %}
-
-{% block header-buttons %}    
-{% endblock header-buttons %}
 
 {% block subheader %}
 <div class="text-muted mb-2">
@@ -65,6 +59,13 @@
             Examples 
         </a>
     </li>
+    <!--
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            Actions 
+        </a>
+    </li>
+    -->
 </ul>
 {% endblock tabs %}
 
