@@ -30,7 +30,7 @@ class ExampleFilter(django_filters.FilterSet):
                 "type": "search",
                 "class": "search form-control ms-1",
                 "autocomplete": "off",
-                "placeholder": "Search examples by tags, predictions, annotations, and metadata...",
+                "placeholder": "Search examples by tags, predictions, annotations, and metadata",
                 # submit form on input clear
                 "oninput": "if (this.value.length == 0) { this.form.submit() }",
             }

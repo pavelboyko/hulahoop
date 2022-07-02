@@ -12,6 +12,7 @@ class IssueFilter(django_filters.FilterSet):
             attrs={
                 "type": "search",
                 "autocomplete": "off",
+                "placeholder": "Search issues",
                 # submit form on input clear
                 "oninput": "if (this.value.length == 0) { this.form.submit() }",
             }
@@ -47,5 +48,6 @@ class IssueFilter(django_filters.FilterSet):
         self.form.helper = FormHelper()
         self.form.helper.form_method = "get"
         self.form.helper.label_class = "text-muted"
+        self.form.helper.form_show_labels = False
         for _, field in self.form.fields.items():
             field.widget.attrs.update({"onchange": "this.form.submit()"})
