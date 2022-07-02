@@ -66,7 +66,7 @@ class Test(TestCase):
         self.assertEqual(attachments.first().url, data["attachments"][0]["url"])
         self.assertEqual(attachments.first().type, Attachment.Type.unknown)
 
-    def test_tags(self):
+    def test_tags(self) -> None:
         Example.objects.all().delete()
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
@@ -86,7 +86,7 @@ class Test(TestCase):
             self.assertIn(et.key, tags)
             self.assertEqual(et.value, str(tags[et.key]))
 
-    def test_tags_long(self):
+    def test_tags_long(self) -> None:
         Example.objects.all().delete()
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
@@ -103,7 +103,7 @@ class Test(TestCase):
         self.assertEqual(et.key, "a" * Tag.key_max_length)
         self.assertEqual(et.value, "b" * Tag.value_max_length)
 
-    def test_timestamp(self):
+    def test_timestamp(self) -> None:
         Example.objects.all().delete()
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
@@ -118,7 +118,7 @@ class Test(TestCase):
         example: Example = Example.objects.first()  # type: ignore
         self.assertEqual(example.created_at, parser.parse(data["timestamp"]))
 
-    def test_attachments_invalid(self):
+    def test_attachments_invalid(self) -> None:
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
         invalid_data = [
@@ -135,7 +135,7 @@ class Test(TestCase):
             response = APIClient().post(path, data, format="json")
             self.assertEqual(response.status_code, 400)
 
-    def test_attachments_ok(self):
+    def test_attachments_ok(self) -> None:
         Example.objects.all().delete()
         project = ProjectFactory.create()
         path = f"/api/capture/{project.id}/"
@@ -154,3 +154,14 @@ class Test(TestCase):
         example: Example = Example.objects.first()  # type: ignore
         self.assertEqual(Attachment.objects.count(), 5)
         self.assertEqual(example.attachment_set.count(), 5)  # type: ignore
+
+    def test_archived_project(self) -> None:
+        project = ProjectFactory.create()
+        project.archive()
+        path = f"/api/capture/{project.id}/"
+        data = {
+            "attachments": [{"url": "http://example.com"}],
+        }
+        response = APIClient().post(path, data, format="json")
+        print(response.json())
+        self.assertEqual(response.status_code, 403)

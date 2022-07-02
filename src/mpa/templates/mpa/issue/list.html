@@ -12,7 +12,12 @@
 
 
 {% block header %}
-<div class="page-header">{{ project.name }}</div>
+<div class="page-header">
+    {% if project.is_archived %}
+        <span class="badge bg-secondary">Archived</span>
+    {% endif %}
+    {{ project.name }}
+</div>
 {% endblock header %}
 
 

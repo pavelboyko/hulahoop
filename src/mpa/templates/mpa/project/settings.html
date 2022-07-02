@@ -9,7 +9,12 @@
 {% endblock breadcrumb%}
 
 {% block header %}
-<div class="page-header">{{ project.name }}</div>
+<div class="page-header">
+  {% if project.is_archived %}
+    <span class="badge bg-secondary">Archived</span>
+  {% endif %}
+  {{ project.name }}
+</div>
 {% endblock header %}
 
 {% block main %}
@@ -22,6 +27,10 @@
     </div>
     <div class="col-md-10 p-2">
         <h5>Integration</h5>
+{% if project.is_archived %}
+        <p>This project is archived and will not accept new examples.</p>
+        {% crispy unarchive_form %}
+{% else %}
         <p>To capture an example in this project <code>POST</code> to <code>{{ capture_endpoint }}</code>.</p>
         <p>Examples:
 <pre><code class="language-bash">curl -X POST \
@@ -31,16 +40,19 @@
 </code>
 </pre>
         </p>
+{% endif %}
         <h5>Project name</h5>
         <div class="mb-4">
         {% crispy rename_form %}
         </div>
 
+{% if not project.is_archived %}
         <h5>Archive project</h5>
         <div class="mb-4">
-        <p>Archived projects reject to receive new examples. An archived project can be unarchived later if needed.</p>
+        <p>Archived projects reject new examples. An archived project can be unarchived later if needed.</p>
         {% crispy archive_form %}
         </div>
+{% endif %}
     </div>
 </div>
 </div>

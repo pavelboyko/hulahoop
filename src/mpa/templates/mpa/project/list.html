@@ -18,7 +18,12 @@
     <ul class="list-group">
         {% for project in project_list %}
         <li class="list-group-item d-flex flex-column list-group-item-action">
-            <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">{{ project.name }}</a>
+            <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">
+                {% if project.is_archived %}
+                    <span class="badge bg-secondary">Archived</span>
+                {% endif %}
+                {{ project.name }}
+            </a>
             <small class="text-muted">
                 {% with count=project.issue_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} issue{{ count | pluralize }}{% endwith %}
                 • {% with count=project.example_count %}{% if count %}{{ count | intcomma }}{% else %}No{% endif %} example{{ count | pluralize }}{% endwith %}

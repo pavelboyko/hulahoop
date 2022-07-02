@@ -19,6 +19,7 @@ class Project(BaseModel):
     created_by = models.ForeignKey(
         "User", null=False, blank=False, on_delete=models.CASCADE
     )
+    is_archived: models.BooleanField = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -37,6 +38,14 @@ class Project(BaseModel):
         transaction.on_commit(
             lambda: app.send_task("start_workflow", [self.pk, example_id])
         )
+
+    def archive(self) -> None:
+        self.is_archived = True
+        self.save(update_fields=["is_archived"])
+
+    def unarchive(self) -> None:
+        self.is_archived = False
+        self.save(update_fields=["is_archived"])
 
 
 class ProjectAdmin(BaseAdmin):

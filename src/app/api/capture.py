@@ -78,6 +78,10 @@ class ExampleSerializer(serializers.ModelSerializer):
 def capture(request, project_id: int) -> Response:
     """The public POST-only /api/capture/<project_id>/ endpoint to receive examples"""
     project = get_object_or_404(Project, pk=project_id)
+    if project.is_archived:
+        return Response(
+            {"error": "Project is archived"}, status=status.HTTP_403_FORBIDDEN
+        )
     serializer = ExampleSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)  # return 400 on invalid request data
     serializer.save(project=project)

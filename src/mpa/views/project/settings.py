@@ -27,6 +27,15 @@ class ArchiveForm(forms.Form):
         )
 
 
+class UnarchiveForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit("submit_unarchive", "Unarchive", css_class="btn-secondary")
+        )
+
+
 @login_required
 def project_settings(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
@@ -36,6 +45,7 @@ def project_settings(request, project_id):
     rename_form = RenameForm()
     rename_form.fields["name"].initial = project.name
     archive_form = ArchiveForm()
+    unarchive_form = UnarchiveForm()
 
     if request.method == "POST":
         if "submit_rename" in request.POST:
@@ -43,6 +53,16 @@ def project_settings(request, project_id):
             if rename_form.is_valid():
                 project.name = rename_form.cleaned_data["name"]
                 project.save(update_fields=["name"])
+
+        if "submit_archive" in request.POST:
+            archive_form = ArchiveForm(request.POST)
+            if archive_form.is_valid():
+                project.archive()
+
+        if "submit_unarchive" in request.POST:
+            unarchive_form = UnarchiveForm(request.POST)
+            if unarchive_form.is_valid():
+                project.unarchive()
 
     return render(
         request,
@@ -52,5 +72,6 @@ def project_settings(request, project_id):
             "capture_endpoint": capture_endpoint,
             "rename_form": rename_form,
             "archive_form": archive_form,
+            "unarchive_form": unarchive_form,
         },
     )
