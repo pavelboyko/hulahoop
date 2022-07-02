@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from itertools import groupby
 from operator import itemgetter
 from datetime import date
-from datetime import timedelta
 from django.db.models import QuerySet, Count
 from matplotlib import cm, colors
 from app.models import Example, Issue, Tag
@@ -31,6 +30,7 @@ class ColoredMatrixValue:
     y: str
     value: float | str  # in % or an empty string
     color: str | None
+    color_is_dark: bool = False
     search: str | None = None
 
 
@@ -39,6 +39,10 @@ ColoredMatrix = List[List[ColoredMatrixValue]]
 
 def rgba_to_hex(rgba: Tuple[float, float, float, float]) -> str:
     return f"#{int(rgba[0] * 255):02x}{int(rgba[1] * 255):02x}{int(rgba[2] * 255):02x}"
+
+
+def rgba_to_greyscale(rgba: Tuple[float, float, float, float]) -> float:
+    return 0.299 * rgba[0] + 0.587 * rgba[1] + 0.114 * rgba[2]
 
 
 def example_count(issue: Issue) -> int:
@@ -142,13 +146,16 @@ def confusion_matrix(examples: QuerySet[Example]) -> ColoredMatrix:
                 for x in sparse
                 if str(x[0]) == annotated and str(x[1]) == predicted
             )
-            color = rgba_to_hex(cmap(color_norm(count))) if count > 0 else None
+            rgba = cmap(color_norm(count))
+            color = rgba_to_hex(rgba) if count > 0 else None
+            color_is_dark = rgba_to_greyscale(rgba) < 0.5 if count > 0 else False
             row.append(
                 ColoredMatrixValue(
                     x=annotated,
                     y=predicted,
                     value=zero_to_empty(count),
                     color=color,
+                    color_is_dark=color_is_dark,
                 )
             )
         matrix.append(row)

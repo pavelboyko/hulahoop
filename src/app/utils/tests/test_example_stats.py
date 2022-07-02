@@ -80,7 +80,7 @@ class Test(TestCase):
         matrix = confusion_matrix(Example.objects.all())
         self.assertEqual(len(matrix), 1)
         self.assertListEqual(
-            matrix[0], [ColoredMatrixValue("None", "None", 100.0, primary_color)]
+            matrix[0], [ColoredMatrixValue("None", "None", 100.0, primary_color, True)]
         )
 
     def test_confusion_matrix_2x2(self) -> None:
@@ -94,14 +94,22 @@ class Test(TestCase):
         self.assertListEqual(
             matrix[0],
             [
-                ColoredMatrixValue(x="a", y="a", value=25.0, color=primary_color),
-                ColoredMatrixValue(x="b", y="a", value=25.0, color=primary_color),
+                ColoredMatrixValue(
+                    x="a", y="a", value=25.0, color=primary_color, color_is_dark=True
+                ),
+                ColoredMatrixValue(
+                    x="b", y="a", value=25.0, color=primary_color, color_is_dark=True
+                ),
             ],
         )
         self.assertListEqual(
             matrix[1],
             [
-                ColoredMatrixValue(x="a", y="b", value=25.0, color=primary_color),
-                ColoredMatrixValue(x="b", y="b", value=25.0, color=primary_color),
+                ColoredMatrixValue(
+                    x="a", y="b", value=25.0, color=primary_color, color_is_dark=True
+                ),
+                ColoredMatrixValue(
+                    x="b", y="b", value=25.0, color=primary_color, color_is_dark=True
+                ),
             ],
         )

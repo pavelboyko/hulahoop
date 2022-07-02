@@ -12,7 +12,7 @@
                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-original-title="{{cell.tooltip}}" 
                     title="Annotated: {{cell.x}}<br/>Predicted: {{cell.y}}<br/>Share: {{cell.value | floatformat:0}}%"
                 >
-                    <small style="color: {{cell.color}}; filter: invert(100%); font-size: 0.75em;">
+                    <small style="color: {% if cell.color_is_dark %}white{% else %}black{% endif %}; font-size: 0.75em;">
                         {% if cell.value > 0%}
                         {{cell.value | floatformat:0 }}%
                         {% endif %}

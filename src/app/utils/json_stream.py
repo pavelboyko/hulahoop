@@ -4,7 +4,7 @@ import json
 
 def json_stream(data: Iterable[Any], count: int) -> Iterator[str]:
     """
-    Streams a JSON object to the client.
+    Streams a list JSON objects to the client.
     """
     yield "["
     for i, x in enumerate(data):
