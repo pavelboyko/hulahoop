@@ -1,6 +1,7 @@
 {% load crispy_forms_tags %}
 
 <form action="{% url 'issue_edit' project.id issue.id %}" method="post">
+    {% csrf_token %}
     <div class="row">
       <div class="col">
           {{ form.name | as_crispy_field }}

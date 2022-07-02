@@ -54,6 +54,8 @@ class Example(BaseModel):
             "tags": {
                 tag["key"]: tag["value"] for tag in self.tag_set.values("key", "value")  # type: ignore
             },
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
         }
 
     @classmethod
