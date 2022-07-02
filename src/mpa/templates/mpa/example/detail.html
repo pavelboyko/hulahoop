@@ -27,7 +27,7 @@
     </a>
 </li>
 {% endif %}
-<li class="breadcrumb-item active" aria-current="page">{{ example }}</li>
+<li class="breadcrumb-item active" aria-current="page">{{ example.id }}</li>
 {% endblock breadcrumb%}
 
 {% block header %}
@@ -65,17 +65,21 @@
 
 
 {% block main %}
-<div class="container">
-    <div class="row">
-        <div class="col ps-0">
+<div>
+    <div class="d-flex" style="width: 100%">
+        <div style="width: 50%" class="pe-2">
             {% for attachment in attachments %}
             <a href="{{ attachment.url }}" target="_blank">
                 <img src="{{ attachment.url }}" alt="Not an image :(" class="img-fluid border mb-3"/>
             </a>
             {% endfor %}
         </div>
-        <div class="col">
-            Created: {{ example.created_at | naturaltime }} • Updated: {{ example.updated_at | naturaltime }}
+        <div style="width: 50%" class="ps-2">
+            <h5>Timestamps</h5>
+            <ul>
+                <li>Created: {{ example.created_at }}</li>
+                <li>Last updated: {{ example.updated_at }}</li>
+            </ul>
             {% if tags %}
             <h5>Tags</h5>
             <ul>
