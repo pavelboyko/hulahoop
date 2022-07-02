@@ -34,6 +34,15 @@
 
     {% if filter.qs %}
     <ul class="list-group">
+        <li class="list-group-item list-group-item-action bg-light"> 
+            <div class="row">
+                <div class="col px-2 d-flex align-items-center">
+                    <small>
+                        Project
+                    </small>
+                </div>
+            </div>
+        </li>        
         {% for project in filter.qs %}
         <li class="list-group-item d-flex flex-column list-group-item-action">
             <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">
