@@ -75,20 +75,6 @@
             {% endfor %}
         </div>
         <div style="width: 50%" class="ps-2">
-            <h5>Timestamps</h5>
-            <ul>
-                <li>Created: {{ example.created_at }}</li>
-                <li>Last updated: {{ example.updated_at }}</li>
-            </ul>
-            {% if tags %}
-            <h5>Tags</h5>
-            <ul>
-            {% for tag in tags %}
-                <li>{{ tag.key }}: {{ tag.value }}</li>
-            {% endfor %}
-            </ul>
-            {% endif %}
-
             {% if predictions %}
             <h5>Predictions</h5> 
             <pre><code class="language-json">{{ predictions }}</code></pre>
@@ -104,7 +90,20 @@
             <pre><code class="language-json">{{ metadata }}</code></pre>
             {% endif %}
 
+            {% if tags %}
+            <h5>Tags</h5>
+            <ul>
+            {% for tag in tags %}
+                <li>{{ tag.key }}: {{ tag.value }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
 
+            <h5>Timestamps</h5>
+            <ul>
+                <li>Created: {{ example.created_at }}</li>
+                <li>Last updated: {{ example.updated_at }}</li>
+            </ul>
         </div>
     </div>
 </div>
