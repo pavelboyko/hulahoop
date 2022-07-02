@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from app.models import Project, Example
+from .export import export_example_json
 
 
 @login_required
@@ -12,6 +13,10 @@ def example_detail(request, project_id, example_id):
 
     project = get_object_or_404(Project, id=project_id)
     example = get_object_or_404(Example, id=example_id, project=project)
+
+    if "export" in request.GET:
+        return export_example_json(example)
+
     return render(
         request,
         "mpa/example/detail.html",

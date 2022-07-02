@@ -1,5 +1,6 @@
 {% extends "mpa/base.html" %}
 {% load humanize %}
+{% load utils %}
 
 {% block title %}Example • {{ project.name }}{% endblock title %}
 
@@ -54,6 +55,14 @@
 </div>
 {% endif %}
 {% endblock subheader %}
+
+{% block header-buttons %}
+    <a href="{% query_string request.GET export='json' %}" target="_blank" class="btn btn-outline-primary ms-2">
+        <i class="bi bi-download"></i> Export
+    </a>
+{% endblock header-buttons %}
+
+
 
 {% block main %}
 <div class="container">
