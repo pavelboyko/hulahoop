@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
-from app.models import Project, Issue
+from app.models import Project
 from .issue_filter import IssueFilter
 
 

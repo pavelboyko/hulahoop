@@ -19,7 +19,9 @@ class Project(BaseModel):
     created_by = models.ForeignKey(
         "User", null=False, blank=False, on_delete=models.CASCADE
     )
-    is_archived: models.BooleanField = models.BooleanField(default=False)
+    is_archived: models.BooleanField = models.BooleanField(
+        default=False, null=False, blank=False
+    )
 
     def __str__(self):
         return self.name

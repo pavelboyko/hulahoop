@@ -1,5 +1,7 @@
 {% extends "mpa/base.html" %}
+{% load crispy_forms_tags %}
 {% load humanize %}
+
 {% block title %}Projects{% endblock title %}
 
 {% block header %}
@@ -14,9 +16,25 @@
 
 {% block main %}
 <div class="container-limited mx-auto">
-    {% if project_list %}
+    <form method="get" novalidate>
+        <div class="row align-items-end">
+            <div class="col">
+                {{ filter.form.name | as_crispy_field }}
+            </div>
+            <!--
+            <div class="col-md-2 form-check form-switch">
+                {{ filter.form.is_archived | as_crispy_field }}
+            </div>
+            -->
+            <div class="col-md-2">
+                {{ filter.form.order | as_crispy_field }}
+            </div>
+        </div>
+    </form>
+
+    {% if filter.qs %}
     <ul class="list-group">
-        {% for project in project_list %}
+        {% for project in filter.qs %}
         <li class="list-group-item d-flex flex-column list-group-item-action">
             <a href="{% url 'project_detail' project.id %}" class="fs-5 text-decoration-none stretched-link">
                 {% if project.is_archived %}
