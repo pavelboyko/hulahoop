@@ -1,4 +1,6 @@
 {% extends "mpa/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block title %}Settings • {{ project.name }}{% endblock title %}
 
 {% block breadcrumb %}
@@ -11,15 +13,14 @@
 {% endblock header %}
 
 {% block main %}
+<div class="container-limited mx-auto">
 <div class="row">
-    <div class="col-2">
-        <nav lass="navbar flex-column">
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link active" href="#">Integration</a>
-            </nav>
-          </nav>
+    <div class="col-md-2">
+        <nav class="nav nav-pills flex-column">
+          <a class="nav-link active" href="#">General</a>
+        </nav>
     </div>
-    <div class="col-10 p-2">
+    <div class="col-md-10 p-2">
         <h5>Integration</h5>
         <p>To capture an example in this project <code>POST</code> to <code>{{ capture_endpoint }}</code>.</p>
         <p>Examples:
@@ -30,7 +31,18 @@
 </code>
 </pre>
         </p>
+        <h5>Project name</h5>
+        <div class="mb-4">
+        {% crispy rename_form %}
+        </div>
+
+        <h5>Archive project</h5>
+        <div class="mb-4">
+        <p>Archived projects reject to receive new examples. An archived project can be unarchived later if needed.</p>
+        {% crispy archive_form %}
+        </div>
     </div>
+</div>
 </div>
 
 <link rel="stylesheet"
