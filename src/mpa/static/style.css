@@ -16,6 +16,9 @@ a {
     text-decoration: underline;
 }
 
+.card {
+    border-color: rgba(0, 0, 0, 0.12)
+}
 
 .page-header {
     font-size: 1.75rem;
@@ -77,5 +80,15 @@ input[type="search"]::-webkit-search-cancel-button {
 input[type="search"]:focus::-webkit-search-cancel-button {
     opacity: .3;
     pointer-events: all;
+}
+
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 0.75em;
+    background-color: rgba(0, 0, 0, 0.12);
+    bottom: -0.75em;
+    left: 1em;
 }
 

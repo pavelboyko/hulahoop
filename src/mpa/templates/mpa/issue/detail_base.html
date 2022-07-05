@@ -1,0 +1,58 @@
+{% extends "mpa/base.html" %}
+{% load humanize %}
+
+{% block title %}{{ issue }} • {{ project.name }}{% endblock title %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="{% url 'project_detail' project.id %}">
+        {{ project.name | truncatechars:40 }}
+    </a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'issue_list' project.id %}">
+        Issues
+    </a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ issue }}
+</li>
+{% endblock breadcrumb%}
+
+{% block header %}
+<div class="page-header d-flex" style="width: 100%">
+    <div hx-target="this" hx-swap="outerHTML">
+        {% if issue.name %}
+            {{ issue.name }}
+            <button hx-get="{% url 'issue_edit' project.id issue.id %}" 
+                    class="btn btn-light">
+                <i class="bi bi-pencil"></i>
+            </button>
+        {% else %}
+            <button hx-get="{% url 'issue_edit' project.id issue.id %}" 
+                    class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Name this issue
+            </button>
+        {% endif %}
+    </div>
+    <div class="ms-auto">
+        {% include "mpa/issue/detail_actions.html" %}
+    </div>
+</div>
+{% endblock header %}
+
+{% block subheader %}
+<div class="text-muted mb-2">
+<span class="badge bage-bg-{{ issue.get_status_display|lower }}">
+        {{ issue.get_status_display }}
+</span>
+    First seen {{ issue.first_seen | naturaltime }}
+    • Last seen {{ issue.last_seen | naturaltime }}
+</div>
+{% endblock subheader %}
+
+{% block tabs %}
+{% endblock tabs %}
+
+{% block main %}
+{% endblock main %}

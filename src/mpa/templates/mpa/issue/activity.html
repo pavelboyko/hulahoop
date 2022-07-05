@@ -1,0 +1,107 @@
+{% extends "mpa/issue/detail_base.html" %}
+
+{% block tabs %}
+<ul class="nav topnav">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'issue_detail' project.id issue.id %}">
+            Examples 
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">
+            Activity 
+        </a>
+    </li>
+</ul>
+{% endblock tabs %}
+
+{% block main %}
+<div class="container-limited mx-auto">
+    <div class="mb-4">
+        <h5>
+            <i class="bi bi-chat-text"></i> Description
+            &nbsp;
+            <button class="btn btn-light btn-sm">
+                <i class="bi bi-pencil"></i>
+            </button>
+        </h5>
+        <p>
+            But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself,
+        </p>
+        <small class="text-muted">
+            Edited 5 days ago by admin.
+        </small>
+    </div>
+
+    <div class="mb-4">
+        <h5>
+            <i class="bi bi-link-45deg"></i> External Issues
+            &nbsp;
+            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Link Jira Issue</button>
+        </h5>
+        <ul class="list-group mb-2 mt-2">
+            <li class="list-group-item list-group-item-action p-3"> 
+                <div class="row">
+                    <div class="col">
+                        <a href="#" class="fs-6 text-decoration-none">
+                            #7791 Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                        </a>
+                        <br/>
+                        <small>
+                            <span class="badge bage-bg-open">
+                                Open
+                            </span>
+                            <span class="text-muted">
+                                Created 1 week ago • Last updated 4 hours ago
+                            </span>
+                        </small>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn-close"></button>
+                    </div>        
+                </div>
+            </li>
+            <li class="list-group-item list-group-item-action p-3"> 
+                <div class="row">
+                    <div class="col">
+                        <a href="#" class="fs-6 text-decoration-none">
+                            #7775 Nor again is there anyone who loves
+                        </a>
+                        <br/>
+                        <small>
+                            <span class="badge bage-bg-closed">
+                                Closed
+                            </span>
+                            <span class="text-muted">
+                                Created 1 week ago • Last updated 4 hours ago
+                            </span>
+                        </small>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn-close"></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="mb-4">
+        <h5><i class="bi bi-clock-history"></i> History</h5>
+        <div class="card card-body mb-2 timeline">
+            <span class="text-muted">5 days ago</span> 
+            Issue created by "fingerprint" rule. Initial example 
+        </div>
+        <div class="card card-body mb-2 timeline">
+            <span class="text-muted">4 hours ago @admin commented</span> 
+            необходимо совсем убрать из распознавания Читос 26г Сыр/Кетчуп. Ранее они были уникальными для Fix Price , передавались в импорте уникальных скю. Теперь этот размер вообще не производится более, уходят остатки.
+        </div>
+        <div class="card card-body">
+            <span class="text-muted">1 hour ago</span> admin closed issue.
+        </div>
+    </div>
+</div>
+    
+{% endblock main %}
