@@ -58,7 +58,7 @@ class ExampleFilter(django_filters.FilterSet):
     def __init__(self, data, *args, **kwargs):
         if not data.get("created_at"):
             data = data.copy()
-            data["created_at"] = "week"
+            data["created_at"] = "month"
 
         super().__init__(data, *args, **kwargs)
         self.form.helper = FormHelper()

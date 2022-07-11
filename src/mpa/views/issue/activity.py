@@ -10,6 +10,7 @@ logger = logging.getLogger(__package__)
 def issue_activity(request, project_id, issue_id):
     project = get_object_or_404(Project, id=project_id)
     issue = get_object_or_404(Issue, id=issue_id, project=project)
+    recent_examples = issue.example_set.all().order_by("-created_at")[:5]  # type: ignore
 
     return render(
         request,
@@ -17,5 +18,6 @@ def issue_activity(request, project_id, issue_id):
         {
             "project": project,
             "issue": issue,
+            "recent_examples": recent_examples,
         },
     )

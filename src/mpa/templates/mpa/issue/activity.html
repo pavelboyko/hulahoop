@@ -3,13 +3,13 @@
 {% block tabs %}
 <ul class="nav topnav">
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'issue_detail' project.id issue.id %}">
-            Examples 
+        <a class="nav-link active" aria-current="page" href="#">
+            Overview 
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">
-            Activity 
+        <a class="nav-link" href="{% url 'issue_detail' project.id issue.id %}">
+            Examples 
         </a>
     </li>
 </ul>
@@ -26,7 +26,7 @@
             </button>
         </h5>
         <p>
-            But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself,
+            Our food recognition AI doesn't recognize any food in the cartoonish images, see examples. Proposed resolution: label more cartoonish examples and retrain classifier.
         </p>
         <small class="text-muted">
             Edited 5 days ago by admin.
@@ -35,19 +35,46 @@
 
     <div class="mb-4">
         <h5>
+            <i class="bi bi-files"></i> Recent Examples
+            <a href="{% url 'issue_detail' project.id issue.id %}" class="btn btn-sm btn-outline-primary ms-2">
+                <i class="bi bi-arrow-right"></i> View all
+            </a>
+        </h5>
+        <p>
+            Last example seen 30 minutes ago. 39,902 examples in total.
+        </p>
+        <div class="d-flex flex-wrap mb-3">
+            {% for example in recent_examples %}
+            <div class="card m-1" style="height: 200px">
+                <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link" style="height:100%">
+                    <img src="{{ example.attachment_set.first.url }}" class="rounded" style="height: 100%" alt="Broken image :("/>
+                </a>
+                <div class="card-img-overlay d-flex flex-wrap align-items-end" style="padding: 4px;">
+                    <small>
+                        <span class="badge bage-bg-tag text-dark me-1">
+                            {{ example.predictions.label }}
+                        </span>
+                    </small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>     
+    </div>
+
+
+    <div class="mb-4">
+        <h5>
             <i class="bi bi-link-45deg"></i> External Issues
-            &nbsp;
-            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Link Jira Issue</button>
+            <button class="btn btn-sm btn-outline-primary ms-2">
+                <i class="bi bi-plus-lg"></i> Link Jira Issue
+            </button>
         </h5>
         <ul class="list-group mb-2 mt-2">
             <li class="list-group-item list-group-item-action p-3"> 
                 <div class="row">
                     <div class="col">
                         <a href="#" class="fs-6 text-decoration-none">
-                            #7791 Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                            #7791 Label more cartoonish food examples
                         </a>
                         <br/>
                         <small>
@@ -68,7 +95,7 @@
                 <div class="row">
                     <div class="col">
                         <a href="#" class="fs-6 text-decoration-none">
-                            #7775 Nor again is there anyone who loves
+                            #7775 Fix bug in the classifier inference worker
                         </a>
                         <br/>
                         <small>
@@ -89,17 +116,55 @@
     </div>
 
     <div class="mb-4">
+        <h5>
+            <i class="bi bi-box-seam"></i> Models
+            <button class="btn btn-sm btn-outline-primary ms-2">
+                <i class="bi bi-plus-lg"></i> Link MLflow Model
+            </button>
+        </h5>
+        <ul class="list-group mb-2 mt-2">
+            <li class="list-group-item list-group-item-action p-3"> 
+                <div class="row">
+                    <div class="col">
+                        <a href="#" class="fs-6 text-decoration-none">
+                            Mobile Food Classifier
+                        </a>
+                        <br/>
+                        <small class="text-muted">
+                            <span class="badge bage-bg-open">
+                                Production: v5
+                            </span>
+                            <span class="badge bage-bg-resolved">
+                                Staging: v6 
+                            </span>
+                            <span class="badge bage-bg-tag text-dark">
+                                Latest: v6 
+                            </span>
+                            Last updated 4 hours ago
+                        </small>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn-close"></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="mb-4">
         <h5><i class="bi bi-clock-history"></i> History</h5>
         <div class="card card-body mb-2 timeline">
-            <span class="text-muted">5 days ago</span> 
-            Issue created by "fingerprint" rule. Initial example 
+            <span class="text-muted">2 weeks 1 day ago</span> 
+            Issue created by "fingerprint" rule. 
         </div>
         <div class="card card-body mb-2 timeline">
-            <span class="text-muted">4 hours ago @admin commented</span> 
-            необходимо совсем убрать из распознавания Читос 26г Сыр/Кетчуп. Ранее они были уникальными для Fix Price , передавались в импорте уникальных скю. Теперь этот размер вообще не производится более, уходят остатки.
+            <span class="text-muted">2 weeeks ago </span> 
+            @admin edited description.
         </div>
-        <div class="card card-body">
-            <span class="text-muted">1 hour ago</span> admin closed issue.
+        <div class="card card-body mb-2 timeline">
+            <span class="text-muted">1 week ago </span> 
+            @admin linked two external issues.
         </div>
     </div>
 </div>
