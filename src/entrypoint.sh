@@ -2,9 +2,7 @@
 set -e
 
 # wait until Postgres is ready
-SQL_HOST="db"
-SQL_PORT=5432
-while ! nc -z $SQL_HOST $SQL_PORT; do
+while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do
   echo "Postgres is unavailable - sleeping"
   sleep 5
 done

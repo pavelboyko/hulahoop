@@ -86,41 +86,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "hulahoop.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-POSTGRES_NAME = os.environ.get("POSTGRES_NAME")
-POSTGRES_USER = os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-
-HAS_POSTGRES = all(
-    [
-        POSTGRES_NAME,
-        POSTGRES_USER,
-        POSTGRES_PASSWORD,
-    ]
-)
-
-if HAS_POSTGRES:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": POSTGRES_NAME,
-            "USER": POSTGRES_USER,
-            "PASSWORD": POSTGRES_PASSWORD,
-            "HOST": "db",
-            "PORT": 5432,
-        }
-    }
-else:
-    # this configurations is used for testing
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "db",
-        }
-    }
+from .db_settings import *  # noqa: F401, F403
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -145,11 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -176,41 +139,13 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
 }
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "default": {
-            "format": "{asctime} | {levelname} | {module} | {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-            "formatter": "default",
-        },
-    },
-    "loggers": {
-        "app": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "propagate": False,
-        },
-        "mpa": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "propagate": False,
-        },
-    },
-}
+from .logging_settings import LOGGING  # noqa: F401, F403
 
 LOGIN_URL = "/admin/login/"
 
 # Redis settings
-REDIS_HOST = os.environ.get("REDIS_SERVICE_ENDPOINT", "redis")
-REDIS_PORT = "6379"
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 
 # Celery settings
 CELERY_TIMEZONE = TIME_ZONE
