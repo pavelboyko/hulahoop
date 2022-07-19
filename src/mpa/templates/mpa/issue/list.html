@@ -113,7 +113,7 @@
             </div>
             -->
             <div class="col px-2">
-                <a href="{% url 'issue_activity' project.id issue.id %}" class="fs-5 text-decoration-none">
+                <a href="{% url 'issue_detail' project.id issue.id %}" class="fs-5 text-decoration-none">
                     {{ issue }}
                     {% if issue.name %}
                         {{ issue.name }}

@@ -32,9 +32,4 @@ urlpatterns = [
         issue.issue_change_status,
         name="issue_change_status",
     ),
-    path(
-        "projects/<int:project_id>/issues/<int:issue_id>/activity/",
-        issue.issue_activity,
-        name="issue_activity",
-    ),
 ]
