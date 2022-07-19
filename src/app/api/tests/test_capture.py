@@ -116,7 +116,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Example.objects.count(), 1)
         example: Example = Example.objects.first()  # type: ignore
-        self.assertEqual(example.created_at, parser.parse(data["timestamp"]))
+        self.assertEqual(example.timestamp, parser.parse(data["timestamp"]))
 
     def test_attachments_invalid(self) -> None:
         project = ProjectFactory.create()

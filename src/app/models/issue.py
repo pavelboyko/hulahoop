@@ -44,12 +44,12 @@ class Issue(BaseModel):
     def add_example(self, example: Example) -> None:
         example.issue = self
         example.save(update_fields=["issue"])
-        if example.created_at < self.first_seen:
-            self.first_seen = example.created_at
+        if example.timestamp < self.first_seen:
+            self.first_seen = example.timestamp
             self.save(update_fields=["first_seen"])
 
-        if example.created_at > self.last_seen:
-            self.last_seen = example.created_at
+        if example.timestamp > self.last_seen:
+            self.last_seen = example.timestamp
             self.save(update_fields=["last_seen"])
 
         if self.status == Issue.Status.resolved:

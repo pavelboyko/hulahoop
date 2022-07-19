@@ -1,3 +1,5 @@
+from datetime import datetime
+from django.utils import timezone
 import logging
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -36,7 +38,6 @@ class ExampleSerializer(serializers.ModelSerializer):
     attachments = serializers.ListField(
         child=AttachmentSerializer(), allow_empty=False, required=True
     )
-    timestamp = serializers.DateTimeField(allow_null=True, required=False)
 
     class Meta:
         model = Example
@@ -55,8 +56,8 @@ class ExampleSerializer(serializers.ModelSerializer):
         attachments = (
             validated_data.pop("attachments") if "attachments" in validated_data else []
         )
-        if "timestamp" in validated_data:
-            validated_data["created_at"] = validated_data.pop("timestamp")
+        if "timestamp" not in validated_data:
+            validated_data["timestamp"] = timezone.now()
 
         example = Example.objects.create(**validated_data)
 

@@ -16,6 +16,11 @@ class Example(BaseModel):
     id: models.UUIDField = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
     )
+    # client side timestamp if provided, otherwise server side timestamp
+    timestamp: models.DateTimeField = models.DateTimeField(
+        null=True,
+        db_index=True,
+    )
     project: models.ForeignKey = models.ForeignKey(
         "Project", null=False, blank=False, on_delete=models.CASCADE
     )
@@ -45,6 +50,7 @@ class Example(BaseModel):
     def to_dict(self) -> Dict[str, Any]:
         return {
             "id": str(self.id),
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
             "project": self.project.id,
             "issue": self.issue.id,
             "fingerprint": self.fingerprint,
@@ -54,8 +60,8 @@ class Example(BaseModel):
             "tags": {
                 tag["key"]: tag["value"] for tag in self.tag_set.values("key", "value")  # type: ignore
             },
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
 
     @classmethod
@@ -87,11 +93,10 @@ class ExampleAdmin(BaseAdmin):
         "predictions",
         "annotations",
         "metadata",
+        "timestamp",
         "created_at",
         "updated_at",
     )
-    # TODO: attachments table
-    # TODO: tags table
 
 
 admin.site.register(Example, ExampleAdmin)

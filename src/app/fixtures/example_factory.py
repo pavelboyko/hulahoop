@@ -55,6 +55,12 @@ class ExampleFactory(DjangoModelFactory):
 
     project = SubFactory(ProjectFactory)
     issue = None
+    timestamp = Faker(
+        "date_time_between",
+        start_date="-90d",
+        end_date="now",
+        tzinfo=get_current_timezone(),
+    )
     created_at = Faker(
         "date_time_between",
         start_date="-90d",
