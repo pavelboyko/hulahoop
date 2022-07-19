@@ -27,6 +27,10 @@ class Test(TestCase):
         )
         self.assertEqual(issue.example_set.count(), 0)  # type: ignore
         issue.add_example(example1)
+        issue.refresh_from_db()
+        self.assertEqual(issue.first_seen, example1.timestamp)
+        self.assertEqual(issue.last_seen, example1.timestamp)
+
         issue.add_example(example2)
         issue.refresh_from_db()
         self.assertEqual(issue.example_set.count(), 2)  # type: ignore

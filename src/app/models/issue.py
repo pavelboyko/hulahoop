@@ -34,7 +34,7 @@ class Issue(BaseModel):
         null=True,
     )
     last_seen: models.DateTimeField = models.DateTimeField(
-        default=timezone.now,
+        default=None,
         null=True,
     )
 
@@ -48,7 +48,7 @@ class Issue(BaseModel):
             self.first_seen = example.timestamp
             self.save(update_fields=["first_seen"])
 
-        if example.timestamp > self.last_seen:
+        if self.last_seen is None or example.timestamp > self.last_seen:
             self.last_seen = example.timestamp
             self.save(update_fields=["last_seen"])
 

@@ -124,8 +124,10 @@
                     <span class="badge bage-bg-{{ issue.get_status_display | lower }}">
                         {{ issue.get_status_display }}
                     </span>
+                    {% if issue.last_seen %}
                     First seen {{ issue.first_seen | naturaltime }}
                     • Last seen {{ issue.last_seen | naturaltime }}
+                    {% endif %}
                 </small>
             </div>
             <div class="col-1 d-flex align-items-center justify-content-end">
