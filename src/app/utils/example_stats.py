@@ -56,10 +56,10 @@ def example_count_daily(
     :returns: list of days and list of example counts
     """
     sparse = (
-        examples.values("created_at__date")
+        examples.values("timestamp__date")
         .annotate(count=Count("id"))
-        .values("created_at__date", "count")
-        .order_by("created_at__date")
+        .values("timestamp__date", "count")
+        .order_by("timestamp__date")
     )
     if not sparse:
         return [], []
@@ -68,11 +68,11 @@ def example_count_daily(
     values = [0] * len(labels)
     for x in sparse:
         try:
-            i = labels.index(x["created_at__date"])
+            i = labels.index(x["timestamp__date"])
             values[i] = x["count"]
         except ValueError as e:
             logger.warning(
-                f"Can't find date {x['created_at__date']} in range {labels}: {e}. If you see this warning not in a test, this is a bug."
+                f"Can't find date {x['timestamp__date']} in range {labels}: {e}. If you see this warning not in a test, this is a bug."
             )
 
     str_labels = [day.strftime("%b %d") for day in labels]
