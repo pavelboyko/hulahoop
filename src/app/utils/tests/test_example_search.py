@@ -110,3 +110,33 @@ class Test(TestCase):
         qs = Example.objects.filter(query_to_Q(query))
         self.assertEqual(qs.count(), 1)
         self.assertEqual(qs[0].id, ex1.id)
+
+    def test_Q_fields_json(self) -> None:
+        ExampleFactory.create(tags=0, predictions={"label": "a"})
+        query = ExampleSearchQuery(tags={}, fields={"predictions__label": "a"})
+        qs = Example.objects.filter(query_to_Q(query))
+        self.assertEqual(qs.count(), 1)
+
+    def test_Q_fields_json_empty(self) -> None:
+        ExampleFactory.create(tags=0, predictions=None)
+        query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
+        qs = Example.objects.filter(query_to_Q(query))
+        self.assertEqual(qs.count(), 1)
+
+    def test_Q_fields_json_no_value(self) -> None:
+        ExampleFactory.create(tags=0, predictions={"a": "b"})
+        query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
+        qs = Example.objects.filter(query_to_Q(query))
+        self.assertEqual(qs.count(), 1)
+
+    def test_Q_fields_json_null_value(self) -> None:
+        ExampleFactory.create(tags=0, predictions={"label": None})
+        query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
+        qs = Example.objects.filter(query_to_Q(query))
+        self.assertEqual(qs.count(), 1)
+
+    def test_Q_fields_json_none_value(self) -> None:
+        ExampleFactory.create(tags=0, predictions={"label": "None"})
+        query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
+        qs = Example.objects.filter(query_to_Q(query))
+        self.assertEqual(qs.count(), 1)

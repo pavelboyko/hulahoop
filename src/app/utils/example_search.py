@@ -71,9 +71,20 @@ def parse_query_string(query: str) -> ExampleSearchQuery:
 
 
 def query_to_Q(query: ExampleSearchQuery) -> Q:
-    q = Q(**query.fields)
+    q = Q()
+    for field, value in query.fields.items():
+        if value != "None":
+            q &= Q(**{field: value})
+        else:
+            # frankly speaking we can't distinguish between absent value, null value and "None" string value here
+            q &= (
+                Q(**{f"{field}__isnull": True})
+                | Q(**{field: None})
+                | Q(**{field: "None"})
+            )
+
     for key, value in query.tags.items():
-        q = q & Q(tag__key=key, tag__value=value)
+        q &= Q(tag__key=key, tag__value=value)
 
     return q
 
