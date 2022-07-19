@@ -34,7 +34,7 @@ class Test(TestCase):
                 ExampleFactory.create(
                     project=issue.project,
                     issue=issue,
-                    created_at=now() - timedelta(days=days),
+                    timestamp=now() - timedelta(days=days),
                 )
         labels, values = example_count_daily(
             issue.example_set.all(),
