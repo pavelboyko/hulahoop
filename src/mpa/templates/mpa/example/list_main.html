@@ -71,6 +71,7 @@
         <a href="{% url 'example_detail' project.id example.id %}" class="stretched-link mx-auto" style="height:100%">
             <img src="{{ example.attachment_set.first.url }}" class="rounded" style="height: 100%" alt="Broken image :("/>
         </a>
+        {% if example.predictions.label %}
         <div class="card-img-overlay d-flex flex-wrap align-items-end" style="padding: 4px;">
             <small>
                 <span class="badge bage-bg-tag text-dark me-1">
@@ -78,6 +79,7 @@
                 </span>
             </small>
         </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
