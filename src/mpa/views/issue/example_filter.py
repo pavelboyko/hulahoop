@@ -15,8 +15,8 @@ logger = logging.getLogger(__package__)
 
 
 class ExampleFilter(django_filters.FilterSet):
-    created_at = django_filters.DateRangeFilter(
-        field_name="created_at",
+    timestamp = django_filters.DateRangeFilter(
+        field_name="timestamp",
         label="Example timestamp",
         empty_label=None,
         choices=[(key, value["label"]) for key, value in date_ranges.items()],
@@ -53,12 +53,12 @@ class ExampleFilter(django_filters.FilterSet):
 
     class Meta:
         model = Example
-        fields = ["created_at"]
+        fields = ["timestamp"]
 
     def __init__(self, data, *args, **kwargs):
-        if not data.get("created_at"):
+        if not data.get("timestamp"):
             data = data.copy()
-            data["created_at"] = "month"
+            data["timestamp"] = "month"
 
         super().__init__(data, *args, **kwargs)
         self.form.helper = FormHelper()

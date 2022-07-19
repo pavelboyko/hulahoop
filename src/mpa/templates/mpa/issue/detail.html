@@ -16,7 +16,7 @@
     <form method="get" novalidate>
         <div class="row align-items-end">
             <div style="width: 300px; z-index: 100;">
-                {{ filter.form.created_at | as_crispy_field }}
+                {{ filter.form.timestamp | as_crispy_field }}
             </div>
             <div class="col">
                 {{ filter.form.search | as_crispy_field }}
