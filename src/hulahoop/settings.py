@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-import sys
 from pathlib import Path
+from .auth_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,13 +43,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-    "rest_framework",  # required by app
-    "rest_framework.authtoken",  # required by app
-    "prettyjson",  # required by app
-    "crispy_forms",  # required by mpa
-    "crispy_bootstrap5",  # required by mpa
-    "django_filters",  # required by mpa
-    "django.contrib.humanize",  # required by mpa
+    # 3rd party
+    "rest_framework",
+    "rest_framework.authtoken",
+    "prettyjson",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "django_filters",
+    "django.contrib.humanize",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
+    # local
     "app",
     "mpa",
 ]
