@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, List
 from dataclasses import dataclass
 import shlex
 from django.db.models import Q
@@ -26,6 +26,7 @@ def parse_query_string(query: str) -> ExampleSearchQuery:
         "predictions",
         "annotations",
         "metadata",
+        "timestamp",
         "created_at",
         "updated_at",
     ]
@@ -70,23 +71,26 @@ def parse_query_string(query: str) -> ExampleSearchQuery:
     return ExampleSearchQuery(tags, fields, random)
 
 
-def query_to_Q(query: ExampleSearchQuery) -> Q:
-    q = Q()
-    for field, value in query.fields.items():
-        if value != "None":
-            q &= Q(**{field: value})
-        else:
-            # frankly speaking we can't distinguish between absent value, null value and "None" string value here
-            q &= (
-                Q(**{f"{field}__isnull": True})
-                | Q(**{field: None})
-                | Q(**{field: "None"})
-            )
+def query_to_filter_list(query: ExampleSearchQuery) -> List[Q]:
+    query_list = []
+    if query.fields:
+        q = Q()
+        for field, value in query.fields.items():
+            if value != "None":
+                q &= Q(**{field: value})
+            else:
+                # we can't distinguish between absent value, null value and "None" string value here
+                q &= (
+                    Q(**{f"{field}__isnull": True})
+                    | Q(**{field: None})
+                    | Q(**{field: "None"})
+                )
+        query_list.append(q)
 
     for key, value in query.tags.items():
-        q &= Q(tag__key=key, tag__value=value)
+        query_list.append(Q(tag__key=key, tag__value=value))
 
-    return q
+    return query_list
 
 
 def query_to_string(query: ExampleSearchQuery) -> str:

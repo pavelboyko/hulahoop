@@ -6,7 +6,7 @@ from app.models import Example
 from app.utils.example_search import (
     ExampleSearchQuery,
     parse_query_string,
-    query_to_Q,
+    query_to_filter_list,
     ParsingError,
 )
 from app.utils.date_ranges import date_ranges
@@ -42,9 +42,12 @@ class ExampleFilter(django_filters.FilterSet):
     def do_search(self, queryset, name, value):
         self.search_error_message = None
         self.search_query = None
+        qs = queryset
         try:
             self.search_query = parse_query_string(value)
-            qs = queryset.filter(query_to_Q(self.search_query))
+            filter_list = query_to_filter_list(self.search_query)
+            for filter in filter_list:
+                qs = qs.filter(filter)
             return qs
         except ParsingError as e:
             self.search_error_message = f"{e}"

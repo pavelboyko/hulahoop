@@ -4,7 +4,7 @@ from app.fixtures import ExampleFactory
 from app.utils.example_search import (
     ExampleSearchQuery,
     parse_query_string,
-    query_to_Q,
+    query_to_filter_list,
     query_to_string,
     ParsingError,
 )
@@ -94,12 +94,40 @@ class Test(TestCase):
             'annotations="xxx yyy" predictions="xxx yyy zzz" tag__a="x y" tag__b="x y z"',
         )
 
-    def test_Q_tags(self) -> None:
+    def test_Q_one_tag(self) -> None:
         ex1: Example = ExampleFactory.create(tags=0)
         Tag.objects.create(example=ex1, key="a", value="b")
         ExampleFactory(tags=0)
         query = ExampleSearchQuery(tags={"a": "b"}, fields={})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
+        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs[0].id, ex1.id)
+
+    def test_Q_two_tags(self) -> None:
+        ex1: Example = ExampleFactory.create(tags=0)
+        Tag.objects.create(example=ex1, key="a", value="1")
+        Tag.objects.create(example=ex1, key="b", value="1")
+        ex2: Example = ExampleFactory.create(tags=0)
+        Tag.objects.create(example=ex2, key="a", value="1")
+        Tag.objects.create(example=ex2, key="b", value="2")
+
+        query = ExampleSearchQuery(tags={"a": "1", "b": "2"}, fields={})
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 2)
+        qs = Example.objects.filter(ql[0]).filter(ql[1])
+        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs[0].id, ex2.id)
+
+    def test_Q_fields_and_tag(self) -> None:
+        ex1: Example = ExampleFactory.create(tags=0, fingerprint="qqq")
+        Tag.objects.create(example=ex1, key="a", value="b")
+        ExampleFactory(tags=0, fingerprint="qqq")
+        query = ExampleSearchQuery(tags={"a": "b"}, fields={"fingerprint": "qqq"})
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 2)
+        qs = Example.objects.filter(ql[0]).filter(ql[1])
         self.assertEqual(qs.count(), 1)
         self.assertEqual(qs[0].id, ex1.id)
 
@@ -107,36 +135,48 @@ class Test(TestCase):
         ex1: Example = ExampleFactory.create(tags=0, fingerprint="qqq")
         ExampleFactory(tags=0, fingerprint="ppp")
         query = ExampleSearchQuery(tags={}, fields={"fingerprint": "qqq"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
         self.assertEqual(qs[0].id, ex1.id)
 
     def test_Q_fields_json(self) -> None:
         ExampleFactory.create(tags=0, predictions={"label": "a"})
         query = ExampleSearchQuery(tags={}, fields={"predictions__label": "a"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
 
     def test_Q_fields_json_empty(self) -> None:
         ExampleFactory.create(tags=0, predictions=None)
         query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
 
     def test_Q_fields_json_no_value(self) -> None:
         ExampleFactory.create(tags=0, predictions={"a": "b"})
         query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
 
     def test_Q_fields_json_null_value(self) -> None:
         ExampleFactory.create(tags=0, predictions={"label": None})
         query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
 
     def test_Q_fields_json_none_value(self) -> None:
         ExampleFactory.create(tags=0, predictions={"label": "None"})
         query = ExampleSearchQuery(tags={}, fields={"predictions__label": "None"})
-        qs = Example.objects.filter(query_to_Q(query))
+        ql = query_to_filter_list(query)
+        self.assertEqual(len(ql), 1)
+        qs = Example.objects.filter(ql[0])
         self.assertEqual(qs.count(), 1)
