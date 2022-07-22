@@ -20,8 +20,12 @@
 <a href="{{ signup_url }}">sign up</a> first.</p>
 {% endif %}
 
-<div class="row">
-  <div class="col-md-7 border-end">
+<div class="d-flex flex-column">
+  <div class="d-flex flex-column">
+      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </div>
+  <hr/>
+  <div>
     <form class="login" method="POST" action="{% url 'account_login' %}">
       {% csrf_token %}
       {{ form | crispy }}
@@ -31,11 +35,6 @@
       <button class="btn btn-primary" type="submit">Sign In</button>
       <a class="btn btn-link" href="{% url 'account_reset_password' %}">Forgot Password?</a>
     </form>
-  </div>
-  <div class="col">
-    <div class="socialaccount_ballot">
-        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-    </div>
   </div>
 </div>
 {% endblock content %}

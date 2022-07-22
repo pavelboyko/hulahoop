@@ -34,6 +34,9 @@ HTTP_SCHEME = os.environ.get("SITE_HTTP_SCHEME", "http")
 
 ALLOWED_HOSTS = [HOSTNAME]
 
+if DEBUG:
+    ALLOWED_HOSTS.append("127.0.0.1")
+
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",

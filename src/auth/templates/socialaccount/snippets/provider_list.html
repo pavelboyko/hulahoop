@@ -13,8 +13,10 @@
 </li>
 {% endfor %}
 {% endif %}
-<li>
-  <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
-     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">{{provider.name}}</a>
-</li>
+  <a title="{{provider.name}}" 
+     class="btn btn-outline-primary mb-3 {{provider.id}}" 
+     style="width: 100%;"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+     <i class="bi bi-{{provider.name | lower}}"></i> {{provider.name}}
+  </a>
 {% endfor %}
