@@ -36,7 +36,7 @@ def issue_detail(request, project_id, issue_id):
 
     daily_count_labels, daily_count_values = example_count_daily(
         filter.qs,  # type: ignore
-        date_ranges[request.GET.get("created_at", "month")]["dayrange"](),
+        date_ranges[request.GET.get("created_at", "week")]["dayrange"](),
     )
     daily_count_graph = plot_example_count_daily(daily_count_labels, daily_count_values)
 
