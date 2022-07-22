@@ -11,12 +11,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-import sys
 from pathlib import Path
+
+from .auth_settings import *
+from .db_settings import *
+from .logging_settings import LOGGING
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -32,9 +34,10 @@ HTTP_SCHEME = os.environ.get("SITE_HTTP_SCHEME", "http")
 
 ALLOWED_HOSTS = [HOSTNAME]
 
+if DEBUG:
+    ALLOWED_HOSTS.append("127.0.0.1")
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,13 +46,20 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-    "rest_framework",  # required by app
-    "rest_framework.authtoken",  # required by app
-    "prettyjson",  # required by app
-    "crispy_forms",  # required by mpa
-    "crispy_bootstrap5",  # required by mpa
-    "django_filters",  # required by mpa
-    "django.contrib.humanize",  # required by mpa
+    # 3rd party
+    "rest_framework",
+    "rest_framework.authtoken",
+    "prettyjson",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "django_filters",
+    "django.contrib.humanize",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
+    # local
+    "auth",
     "app",
     "mpa",
 ]
@@ -71,7 +81,7 @@ ROOT_URLCONF = "hulahoop.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "auth", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -86,7 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "hulahoop.wsgi.application"
 
-from .db_settings import *  # noqa: F401, F403
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -122,9 +131,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "/var/www/hulahoop/static/")
 
-# DEFAULT_FILE_STORAGE = "utils.storages.file.CommonFileSystemStorage"
-# STATICFILES_STORAGE = "utils.storages.static.ManifestStaticFilesStorage"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -138,10 +144,6 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
 }
-
-from .logging_settings import LOGGING  # noqa: F401, F403
-
-LOGIN_URL = "/admin/login/"
 
 # Redis settings
 REDIS_HOST = os.environ.get("REDIS_HOST", "redis")

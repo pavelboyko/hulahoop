@@ -24,4 +24,5 @@ urlpatterns = [
     path(r"admin/", admin.site.urls),
     path(r"api/", include("app.urls")),
     path("", include("mpa.urls")),
+    path("accounts/", include("allauth.urls")),
 ]
