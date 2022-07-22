@@ -1,10 +1,9 @@
 {% extends "account/base.html" %}
 
 {% load crispy_forms_tags %}
-{% load i18n %}
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}Sign In{% endblock %}
 
 {% block content %}
 <h1>Sign In</h1>
@@ -29,8 +28,8 @@
       {% if redirect_field_value %}
       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
       {% endif %}
-      <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
-      <a class="btn btn-link" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+      <button class="btn btn-primary" type="submit">Sign In</button>
+      <a class="btn btn-link" href="{% url 'account_reset_password' %}">Forgot Password?</a>
     </form>
   </div>
   <div class="col">

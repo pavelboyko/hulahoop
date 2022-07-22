@@ -16,9 +16,9 @@
   </head>
   <body>
     {% block body %}
-
+    <!--
     {% if messages %}
-    <div>
+    <div>      
       <strong>Messages:</strong>
       <ul>
         {% for message in messages %}
@@ -27,8 +27,15 @@
       </ul>
     </div>
     {% endif %}
+    -->
+    <div class="d-flex justify-content-center mx-auto mt-3">
+        <span class="align-middle">
+        <img src="{% static 'logo.png' %}" alt="" style="height: 2em; padding-bottom: 2px" />
+        Hulahoop
+        </span>
+    </div>
 
-    <div style="width: 620px" class="mx-auto mt-5 p-4 border rounded">
+    <div style="width: 620px" class="mx-auto mt-3 p-4 border rounded">
     {% block content %}
     {% endblock %}
     </div>

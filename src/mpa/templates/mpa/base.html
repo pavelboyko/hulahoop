@@ -17,7 +17,12 @@
         <div class="d-flex">
             <nav aria-label="breadcrumb" class="flex-grow-1">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/" style="color: rgb(33, 37, 41)">◯ Hulahoop</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="/" style="color: rgb(33, 37, 41)">
+                            <img src="{% static 'logo.png' %}" alt="" style="height: 20px; padding-bottom: 2px;" />
+                            Hulahoop
+                        </a>
+                    </li>
                     {% block breadcrumb %} {% endblock breadcrumb %}
                 </ol>
             </nav>
